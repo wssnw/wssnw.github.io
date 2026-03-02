@@ -6,18 +6,21 @@
     <title>Foggy Fights | 2028</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        /* made by wssnw - fbi intel protector stuff ninja */
         :root { 
             --neon-pink: #ff2d95; 
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
             --white-glow: rgba(255, 255, 255, 0.9);
             --paper: #fdfaf0;
-            --important-red: #ff0040;
-            --main-glow: 0 0 25px var(--neon-pink), 0 0 50px rgba(0, 242, 255, 0.4);
+            --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* --- CORE RESET --- */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+        }
         
         body, html {
             margin: 0; padding: 0;
@@ -28,167 +31,228 @@
             overflow: hidden;
         }
 
-        /* --- bg and overlay --- */
+        /* --- BACKGROUND ENGINE --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.5), rgba(2,0,8,0.95)), 
+            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover;
             z-index: 1; transform: scale(1.05);
-            transition: 7s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
-        .status-tag {
-            position: fixed; top: 20px; right: 20px;
-            background: var(--important-red);
-            color: white; padding: 5px 15px;
-            font-size: 0.7rem; font-weight: 900;
-            letter-spacing: 2px; z-index: 100;
-            box-shadow: 0 0 20px var(--important-red);
-            border-radius: 2px;
-        }
-
-        /* --- the leaf logic --- */
+        /* --- SAKURA PETALS --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
             width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
+            pointer-events: auto;
             animation: fallSway linear infinite;
-            opacity: 0.8; cursor: pointer;
+            opacity: 0.8;
+            transition: filter 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .leaf.clicked {
+            filter: brightness(2) drop-shadow(0 0 15px white);
+            transform: scale(2.5) rotate(45deg) !important;
         }
 
         @keyframes fallSway {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
             15% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- titles --- */
-        .main-logo {
+        /* --- TITLES & RGB GLOW --- */
+        .main-logo, .glow-header {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 18vw, 12rem);
             color: white;
-            filter: drop-shadow(0 0 30px var(--neon-pink));
-            animation: floating 4s ease-in-out infinite;
-            text-align: center; z-index: 10;
+            text-align: center;
+            animation: rgbPulse 5s linear infinite;
+        }
+
+        .main-logo {
+            font-size: clamp(3.8rem, 16vw, 11rem);
+            animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
+            margin: 0;
+            z-index: 10;
+        }
+
+        @keyframes rgbPulse {
+            0%, 100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px var(--neon-pink)); }
+            33% { filter: drop-shadow(0 0 15px #00f2ff) drop-shadow(0 0 30px #7000ff); }
+            66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
         }
 
         @keyframes floating {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* --- important diary shii --- */
+        /* --- THE HEAVENLY DIARY --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.9);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            background: rgba(2, 0, 8, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: none; z-index: 1000;
-            overflow-y: scroll; padding: 80px 20px;
+            overflow-y: scroll; padding: 60px 20px;
             flex-direction: column; align-items: center;
-            opacity: 0; transition: 1s ease;
+            opacity: 0; transition: opacity 1s ease;
+        }
+
+        .diary-stack {
+            width: 100%; max-width: 450px;
+            display: flex; flex-direction: column; gap: 45px;
+            margin-bottom: 50px;
         }
 
         .diary-card {
-            position: relative; background: var(--paper); 
-            padding: 15px 15px 60px 15px; width: 100%;
-            box-shadow: var(--main-glow);
-            transform: rotate(-1deg);
-            animation: slideUp 0.6s ease forwards;
+            position: relative; 
+            background: var(--paper); 
+            padding: 15px 15px 60px 15px;
+            width: 100%;
+            /* HEAVY GLOW ON CARDS */
+            box-shadow: var(--heaven-glow);
+            transform: rotate(-1.5deg);
+            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .diary-card:nth-child(even) { transform: rotate(2deg); }
+
+        @keyframes diaryEntry {
+            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
+            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px) rotate(5deg); }
-            to { opacity: 1; transform: translateY(0) rotate(-1deg); }
+        .tape {
+            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
+            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 5;
         }
 
-        /* --- legacy text shii --- */
-        .legacy-text {
-            font-size: clamp(1.3rem, 5vw, 2rem);
-            font-family: 'Inter', sans-serif;
-            text-shadow: 0 0 25px var(--neon-pink);
-            font-weight: 900; line-height: 1.5;
+        .img-box { 
+            width: 100%; aspect-ratio: 16/9; background: #111; 
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.1);
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .diary-label {
+            color: #222; font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; text-align: center; margin-top: 20px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
+        /* --- GLOWING BUTTONS --- */
         .btn-fancy {
-            margin: 10px; padding: 20px 50px; border: 2px solid white;
-            background: none; color: white; cursor: pointer;
-            letter-spacing: 5px; font-weight: 900; transition: 0.3s;
-            text-transform: uppercase;
+            margin: 10px; padding: 18px 40px; border: 2px solid white;
+            background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
+            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
+            backdrop-filter: blur(5px); text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
         .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 40px white; }
 
-        .made-by { font-size: 0.7rem; opacity: 0.3; letter-spacing: 4px; margin-top: 30px; }
-
-        /* --- dev ticker --- */
-        .ticker {
-            position: fixed; bottom: 0; width: 100%; background: rgba(255, 45, 149, 0.1);
-            padding: 10px; font-size: 0.8rem; letter-spacing: 2px;
-            white-space: nowrap; overflow: hidden; z-index: 100;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        .btn-play {
+            display: block; width: 100%; background: #000; color: white;
+            padding: 14px; margin-top: 15px; text-decoration: none;
+            text-align: center; font-weight: 900; letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s;
         }
-        .ticker-inner { display: inline-block; animation: tick 20s linear infinite; }
-        @keyframes tick { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        .btn-play:hover { 
+            background: var(--neon-pink); 
+            box-shadow: 0 0 25px var(--neon-pink);
+        }
+
+        /* --- LEGACY SECTION GLOW --- */
+        .legacy-text {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            color: #fff;
+            /* Constant text glow */
+            text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
+            animation: textBreath 3s ease-in-out infinite;
+        }
+
+        @keyframes textBreath {
+            0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
+        }
 
         .hero {
             position: relative; z-index: 10; height: 100vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.5s ease;
         }
+
+        @media (max-width: 600px) {
+            .diary-stack { max-width: 90%; }
+            .btn-fancy { width: 85%; }
+            .main-logo { font-size: 4rem; }
+        }
+
+        #story { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="status-tag">PROJECT: REDLINE</div>
     <div class="bg-img" id="bg"></div>
     <div id="leaf-container"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-fancy" onclick="godlyEnter()">ACCESS THE CORE</button>
-        <div class="made-by">HANDCRAFTED BY WSSNW</div>
+        <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 style="font-family:'Dancing Script'; font-size: 4rem; text-shadow: var(--main-glow);">Classified</h2>
+        <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 10px; margin-bottom: 50px;">MEMORIES</h2>
         
-        <div style="width: 100%; max-width: 450px; margin-bottom: 40px;">
-            <div class="diary-card">
-                <div style="position: absolute; top: -15px; left: 50%; width: 120px; height: 45px; background: #00f2ff; transform: translateX(-50%) rotate(-2deg); box-shadow: 0 0 20px #00f2ff;"></div>
-                <div style="width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;"><img src="https://tr.rbxcdn.com/180day-033504107936691459976378e9b08535/768/432/Image/Webp" style="width:100%"></div>
-                <div style="color: #000; font-family: 'Dancing Script'; font-size: 2rem; text-align: center; margin-top: 25px; font-weight: 900;">The Foundation</div>
-                <a href="https://www.roblox.com/games/15134238727/Foggy-Fights" target="_blank" style="display:block; background:#000; color:#fff; text-align:center; padding:15px; margin-top:10px; text-decoration:none; font-weight:900; letter-spacing:2px;">EXECUTE PLAY</a>
+        <div class="diary-stack">
+            <div class="diary-card" style="animation-delay: 0.1s;">
+                <div class="tape"></div>
+                <div class="img-box">
+                    <img src="https://tr.rbxcdn.com/180day-033504107936691459976378e9b08535/768/432/Image/Webp" alt="Foggy Fights Game">
+                </div>
+                <div class="diary-label">The Main Stage</div>
+                <a href="https://www.roblox.com/games/15134238727/Foggy-Fights" target="_blank" class="btn-play">PLAY NOW</a>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box">
+                    <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" alt="Group Icon" style="object-fit: contain; background: #fff; padding: 10px;">
+                </div>
+                <div class="diary-label">The Community</div>
+                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
+                <div class="tape" style="background: #fffb00; box-shadow: 0 0 15px #fffb00;"></div>
+                <div class="img-box"><img src="Screenshot_28.png" alt="Development"></div>
+                <div class="diary-label">08/15/25 - Progress</div>
             </div>
         </div>
 
-        <button class="btn-fancy" onclick="openStory()">VIEW THE LEGACY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5; font-size:0.7rem" onclick="backToHome()">LOGOUT</button>
-        <div class="made-by">made by wssnw</div>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
+        <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
     </div>
 
     <div class="heaven-logs" id="story">
         <div style="max-width: 800px; text-align: center; padding: 20px;">
-            <h1 style="font-size: 4.5rem; letter-spacing: -2px; margin-bottom: 40px; text-shadow: 0 0 30px var(--important-red);">STORY_LOGS</h1>
-            <p class="legacy-text">
-                Inspired by Da Hood.<br><br>
-                Started this solo at 13-14. 2025 was the goal, then 2026.<br><br>
-                Final destination: 2028. Real life is moving fast but the vision stays.
-            </p>
+            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
+            <div class="legacy-text">
+                This game was inspired from a game that i played called da hood.<br><br>
+                i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
+                and now its probably going to get released in 2028 since im busy with life.
+            </div>
             
-            <button class="btn-fancy" style="margin-top:80px" onclick="backToLogs()">RETURN</button>
-            <div class="made-by" style="margin-top:40px">WSSNW // 2028</div>
-        </div>
-    </div>
-
-    <div class="ticker">
-        <div class="ticker-inner">
-            SYSTEM STATUS: OPERATIONAL // FOGGY FIGHTS ENTERTAINMENT // RELEASE WINDOW: 2028 // MADE BY WSSNW // 
-            SYSTEM STATUS: OPERATIONAL // FOGGY FIGHTS ENTERTAINMENT // RELEASE WINDOW: 2028 // MADE BY WSSNW // 
+            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
         </div>
     </div>
 
     <script>
-        /* logic by wssnw */
         const leafContainer = document.getElementById('leaf-container');
         
         function createLeaf() {
@@ -196,37 +260,61 @@
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            const size = (Math.random() * 10 + 15) + 'px';
+            leaf.style.width = size;
+            leaf.style.height = (parseFloat(size) * 1.2) + 'px';
+            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
             leafContainer.appendChild(leaf);
             setTimeout(() => leaf.remove(), 10000);
         }
-
-        setInterval(createLeaf, 600);
+        setInterval(createLeaf, 500);
 
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.5) blur(60px)";
+            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
                 const logs = document.getElementById('logs');
                 logs.style.display = 'flex';
                 setTimeout(() => logs.style.opacity = "1", 50);
-            }, 1200);
+            }, 2000);
         }
 
         function openStory() {
-            document.getElementById('logs').style.display = 'none';
-            const story = document.getElementById('story');
-            story.style.display = 'flex';
-            setTimeout(() => story.style.opacity = "1", 50);
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const story = document.getElementById('story');
+                story.style.display = 'flex';
+                setTimeout(() => story.style.opacity = "1", 50);
+            }, 800);
         }
 
         function backToLogs() {
-            document.getElementById('story').style.display = 'none';
-            document.getElementById('logs').style.display = 'flex';
+            const story = document.getElementById('story');
+            story.style.opacity = "0";
+            setTimeout(() => {
+                story.style.display = 'none';
+                const logs = document.getElementById('logs');
+                logs.style.display = 'flex';
+                setTimeout(() => logs.style.opacity = "1", 50);   
+            }, 800);
         }
 
-        function backToHome() { location.reload(); }
+        function backToHome() {
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const hero = document.getElementById('hero');
+                hero.style.display = 'flex';
+                document.getElementById('bg').style.transform = "scale(1.05)";
+                document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
+                setTimeout(() => hero.style.opacity = "1", 50);
+            }, 800);
+        }
     </script>
 </body>
 </html>
