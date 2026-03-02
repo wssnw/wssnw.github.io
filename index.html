@@ -40,21 +40,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.6s ease;
         }
 
-        /* --- THE ORIGINAL GOATED GLOWING LOGO --- */
+        /* --- THE LOGO --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(5rem, 18vw, 11rem);
             color: #fff;
             margin: 0;
             text-shadow: 
-                0 0 10px #fff,
-                0 0 20px var(--neon-pink),
-                0 0 40px var(--neon-pink),
-                0 0 80px var(--neon-pink),
-                0 0 120px var(--neon-pink);
+                0 0 15px #fff,
+                0 0 30px var(--neon-pink),
+                0 0 60px var(--neon-pink),
+                0 0 100px var(--neon-pink);
             animation: ultraBreathe 4s infinite ease-in-out;
         }
 
@@ -63,71 +62,70 @@
             50% { transform: scale(1.05); filter: brightness(1.3); }
         }
 
-        /* --- ULTRA GLASSIER 2028 BUTTON --- */
-        .btn-2028 {
-            margin-top: 160px; /* Pushed down as requested */
-            padding: 25px 90px;
+        /* --- THE "ENTER THE FOG" BUTTON --- */
+        .btn-fog {
+            margin-top: 150px;
+            padding: 25px 60px;
             background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.7); /* Thicker edge for glass look */
+            border: 2px solid rgba(255, 255, 255, 0.8);
             color: #fff;
             text-transform: uppercase;
-            letter-spacing: 25px;
+            letter-spacing: 12px;
+            font-size: 1.2rem;
             cursor: pointer;
-            backdrop-filter: blur(40px) saturate(200%); /* Maximum Glass */
+            backdrop-filter: blur(40px) saturate(200%);
             -webkit-backdrop-filter: blur(40px) saturate(200%);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4), 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 
                         inset 0 0 20px rgba(255,255,255,0.2);
-            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .btn-2028:hover {
-            letter-spacing: 35px;
+        .btn-fog:hover {
+            letter-spacing: 18px;
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 60px #fff;
-            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 60px var(--neon-pink), 0 0 20px #fff;
+            transform: translateY(-5px);
         }
 
-        /* --- TELEPORTATION SUNRAYS (SHARP BEAMS) --- */
+        /* --- THE TELEPORTATION SUNRAYS (FIXED GLOW) --- */
         .sunray-burst {
             position: fixed;
             top: 50%; left: 50%;
-            width: 250vw; height: 250vw;
-            /* Conic gradient creates the teleportation "spikes" */
+            width: 300vw; height: 300vw; /* Massively oversized to prevent edges showing */
             background: conic-gradient(
                 from 0deg,
                 transparent 0%,
                 #fff 5%,
-                transparent 10%,
-                #fff 20%,
-                transparent 30%,
-                #fff 45%,
-                transparent 60%,
-                #fff 75%,
-                transparent 85%,
-                #fff 95%,
+                transparent 12%,
+                #fff 25%,
+                transparent 40%,
+                #fff 55%,
+                transparent 70%,
+                #fff 85%,
                 transparent 100%
             );
             transform: translate(-50%, -50%) scale(0);
             z-index: 999;
             pointer-events: none;
             opacity: 0;
-            filter: blur(1px);
+            /* The secret sauce: heavy blur + mix-blend-mode */
+            filter: blur(15px); 
+            mix-blend-mode: screen;
         }
 
         .sunray-burst.active {
-            animation: teleportFlash 1.5s forwards ease-in;
+            animation: teleportFlash 1.8s forwards ease-in;
         }
 
         @keyframes teleportFlash {
             0% { 
                 transform: translate(-50%, -50%) scale(0) rotate(0deg); 
-                opacity: 1; 
+                opacity: 0; 
             }
-            70% {
-                opacity: 1;
-            }
+            20% { opacity: 1; }
+            80% { opacity: 1; filter: blur(30px) brightness(2); }
             100% { 
-                transform: translate(-50%, -50%) scale(1.5) rotate(120deg); 
+                transform: translate(-50%, -50%) scale(1.5) rotate(180deg); 
                 opacity: 0; 
             }
         }
@@ -151,11 +149,11 @@
             max-width: 700px;
             margin: 0 auto;
             text-align: left;
-            animation: fadeInUp 1s ease forwards;
+            animation: fadeInUp 1.2s ease forwards;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -178,7 +176,7 @@
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-2028" onclick="ascend()">2028</button>
+        <button class="btn-fog" onclick="ascend()">Enter the Fog!</button>
     </div>
 
     <div class="heaven-logs" id="logs">
@@ -206,20 +204,20 @@
             const logs = document.getElementById('logs');
             const bg = document.getElementById('bg');
 
-            // 1. Trigger Teleport Rays
+            // 1. Kick off the Sunray Warp
             ray.classList.add('active');
             
-            // 2. Blow out the background (Teleporting effect)
-            bg.style.filter = 'brightness(10) contrast(0.5) blur(10px)';
-            bg.style.transform = 'scale(3)';
+            // 2. Explode the Background (No more quadrat/square look)
+            bg.style.filter = 'brightness(20) contrast(0.2) blur(20px)';
+            bg.style.transform = 'scale(4)';
             hero.style.opacity = '0';
             
-            // 3. Swap to Heaven Logs
+            // 3. Switch to the bright heaven logs
             setTimeout(() => {
                 hero.style.display = 'none';
                 logs.style.display = 'block';
                 document.body.style.background = "#fff";
-            }, 900);
+            }, 1000);
         }
     </script>
 </body>
