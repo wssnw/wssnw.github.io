@@ -13,7 +13,6 @@
             --white-glow: rgba(255, 255, 255, 0.9);
         }
 
-        * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
@@ -21,216 +20,211 @@
             font-family: 'Syne', sans-serif;
             color: white;
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            cursor: none; /* Custom cursor fog */
         }
 
-        /* --- GODLY BACKGROUND ENGINE --- */
+        /* --- CURSOR FOG --- */
+        #cursor-fog {
+            width: 40px; height: 40px;
+            background: white;
+            filter: blur(20px);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0.5;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* --- BACKGROUND --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover;
-            z-index: 1; transform: scale(1.05);
-            transition: transform 8s cubic-bezier(0.22, 1, 0.36, 1), filter 4s ease;
+            z-index: 1;
         }
 
-        /* --- SMOOTH LEAVES --- */
-        .leaf {
-            position: fixed; top: -10%; z-index: 5;
-            width: 12px; height: 12px;
-            background: var(--white-glow);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            pointer-events: none;
-            animation: fallRotate linear infinite;
-        }
-
-        @keyframes fallRotate {
-            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(150px); opacity: 0; }
-        }
-
-        /* --- LOGO & HERO --- */
-        .hero {
-            position: relative; z-index: 10; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 1.5s ease, transform 1.5s ease;
-        }
-
-        .main-logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(5rem, 18vw, 12rem);
-            background: linear-gradient(to bottom, #fff, var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px var(--neon-pink));
-            animation: floating 4s ease-in-out infinite;
-        }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.02); }
-        }
-
-        /* --- WARP RAYS (FIXED CHOPPINESS) --- */
+        /* --- WARP RAYS --- */
         .ray-box {
             position: fixed; top: 50%; left: 50%;
             width: 150vmax; height: 150vmax;
             transform: translate(-50%, -50%) scale(0);
-            background: radial-gradient(circle, transparent 20%, var(--white-glow) 21%, transparent 22%);
-            background-size: 10% 10%;
+            background: radial-gradient(circle, var(--white-glow) 10%, transparent 40%);
             opacity: 0; z-index: 9999; pointer-events: none;
         }
-
-        .ray-active { animation: godlyWarp 3s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        .ray-active { animation: godlyWarp 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 
         @keyframes godlyWarp {
-            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(4) rotate(180deg); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
         }
 
-        /* --- MEMORY CARDS --- */
-        .heaven-logs {
+        /* --- SECTIONS --- */
+        .section {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #020008; display: none; z-index: 1000;
-            overflow-y: auto; padding: 100px 20px;
-            flex-direction: column; align-items: center;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000; background: #020008;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .section-active { display: flex; animation: fadeIn 0.8s forwards; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(1.1); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.9); } }
+
+        /* --- CARDS & GLITCH --- */
         .diary-card {
-            position: relative; background: white; padding: 10px 10px 50px 10px;
-            width: 100%; max-width: 400px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
+            background: white; padding: 10px 10px 50px 10px;
+            width: 300px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: black; margin: 20px;
+        }
+        .diary-card:hover { transform: scale(1.1) rotate(3deg); }
+
+        .locked-slot:hover {
+            animation: glitch 0.3s infinite;
+            background: #f0f0f0;
+            color: var(--neon-pink);
         }
 
-        .diary-card:hover { transform: scale(1.05) rotate(2deg); z-index: 10; }
-
-        .tape {
-            position: absolute; top: -15px; left: 50%; width: 100px; height: 35px;
-            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-5deg);
-            box-shadow: 0 5px 15px var(--neon-pink);
+        @keyframes glitch {
+            0% { transform: translate(2px, 0); }
+            50% { transform: translate(-2px, 2px); }
+            100% { transform: translate(0, -2px); }
         }
 
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- STORY FORMATTING --- */
-        .story-content {
-            max-width: 700px; text-align: left; line-height: 1.8;
-            font-family: 'Inter', sans-serif; font-weight: 400;
+        /* --- COUNTDOWN --- */
+        .countdown {
+            font-size: 2rem; font-weight: 900; color: var(--neon-blue);
+            text-shadow: 0 0 20px var(--neon-blue); margin: 20px 0;
         }
 
-        .story-header {
-            font-size: 3rem; font-weight: 900; margin-bottom: 30px;
-            background: linear-gradient(90deg, #fff, var(--neon-blue), var(--neon-pink), #fff);
-            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: rgbFlow 5s linear infinite;
-        }
-
-        @keyframes rgbFlow { 0% { background-position: 0%; } 100% { background-position: 300%; } }
-
-        /* --- SOCIAL ICONS --- */
-        .social-icons { display: flex; gap: 40px; margin-top: 50px; }
-        .social-icon { width: 50px; height: 50px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(1) invert(1); }
-        .social-icon:hover { transform: scale(1.3) rotate(10deg); filter: grayscale(0) invert(0); }
-
+        /* --- ANIMATED BUTTONS --- */
         .btn-fancy {
-            margin-top: 40px; padding: 15px 40px; border: 1px solid white;
+            padding: 15px 40px; border: 1px solid white;
             background: none; color: white; cursor: pointer;
-            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
+            font-weight: 900; letter-spacing: 3px;
+            transition: 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+            position: relative; overflow: hidden;
         }
-        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
+        .btn-fancy:hover {
+            background: white; color: black;
+            box-shadow: 0 0 50px var(--white-glow);
+            transform: translateY(-5px);
+        }
 
-        #story { display: none; }
+        /* Back button specific animation */
+        .btn-back:active { transform: scale(0.8); opacity: 0.5; }
+
+        .social-icon { width: 40px; transition: 0.3s; filter: invert(1); margin: 0 15px; }
+        .social-icon:hover { transform: scale(1.4) rotate(15deg); filter: invert(1) drop-shadow(0 0 10px var(--neon-pink)); }
+
     </style>
 </head>
 <body>
 
+    <div id="cursor-fog"></div>
     <div class="bg-img" id="bg"></div>
     <div class="ray-box" id="rays"></div>
-    <div id="leaf-container"></div>
+    
+    <audio id="ambient" loop><source src="https://www.soundjay.com/nature/wind-01.mp3" type="audio/mpeg"></audio>
 
-    <div class="hero" id="hero">
-        <h1 class="main-logo">Foggy Fights</h1>
+    <div class="hero" id="hero" style="display:flex; position:relative; z-index:100; height:100vh; flex-direction:column; align-items:center; justify-content:center;">
+        <h1 class="main-logo" style="font-family:'Dancing Script'; font-size: 8rem; text-shadow: 0 0 30px var(--neon-pink);">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
     </div>
 
-    <div class="heaven-logs" id="logs">
-        <h2 class="story-header" style="text-align:center">MEMORIES</h2>
-        <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
+    <div class="section" id="logs">
+        <h2 style="font-size: 3rem; margin-bottom: 40px;">MEMORIES</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center;">
             <div class="diary-card">
-                <div class="tape"></div>
-                <div class="img-box"><img src="Screenshot_28.png"></div>
-                <p style="color:black; font-family:'Dancing Script'; text-align:center; font-size: 1.5rem;">08/15/25</p>
+                <div style="height:250px; background:url('Screenshot_28.png') center/cover;"></div>
+                <p style="text-align:center; font-family:'Dancing Script'; font-size: 1.5rem;">08/15/25</p>
+            </div>
+            <div class="diary-card locked-slot">
+                <div style="height:250px; background:#000; display:flex; align-items:center; justify-content:center; color:white;">LOCKED</div>
+                <p style="text-align:center; font-size: 1rem;">DEEPER IN FOG</p>
             </div>
         </div>
         <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5" onclick="location.reload()">BACK</button>
+        <button class="btn-fancy btn-back" style="border:none; margin-top:20px; font-size:0.8rem;" onclick="reverseWarp('hero', 'logs')">BACK</button>
     </div>
 
-    <div class="heaven-logs" id="story">
-        <div class="story-content">
-            <h1 class="story-header">THE LEGACY</h1>
-            <p style="font-size: 1.2rem; opacity: 0.9;">
-                This vision was born from the streets of <strong>Da Hood</strong>. <br><br>
-                I started crafting this world alone at just <strong>13 years old</strong>. What began as a dream in 2024 was supposed to meet the world in 2025. But time is a heavy thing. <br><br>
-                The release shifted to 2026, and now, as life pulls me in different directions, <strong>2028</strong> has become the final destination. <br><br>
-                <em>Quality takes time. Life takes priority. The fog remains.</em>
-            </p>
-            
-            <div class="social-icons">
-                <a href="https://www.tiktok.com/@melody" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-icon" title="TikTok">
-                </a>
-                <a href="https://www.instagram.com/promethazine" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="social-icon" title="Instagram">
-                </a>
-                <a href="https://www.roblox.com/users/3295874241/profile" target="_blank">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1018/1018285.png" class="social-icon" title="Roblox: 0dedzz">
-                </a>
-            </div>
-
-            <button class="btn-fancy" style="margin-top:80px" onclick="backToLogs()">BACK TO GALLERY</button>
+    <div class="section" id="story">
+        <h1 style="color:var(--neon-blue);">THE JOURNEY</h1>
+        <div id="countdown" class="countdown">LOADING 2028...</div>
+        <p style="max-width:600px; text-align:center; line-height:1.6; font-size:1.1rem;">
+            Inspired by <strong>Da Hood</strong>. Started at 13-14 alone. <br>
+            Release 2025 → 2026 → <strong>2028</strong>. <br>
+            Busy with life, but the grind never stops.
+        </p>
+        <div style="margin-top:30px;">
+            <a href="https://tiktok.com/@melody" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-icon"></a>
+            <a href="https://instagram.com/promethazine" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="social-icon"></a>
+            <a href="https://www.roblox.com/users/2799919850/profile?friendshipSourceType=PlayerSearch target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1018/1018285.png" class="social-icon"></a>
         </div>
+        <button class="btn-fancy btn-back" style="margin-top:50px;" onclick="reverseWarp('logs', 'story')">RETURN TO MEMORIES</button>
     </div>
 
     <script>
-        // Smooth Leaf Generator
-        const leafContainer = document.getElementById('leaf-container');
-        setInterval(() => {
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf');
-            leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            leafContainer.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 8000);
-        }, 500);
+        // CURSOR FOG
+        const fog = document.getElementById('cursor-fog');
+        document.addEventListener('mousemove', (e) => {
+            fog.style.left = e.clientX - 20 + 'px';
+            fog.style.top = e.clientY - 20 + 'px';
+        });
+
+        // 2028 COUNTDOWN
+        function updateCountdown() {
+            const target = new Date("January 1, 2028 00:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerText = days + " DAYS UNTIL 2028";
+        }
+        setInterval(updateCountdown, 1000);
 
         function godlyEnter() {
+            document.getElementById('ambient').play();
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(1.8) rotate(5deg)";
-            document.getElementById('bg').style.filter = "brightness(5) blur(20px)";
-            document.getElementById('hero').style.opacity = "0";
-
+            document.getElementById('hero').style.animation = "fadeOut 0.8s forwards";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
-                document.getElementById('logs').style.display = 'flex';
-                document.getElementById('bg').style.display = 'none';
-            }, 1500);
+                document.getElementById('logs').classList.add('section-active');
+            }, 1000);
         }
 
         function openStory() {
-            document.getElementById('logs').style.display = 'none';
-            document.getElementById('story').style.display = 'flex';
+            document.getElementById('logs').classList.remove('section-active');
+            setTimeout(() => {
+                document.getElementById('logs').style.display = 'none';
+                document.getElementById('story').classList.add('section-active');
+            }, 400);
         }
 
-        function backToLogs() {
-            document.getElementById('story').style.display = 'none';
-            document.getElementById('logs').style.display = 'flex';
+        // REVERSE WARP ANIMATION
+        function reverseWarp(targetId, currentId) {
+            const current = document.getElementById(currentId);
+            current.style.animation = "fadeOut 0.5s forwards";
+            
+            setTimeout(() => {
+                current.classList.remove('section-active');
+                current.style.display = 'none';
+                current.style.animation = ""; // reset
+                
+                const target = document.getElementById(targetId);
+                if(targetId === 'hero') {
+                    target.style.display = 'flex';
+                    target.style.animation = "fadeIn 0.8s forwards";
+                } else {
+                    target.classList.add('section-active');
+                }
+            }, 500);
         }
+
+        function backToLogs() { reverseWarp('logs', 'story'); }
     </script>
 </body>
 </html>
