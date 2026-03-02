@@ -16,7 +16,7 @@
             overflow: hidden;
         }
 
-        /* --- BACKGROUND & WARP --- */
+        /* --- BACKGROUND --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.5), rgba(2,0,8,0.8)), 
@@ -41,53 +41,59 @@
             100% { transform: translate(-50%, -50%) scale(6) rotate(120deg); opacity: 0; }
         }
 
-        /* --- THE GODLY RGB EFFECT --- */
-        .rgb-master {
-            background: linear-gradient(to right, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        /* --- RGB GLOW OUTSIDE ONLY --- */
+        .glow-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .rgb-glow {
+            color: white; /* Text stays white */
+            position: relative;
+            z-index: 2;
+        }
+
+        /* The RGB Effect is only in the shadow/glow */
+        .rgb-aura {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            filter: blur(25px);
+            background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
             background-size: 400% 400%;
+            animation: rgbShift 3s linear infinite;
+            opacity: 0.8;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: rgbShift 2s linear infinite, textGlow 1.2s ease-in-out infinite alternate;
         }
 
         @keyframes rgbShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-        
-        @keyframes textGlow {
-            from { filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); transform: scale(1); }
-            to { filter: drop-shadow(0 0 35px rgba(255,255,255,0.7)); transform: scale(1.03); }
-        }
 
         /* --- SECTIONS --- */
         .section {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             display: none; z-index: 1000;
             flex-direction: column; align-items: center; justify-content: center;
-            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.7s ease, transform 0.7s ease;
         }
-        .active { display: flex !important; animation: slideIn 0.7s forwards; }
+        .active { display: flex !important; opacity: 1; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.8); } }
-
-        /* --- BUTTONS & CARDS --- */
+        /* --- BUTTONS --- */
         .btn-fog {
             padding: 18px 45px; border: 2px solid #fff;
             background: none; color: #fff; font-weight: 900;
             letter-spacing: 5px; cursor: pointer; transition: 0.4s;
             text-transform: uppercase; margin: 15px;
         }
-        .btn-fog:hover { background: #fff; color: #000; box-shadow: 0 0 50px #fff; transform: translateY(-3px); }
+        .btn-fog:hover { background: #fff; color: #000; box-shadow: 0 0 50px #fff; }
 
         .diary-card {
             background: white; padding: 10px 10px 50px 10px;
-            width: 320px; box-shadow: 0 0 40px rgba(255,0,150,0.4);
+            width: 320px; box-shadow: 0 0 40px rgba(0,0,0,0.8);
             transform: rotate(-2deg); transition: 0.5s;
         }
-        .diary-card:hover { transform: scale(1.1) rotate(2deg); box-shadow: 0 0 60px #00f2ff; }
 
         .social-link img { width: 50px; margin: 0 20px; filter: invert(1); transition: 0.3s; }
-        .social-link img:hover { transform: scale(1.4) rotate(15deg); filter: drop-shadow(0 0 20px #ff2d95); }
-
     </style>
 </head>
 <body>
@@ -96,25 +102,38 @@
     <div class="ray-box" id="rays"></div>
 
     <div class="section active" id="hero">
-        <h1 class="rgb-master" style="font-family:'Dancing Script'; font-size: clamp(5rem, 15vw, 10rem);">Foggy Fights</h1>
+        <div class="glow-wrap">
+            <h1 class="rgb-aura" style="font-family:'Dancing Script'; font-size: 8rem;">Foggy Fights</h1>
+            <h1 class="rgb-glow" style="font-family:'Dancing Script'; font-size: 8rem;">Foggy Fights</h1>
+        </div>
         <button class="btn-fog" onclick="enterFog()">Enter the Fog</button>
     </div>
 
     <div class="section" id="gallery">
-        <h2 class="rgb-master" style="font-size: 3.5rem; margin-bottom: 30px;">MEMORIES</h2>
-        <div class="diary-card">
+        <div class="glow-wrap">
+            <h2 class="rgb-aura" style="font-size: 3.5rem;">MEMORIES</h2>
+            <h2 class="rgb-glow" style="font-size: 3.5rem;">MEMORIES</h2>
+        </div>
+        <div class="diary-card" style="margin-top:20px;">
             <div style="height:300px; background:url('Screenshot_28.png') center/cover;"></div>
             <p style="color:black; font-family:'Dancing Script'; text-align:center; font-size: 1.8rem;">08/15/25</p>
         </div>
-        <button class="btn-fog" style="margin-top:35px" onclick="navTo('story')">Explore Story</button>
+        <button class="btn-fog" style="margin-top:30px" onclick="navTo('story')">Explore Story</button>
         <button class="btn-fog" style="border:none; font-size:0.8rem; opacity:0.6;" onclick="navBack('hero')">Back</button>
     </div>
 
     <div class="section" id="story">
-        <div class="rgb-master" style="font-size: clamp(1.2rem, 2.5vw, 2rem); max-width: 850px; line-height: 1.5; text-align: center; padding: 20px;">
-            This game was inspired from a game that i played called da hood.<br><br>
-            i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
-            and now its probably going to get released in 2028 since im busy with life.
+        <div class="glow-wrap">
+            <div class="rgb-aura" style="font-size: 1.8rem; line-height: 1.5; text-align: center;">
+                This game was inspired from a game that i played called da hood.<br><br>
+                i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
+                and now its probably going to get released in 2028 since im busy with life.
+            </div>
+            <div class="rgb-glow" style="font-size: 1.8rem; line-height: 1.5; text-align: center;">
+                This game was inspired from a game that i played called da hood.<br><br>
+                i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
+                and now its probably going to get released in 2028 since im busy with life.
+            </div>
         </div>
         
         <div style="margin-top:40px;">
@@ -122,21 +141,18 @@
             <a class="social-link" href="https://instagram.com/promethazine" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
             <a class="social-link" href="https://www.roblox.com/users/3295874241/profile" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1018/1018285.png"></a>
         </div>
-
         <button class="btn-fog" style="margin-top:40px;" onclick="navBack('gallery')">Back to Gallery</button>
     </div>
 
     <script>
         function enterFog() {
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(12) rotate(25deg)";
-            document.getElementById('bg').style.filter = "brightness(35) blur(70px)";
-            
-            const current = document.getElementById('hero');
-            current.style.animation = "slideOut 1.5s forwards";
+            document.getElementById('bg').style.transform = "scale(10) rotate(15deg)";
+            document.getElementById('bg').style.filter = "brightness(20) blur(50px)";
+            document.getElementById('hero').style.opacity = "0";
             
             setTimeout(() => {
-                current.classList.remove('active');
+                document.getElementById('hero').classList.remove('active');
                 document.getElementById('gallery').classList.add('active');
             }, 2000); 
         }
@@ -144,33 +160,27 @@
         function navTo(id) {
             const current = document.querySelector('.section.active');
             current.style.opacity = "0";
-            current.style.transform = "scale(0.8)";
-            
             setTimeout(() => {
                 current.classList.remove('active');
-                current.style.opacity = "";
-                current.style.transform = "";
                 document.getElementById(id).classList.add('active');
-            }, 700);
+            }, 600);
         }
 
         function navBack(id) {
             const current = document.querySelector('.section.active');
             current.style.opacity = "0";
-            current.style.transform = "scale(1.2)";
-            
             setTimeout(() => {
                 current.classList.remove('active');
-                current.style.transform = "";
                 const next = document.getElementById(id);
                 next.classList.add('active');
+                next.style.opacity = "1"; // Ensure it shows up
                 
                 if(id === 'hero') {
                     document.getElementById('bg').style.transform = "scale(1)";
                     document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
                     document.getElementById('rays').classList.remove('ray-active');
                 }
-            }, 700);
+            }, 600);
         }
     </script>
 </body>
