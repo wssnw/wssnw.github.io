@@ -6,10 +6,7 @@
     <title>Foggy Fights | 2028</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --neon-pink: #ff2d95;
-            --glass-white: rgba(255, 255, 255, 0.1);
-        }
+        :root { --neon-pink: #ff2d95; }
 
         body, html {
             margin: 0; padding: 0;
@@ -19,152 +16,111 @@
             font-family: 'Syne', sans-serif;
         }
 
-        /* --- MAIN BACKGROUND --- */
         .bg-img {
-            position: fixed;
-            top: -10%; left: -10%;
-            width: 120%; height: 120%;
-            /* Using the GitHub link to ensure it loads immediately */
+            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
             background: url('https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/IMG_3002.jpg') no-repeat center center;
             background-size: cover;
-            z-index: 1;
-            filter: contrast(1.2) brightness(0.6);
-            transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1), filter 1.5s;
+            z-index: 1; filter: contrast(1.2) brightness(0.6);
+            transition: transform 3.2s cubic-bezier(0.19, 1, 0.22, 1), filter 1.5s;
         }
 
-        /* --- NEON LOGO --- */
         .hero {
-            position: relative;
-            z-index: 10;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center; justify-content: center;
-            transition: opacity 0.5s;
+            position: relative; z-index: 10; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(5rem, 18vw, 11rem);
-            color: #fff;
-            text-shadow: 0 0 15px #fff, 0 0 30px var(--neon-pink), 0 0 70px var(--neon-pink), 0 0 120px var(--neon-pink);
-            animation: ultraBreathe 4s infinite ease-in-out;
+            font-size: clamp(4rem, 15vw, 10rem);
+            color: #fff; text-align: center;
+            text-shadow: 0 0 20px #fff, 0 0 40px var(--neon-pink), 0 0 80px var(--neon-pink);
+            animation: breathe 4s infinite ease-in-out;
         }
 
-        @keyframes ultraBreathe {
+        @keyframes breathe {
             0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.05); filter: brightness(1.4); }
+            50% { transform: scale(1.03); filter: brightness(1.4); }
         }
 
-        /* --- CRYSTAL GLASS BUTTON --- */
         .btn-fog {
-            margin-top: 140px;
-            padding: 25px 80px;
-            background: var(--glass-white);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 20px;
-            cursor: pointer;
-            backdrop-filter: blur(55px) saturate(200%);
-            -webkit-backdrop-filter: blur(55px) saturate(200%);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 0 25px rgba(255,255,255,0.2);
-            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            margin-top: 60px; padding: 25px 70px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #fff; color: #fff;
+            text-transform: uppercase; letter-spacing: 15px;
+            cursor: pointer; backdrop-filter: blur(40px);
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .btn-fog:hover {
-            letter-spacing: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 80px var(--neon-pink);
-            transform: translateY(-10px);
+            letter-spacing: 20px; background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 50px var(--neon-pink);
         }
 
-        /* --- INFINITE HEAVEN RAYS (NO BOXES) --- */
-        .ray-container {
-            position: fixed;
-            top: 50%; left: 50%;
-            width: 800vw; height: 800vw;
+        /* --- THE INFINITE RAYS --- */
+        .ray-box {
+            position: fixed; top: 50%; left: 50%;
+            width: 1200vw; height: 1200vw; /* Massive width */
             transform: translate(-50%, -50%) scale(0);
-            z-index: 999;
-            pointer-events: none;
-            opacity: 0;
-            background: conic-gradient(from 0deg, transparent 0deg, #fff 15deg, transparent 35deg, #fff 60deg, transparent 90deg, #fff 140deg, transparent 180deg);
-            filter: blur(120px) brightness(3); /* Huge blur makes it glowy, not choppy */
+            background: conic-gradient(from 0deg, transparent 0, #fff 5deg, transparent 15deg, #fff 35deg, transparent 60deg);
+            filter: blur(120px) brightness(2.5);
+            z-index: 999; pointer-events: none; opacity: 0;
         }
 
-        .ray-active { animation: heavenWarp 2.2s forwards ease-in; }
+        .ray-active { animation: warpDrive 2s forwards ease-in; }
 
-        @keyframes heavenWarp {
+        @keyframes warpDrive {
             0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1.2) rotate(250deg); opacity: 0; }
+            25% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(400deg); opacity: 0; }
         }
 
-        /* --- HEAVEN DIARY --- */
+        /* --- THE DIARY SECTION --- */
         .heaven-logs {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100vh;
-            background: #fff;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .diary-container {
-            width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        @keyframes diaryFloat {
-            0%, 100% { transform: rotate(-1.5deg) translateY(0); }
-            50% { transform: rotate(1.5deg) translateY(-20px); }
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #fff; display: none; z-index: 1000;
+            align-items: center; justify-content: center;
         }
 
         .diary-card {
-            position: relative;
-            width: 600px;
-            background: #fff;
-            padding: 20px 20px 80px 20px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
-            animation: diaryFloat 6s infinite ease-in-out; /* Moving because of air */
+            position: relative; width: 90%; max-width: 550px; 
+            background: #fff; padding: 20px 20px 100px 20px;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.15);
+            animation: windSway 6s infinite ease-in-out;
         }
 
-        /* NEON PINK TAPE STICKER */
+        @keyframes windSway {
+            0%, 100% { transform: rotate(-1.5deg) translateY(0); }
+            50% { transform: rotate(1.5deg) translateY(-25px); }
+        }
+
         .tape-sticker {
-            position: absolute;
-            top: -30px; left: 50%;
-            width: 160px; height: 50px;
-            background: rgba(255, 45, 149, 0.5); 
-            backdrop-filter: blur(4px);
-            transform: translateX(-50%) rotate(-2deg);
-            box-shadow: 0 5px 15px rgba(255, 45, 149, 0.3);
+            position: absolute; top: -30px; left: 50%;
+            width: 160px; height: 55px;
+            background: rgba(255, 45, 149, 0.5); /* Neon pink tape */
+            backdrop-filter: blur(5px); transform: translateX(-50%) rotate(-3deg);
             z-index: 10;
         }
 
-        .diary-image {
-            width: 100%; height: 400px;
-            /* Update this to your local file or a web link */
-            background: url('Screenshot_28.png') no-repeat center center;
+        .diary-img-box {
+            width: 100%; height: 450px;
+            background-color: #eee; /* Fallback color if pic fails */
+            background-image: url('Screenshot_28.png'); 
+            background-repeat: no-repeat;
+            background-position: center;
             background-size: cover;
-            border: 1px solid #eee;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .diary-text {
-            font-family: 'Dancing Script';
-            font-size: 2.5rem; text-align: center; margin-top: 25px;
-            color: #333;
+            font-family: 'Dancing Script'; font-size: 2.5rem;
+            text-align: center; margin-top: 30px; color: #111;
         }
     </style>
 </head>
 <body>
 
-    <audio id="windSound" loop>
-        <source src="https://www.soundjay.com/nature/wind-01.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="bg-img" id="bg"></div>
-    <div class="ray-container" id="rays"></div>
+    <div class="ray-box" id="rays"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
@@ -172,39 +128,26 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <div class="diary-container">
-            <div class="diary-card">
-                <div class="tape-sticker"></div>
-                <div class="diary-image"></div>
-                <div class="diary-text">Memory Found...</div>
-                <button onclick="location.reload()" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:none; border:1px solid #000; cursor:pointer; padding:5px 15px; font-family:'Syne';">LEAVE</button>
-            </div>
+        <div class="diary-card">
+            <div class="tape-sticker"></div>
+            <div class="diary-img-box"></div>
+            <div class="diary-text">Memory Found...</div>
+            <button onclick="location.reload()" style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); border:1px solid #000; background:none; cursor:pointer; padding:10px 25px; font-family:'Syne';">BACK</button>
         </div>
     </div>
 
     <script>
         function warp() {
-            const rays = document.getElementById('rays');
-            const bg = document.getElementById('bg');
-            const hero = document.getElementById('hero');
-            const logs = document.getElementById('logs');
-            const wind = document.getElementById('windSound');
-
-            // Sound and Rays
-            wind.volume = 0.3;
-            wind.play().catch(e => console.log("Audio play blocked"));
-            rays.classList.add('ray-active');
+            document.getElementById('rays').classList.add('ray-active');
+            document.getElementById('bg').style.transform = "scale(12)";
+            document.getElementById('bg').style.filter = "brightness(30) blur(60px)";
+            document.getElementById('hero').style.opacity = "0";
             
-            // Warp FX
-            bg.style.filter = 'brightness(30) blur(80px)';
-            bg.style.transform = 'scale(10)';
-            hero.style.opacity = '0';
-
             setTimeout(() => {
-                hero.style.display = 'none';
-                logs.style.display = 'block';
+                document.getElementById('hero').style.display = 'none';
+                document.getElementById('logs').style.display = 'flex';
                 document.body.style.background = "#fff";
-            }, 1500);
+            }, 1600);
         }
     </script>
 </body>
