@@ -3,87 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foggy Fights | Official</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    
+    <title>Foggy Fights | 2028</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --neon-blue: #00d2ff;
+            --neon-pink: #ff00ff;
+        }
+
         body {
-            background-color: #050505;
+            background: radial-gradient(circle, #0a0a1a 0%, #050505 100%);
+            color: white;
             margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Dancing Script', cursive;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
-            font-family: 'Dancing Script', cursive;
         }
 
-        .logo-container {
-            text-align: center;
+        /* Animated Snow Background */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
 
         .logo {
-            font-size: 8rem;
+            font-size: 6rem;
             color: #fff;
-            text-decoration: none;
-            cursor: default;
-            /* The Blue Glow Effect */
-        
-            text-shadow: 
-                0 0 7px #fff,
-                0 0 10px #fff,
-                0 0 21px #fff,
-                0 0 42px #00d2ff,
-                0 0 82px #00d2ff,
-                0 0 92px #00d2ff,
-                0 0 102px #00d2ff,
-                0 0 151px #00d2ff;
-            /* Running both Flicker and Pulse animations */
-            animation: flicker 2s infinite alternate, pulse 3s infinite ease-in-out;
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
+            animation: flicker 3s infinite alternate;
+            margin-bottom: 0;
         }
 
-        /* Animation 1: Random Neon Flicker */
-        @keyframes flicker {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% {
-                text-shadow: 
-                    0 0 7px #fff,
-                    0 0 10px #fff,
-                    0 0 21px #fff,
-                    0 0 42px #00d2ff,
-                    0 0 82px #00d2ff,
-                    0 0 92px #00d2ff,
-                    0 0 102px #00d2ff,
-                    0 0 151px #00d2ff;
-            }
-            20%, 24%, 55% {       
-                text-shadow: none;
-                color: #111;
-            }
+        .screenshot {
+            width: 350px;
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--neon-pink);
+            transform: rotate(-2deg);
+            transition: 0.5s;
+            animation: float 4s ease-in-out infinite;
         }
 
-        /* Animation 2: Gentle Breathing Pulse */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .screenshot:hover {
+            transform: rotate(0deg) scale(1.1);
         }
 
-        .subtitle {
-            font-family: sans-serif;
-            color: #00d2ff;
+        .info-box {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .release {
+            font-size: 1.5rem;
             letter-spacing: 5px;
-            font-size: 0.8rem;
-            margin-top: -20px;
-            opacity: 0.6;
-            text-transform: uppercase;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .discord-btn {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 0 15px var(--neon-blue);
+            transition: 0.3s;
+        }
+
+        .discord-btn:hover {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            95% { opacity: 1; }
+            96% { opacity: 0.8; }
+            97% { opacity: 1; }
+            99% { opacity: 0.9; }
         }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <h1 class="logo">Foggy Fights</h1>
-        <p class="subtitle">Enter the Mist</p>
+    <canvas id="snow"></canvas>
+
+    <h1 class="logo">Foggy Fights</h1>
+    
+    <img src="https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/Screenshot_28.png" class="screenshot" alt="FF Gameplay">
+
+    <div class="info-box">
+        <p class="release">RELEASING IN 2028</p>
+        <br><br>
+        <a href="https://discord.gg/ff" class="discord-btn">gg/ff</a>
     </div>
 
+    <script>
+        // Snow Script
+        const canvas = document.getElementById('snow');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const flakes = [];
+        for(let i=0; i<150; i++) flakes.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*3+1, d: Math.random()*1});
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            flakes.forEach(f => {
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI*2, true);
+                f.y += Math.cos(f.d) + 1 + f.r/2;
+                if(f.y > canvas.height) { f.y = -10; f.x = Math.random()*canvas.width; }
+            });
+            ctx.fill();
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
 </body>
 </html>
