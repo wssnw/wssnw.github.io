@@ -3,216 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Montserrat:wght@300;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>Foggy Fights | Tropical</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-blue: #00d2ff;
-            --neon-pink: #ff00ff;
-            --sun-gold: #ffcc00;
-            --bg: #030303;
+            --sea-blue: #0077be;
+            --sand-gold: #f2d2a9;
+            --leaf-green: #2d5a27;
+            --neon-glow: #00d2ff;
         }
 
         body {
-            background: var(--bg);
-            color: white;
             margin: 0;
-            overflow-x: hidden;
-            font-family: 'Montserrat', sans-serif;
-            -webkit-font-smoothing: antialiased;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #00b4db, #0083b0);
+            font-family: 'Syne', sans-serif;
+            height: 100vh;
         }
 
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; opacity: 0.6; }
+        /* --- THE BEACH --- */
+        .beach {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 25vh;
+            background: var(--sand-gold);
+            z-index: 5;
+            box-shadow: inset 0 20px 50px rgba(0,0,0,0.1);
+        }
 
-        /* Smooth Hero Section */
+        /* --- THE WAVES --- */
+        .waves {
+            position: absolute;
+            bottom: 20vh;
+            width: 100%;
+            height: 15vh;
+            z-index: 4;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 43%;
+            animation: waveFlow 10s infinite linear;
+        }
+
+        .wave:nth-child(2) {
+            bottom: 2vh;
+            background: rgba(0, 119, 190, 0.5);
+            animation-duration: 7s;
+            animation-direction: reverse;
+        }
+
+        @keyframes waveFlow {
+            from { transform: translateX(0) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        /* --- THE PALM TREES --- */
+        .palm-tree {
+            position: absolute;
+            bottom: 20vh;
+            width: 20px;
+            height: 200px;
+            background: #6d4c41;
+            z-index: 6;
+            border-radius: 10px 10px 0 0;
+            transform-origin: bottom;
+            animation: sway 4s infinite ease-in-out;
+        }
+
+        .palm-tree::before {
+            content: '🌴';
+            font-size: 100px;
+            position: absolute;
+            top: -60px;
+            left: -40px;
+        }
+
+        .left-tree { left: 10%; animation-delay: 0s; }
+        .right-tree { right: 10%; animation-delay: 1s; }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        /* --- LOGO & BUTTON --- */
         .container {
+            position: relative;
+            z-index: 10;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(5rem, 18vw, 10rem);
-            margin: 0;
-            background: linear-gradient(to bottom, #fff, var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.5));
-            animation: logoFloat 6s infinite ease-in-out;
-        }
-
-        /* Clicking this triggers the "Boss" effect */
-        .release-trigger {
-            margin-top: -20px;
-            font-family: 'Syne', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 15px;
+            font-size: clamp(5rem, 15vw, 9rem);
             color: #fff;
-            background: none;
-            border: none;
+            text-shadow: 0 0 20px var(--neon-glow), 0 0 40px var(--neon-glow);
+            animation: float 4s infinite ease-in-out;
+            margin-bottom: 20px;
+        }
+
+        .release-btn {
+            font-family: 'Syne', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
             cursor: pointer;
-            position: relative;
-            padding: 20px;
-            transition: letter-spacing 0.5s cubic-bezier(0.23, 1, 0.32, 1), filter 0.3s;
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .release-trigger:hover {
-            letter-spacing: 25px;
-            filter: drop-shadow(0 0 10px var(--neon-pink));
+        .release-btn:hover {
+            background: white;
+            color: var(--sea-blue);
+            transform: scale(1.1);
+            letter-spacing: 10px;
         }
 
-        /* The Sunray Expansion (Smoothed with Blurs) */
-        .sun-expansion {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: var(--sun-gold);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 99;
-            pointer-events: none;
-            filter: blur(20px);
-            box-shadow: 0 0 200px 100px var(--sun-gold);
+        /* --- COCONUTS --- */
+        .coconut {
+            position: absolute;
+            font-size: 30px;
+            z-index: 7;
+            user-select: none;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.3));
         }
 
-        .sun-expansion.active {
-            animation: sunBurst 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
-
-        /* Diary - Glassmorphism Aesthetic */
-        .diary-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(3, 3, 3, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 100;
-            display: none;
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .diary-content {
-            max-width: 900px;
-            margin: 100px auto;
-            padding: 40px;
-        }
-
-        .entry {
-            margin-bottom: 100px;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .entry.visible { opacity: 1; transform: translateY(0); }
-
-        .entry h2 { font-family: 'Syne', sans-serif; font-size: 3rem; color: var(--neon-blue); margin-bottom: 10px; }
-        .entry p { font-size: 1.2rem; line-height: 1.8; color: #ccc; font-weight: 300; }
-        
-        .entry img {
-            width: 100%;
-            border-radius: 20px;
-            margin-top: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transition: transform 0.5s;
-        }
-
-        .entry img:hover { transform: scale(1.02); }
-
-        /* Animations */
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-25px) rotate(1deg); }
-        }
-
-        @keyframes sunBurst {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            70% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(600); opacity: 0; }
-        }
-
-        /* Scrollbar Hide */
-        ::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
 
-    <canvas id="snowCanvas"></canvas>
-    <div class="sun-expansion" id="sun"></div>
-
-    <div class="container" id="hero">
-        <h1 class="main-logo">Foggy Fights</h1>
-        <button class="release-trigger" onclick="launchDiary()">2028</button>
+    <div class="waves">
+        <div class="wave"></div>
+        <div class="wave"></div>
     </div>
 
-    <div class="diary-overlay" id="diary">
-        <div class="diary-content">
-            <div class="entry" id="e1">
-                <h2>THE VISION</h2>
-                <p>Foggy Fights isn't just a project. It's the mist that consumes everything.</p>
-                <img src="Screenshot_28.png" alt="FF Entry 1">
-            </div>
+    <div class="beach"></div>
 
-            <div class="entry" id="e2">
-                <h2>THE DIARY</h2>
-                <p>2028 is the year the world changes. Recorded in the shadows.</p>
-                </div>
+    <div class="palm-tree left-tree"></div>
+    <div class="palm-tree right-tree"></div>
 
-            <button onclick="window.location.reload()" style="background:none; border: 1px solid white; color:white; padding: 15px 30px; cursor:pointer; font-family:'Syne';">REBOOT SYSTEM</button>
-        </div>
+    <div class="container">
+        <h1 class="main-logo">Foggy Fights</h1>
+        <button class="release-btn" onclick="location.reload()">2028</button>
     </div>
 
     <script>
-        function launchDiary() {
-            const sun = document.getElementById('sun');
-            const hero = document.getElementById('hero');
-            const diary = document.getElementById('diary');
+        function dropCoconut() {
+            const coconut = document.createElement('div');
+            coconut.className = 'coconut';
+            coconut.innerHTML = '🥥';
+            
+            // Randomly pick left or right tree area
+            const isLeft = Math.random() > 0.5;
+            coconut.style.left = isLeft ? (Math.random() * 5 + 10) + '%' : (Math.random() * 5 + 80) + '%';
+            coconut.style.top = '20vh';
+            
+            document.body.appendChild(coconut);
 
-            sun.classList.add('active');
-            hero.style.opacity = '0';
-            hero.style.transform = 'scale(0.9)';
-
-            setTimeout(() => {
-                diary.style.display = 'block';
-                setTimeout(() => { 
-                    diary.style.opacity = '1'; 
-                    document.getElementById('e1').classList.add('visible');
-                    document.getElementById('e2').classList.add('visible');
-                }, 50);
-            }, 800);
+            let top = 20;
+            const gravity = setInterval(() => {
+                top += 2;
+                coconut.style.top = top + 'vh';
+                
+                if (top >= 85) { // Hits the sand
+                    clearInterval(gravity);
+                    setTimeout(() => {
+                        coconut.style.opacity = '0';
+                        setTimeout(() => coconut.remove(), 1000);
+                    }, 2000);
+                }
+            }, 20);
         }
 
-        // Professional Snow System
-        const canvas = document.getElementById('snowCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i<100; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, s: Math.random()*1+0.5});
-        }
-        function draw() {
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = "rgba(255,255,255,0.3)";
-            particles.forEach(p => {
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-                p.y += p.s; if(p.y > canvas.height) p.y = -10;
-            });
-            requestAnimationFrame(draw);
-        }
-        window.addEventListener('resize', init);
-        init(); draw();
+        // Drop a coconut every 5-10 seconds
+        setInterval(dropCoconut, Math.random() * 5000 + 5000);
     </script>
 </body>
 </html>
