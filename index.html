@@ -11,9 +11,15 @@
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
             --white-glow: rgba(255, 255, 255, 0.9);
+            --paper: #fdfaf0;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* --- CORE RESET --- */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+        }
         
         body, html {
             margin: 0; padding: 0;
@@ -21,7 +27,7 @@
             background: #020008;
             font-family: 'Syne', sans-serif;
             color: white;
-            overflow-x: hidden;
+            overflow: hidden; /* Prevents mobile "rubber-band" scrolling */
         }
 
         /* --- BACKGROUND ENGINE --- */
@@ -34,64 +40,54 @@
             transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
-        /* --- ACCURATE SAKURA PETALS --- */
+        /* --- SAKURA PETALS --- */
         .leaf {
-            position: fixed; 
-            top: -10%; 
-            z-index: 5;
-            width: 18px; 
-            height: 22px;
+            position: fixed; top: -10%; z-index: 5;
+            width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
-            /* The "Notched" Sakura Shape */
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
             pointer-events: auto;
             animation: fallSway linear infinite;
             opacity: 0.8;
-            transition: filter 0.3s, transform 0.3s, opacity 0.3s;
+            transition: filter 0.3s, transform 0.3s;
             cursor: pointer;
         }
 
         .leaf.clicked {
             filter: brightness(2) drop-shadow(0 0 15px white);
-            transform: scale(2) rotate(45deg) !important;
-            opacity: 1;
+            transform: scale(2.5) rotate(45deg) !important;
         }
 
         @keyframes fallSway {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
             15% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- LOGO & HEADER RGB GLOW --- */
-        .main-logo, .glow-header {
-            color: white;
-            position: relative;
-            filter: drop-shadow(0 0 20px #ff0000) drop-shadow(0 0 40px #00f2ff);
-            animation: rgbPulse 5s linear infinite;
-            text-align: center;
-        }
-
+        /* --- TITLES & LOGOS --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            /* clamp(min, preferred, max) - handles Mobile vs Desktop automatically */
-            font-size: clamp(3.5rem, 15vw, 11rem);
+            font-size: clamp(3.8rem, 16vw, 11rem);
+            color: white;
+            filter: drop-shadow(0 0 20px #ff0000) drop-shadow(0 0 40px #00f2ff);
             animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
+            text-align: center;
+            margin: 0;
+            z-index: 10;
         }
 
         @keyframes rgbPulse {
-            0% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px #ff2d95); }
+            0%, 100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px #ff2d95); }
             33% { filter: drop-shadow(0 0 15px #00f2ff) drop-shadow(0 0 30px #7000ff); }
             66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
-            100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px #ff2d95); }
         }
 
         @keyframes floating {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        /* --- CINEMATIC WARP --- */
+        /* --- CINEMATIC OVERLAY --- */
         .ray-box {
             position: fixed; top: 50%; left: 50%;
             width: 150vmax; height: 150vmax;
@@ -100,74 +96,107 @@
             background-size: 10% 10%;
             opacity: 0; z-index: 9999; pointer-events: none;
         }
-
-        .ray-active { animation: godlyWarp 5.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        .ray-active { animation: godlyWarp 5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 
         @keyframes godlyWarp {
-            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
             20% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(5) rotate(180deg); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(5); opacity: 0; }
         }
 
-        /* --- UI SECTIONS --- */
+        /* --- THE HEAVENLY DIARY --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.75); 
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(2, 0, 8, 0.8);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             display: none; z-index: 1000;
-            overflow-y: auto; padding: 80px 20px;
+            overflow-y: scroll; padding: 60px 20px;
             flex-direction: column; align-items: center;
-            opacity: 0;
-            transition: opacity 1.5s ease;
+            opacity: 0; transition: opacity 1s ease;
         }
 
-        .hero {
-            position: relative; z-index: 10; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 2s ease;
-            padding: 20px;
+        .diary-stack {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 50px;
         }
 
-        /* --- POLAROID CARD --- */
         .diary-card {
-            position: relative; background: white; padding: 12px 12px 45px 12px;
-            width: 100%; max-width: 340px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            margin: 20px;
+            position: relative; 
+            background: var(--paper); 
+            padding: 15px 15px 60px 15px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transform: rotate(-1.5deg);
+            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-        .diary-card:hover { transform: scale(1.05) rotate(2deg); }
+        .diary-card:nth-child(even) { transform: rotate(2deg); }
+
+        @keyframes diaryEntry {
+            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
+            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
+        }
 
         .tape {
-            position: absolute; top: -15px; left: 50%; width: 90px; height: 35px;
-            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-5deg);
-            box-shadow: 0 5px 15px var(--neon-pink);
-            z-index: 2;
+            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
+            background: rgba(255, 45, 149, 0.8); transform: translateX(-50%) rotate(-4deg);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 5;
         }
 
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box { 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            background: #111; 
+            overflow: hidden; 
+            border: 1px solid #ddd;
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+
+        .diary-label {
+            color: #222; 
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; 
+            text-align: center; 
+            margin-top: 20px;
+        }
 
         /* --- BUTTONS --- */
         .btn-fancy {
-            margin: 10px; padding: 15px 35px; border: 1px solid white;
+            margin: 10px; padding: 18px 40px; border: 1px solid white;
             background: rgba(255, 255, 255, 0.05); color: white; cursor: pointer;
-            letter-spacing: 4px; font-weight: 900; transition: 0.4s;
-            backdrop-filter: blur(5px);
-            text-transform: uppercase;
-            font-size: 0.85rem;
+            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
+            backdrop-filter: blur(5px); text-transform: uppercase;
         }
         .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
 
-        .social-icons { display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
-        .social-icon { width: 45px; transition: 0.4s; filter: grayscale(1) invert(1); }
-        .social-icon:hover { transform: scale(1.25); filter: grayscale(0) invert(0); }
+        .btn-play {
+            display: block; width: 100%; background: #000; color: white;
+            padding: 12px; margin-top: 15px; text-decoration: none;
+            text-align: center; font-weight: 900; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .btn-play:hover { background: var(--neon-pink); }
 
-        /* --- MOBILE TWEAKS --- */
+        .social-icons { display: flex; gap: 30px; margin-top: 40px; justify-content: center; }
+        .social-icon { width: 45px; transition: 0.4s; filter: grayscale(1) invert(1); }
+        .social-icon:hover { transform: scale(1.3); filter: grayscale(0) invert(0); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative; z-index: 10; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.5s ease;
+        }
+
+        /* iOS/Android Adjustments */
         @media (max-width: 600px) {
-            .btn-fancy { width: 90%; letter-spacing: 2px; }
-            .glow-header { font-size: 2.2rem !important; }
+            .diary-stack { max-width: 90%; }
+            .btn-fancy { width: 85%; padding: 15px; letter-spacing: 2px; }
+            .main-logo { font-size: 4rem; }
         }
 
         #story { display: none; }
@@ -185,24 +214,46 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 8px; margin-bottom: 40px;">MEMORIES</h2>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; width: 100%;">
-            <div class="diary-card">
+        <h2 class="glow-header" style="font-size: 3rem; letter-spacing: 10px; margin-bottom: 50px; text-align: center;">MEMORIES</h2>
+        
+        <div class="diary-stack">
+            
+            <div class="diary-card" style="animation-delay: 0.1s;">
                 <div class="tape"></div>
-                <div class="img-box"><img src="Screenshot_28.png" alt="Memory"></div>
-                <p style="color:black; font-family:'Dancing Script'; text-align:center; font-size: 1.6rem; margin: 15px 0 0 0;">08/15/25</p>
+                <div class="img-box">
+                    <img src="https://tr.rbxcdn.com/180day-033504107936691459976378e9b08535/768/432/Image/Webp" alt="Foggy Fights Game">
+                </div>
+                <div class="diary-label">The Main Stage</div>
+                <a href="https://www.roblox.com/games/15134238727/Foggy-Fights" target="_blank" class="btn-play">PLAY NOW</a>
             </div>
+
+            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
+                <div class="tape" style="background: #00f2ff;"></div>
+                <div class="img-box">
+                    <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" alt="Group Icon" style="object-fit: contain; background: #fff; padding: 10px;">
+                </div>
+                <div class="diary-label">The Community</div>
+                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
+                <div class="tape" style="background: #fffb00;"></div>
+                <div class="img-box"><img src="Screenshot_28.png" alt="Development"></div>
+                <div class="diary-label">08/15/25 - Progress</div>
+            </div>
+
         </div>
-        <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; width: 100%;">
+
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;">
             <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-            <button class="btn-fancy" style="border:none; opacity:0.5" onclick="backToHome()">BACK</button>
+            <button class="btn-fancy" style="border:none; opacity:0.5" onclick="backToHome()">BACK HOME</button>
         </div>
     </div>
 
     <div class="heaven-logs" id="story">
-        <div style="max-width: 800px; text-align: center; line-height: 1.6; padding: 20px;">
-            <h1 class="glow-header" style="font-size: 3.2rem; font-weight: 900; margin-bottom: 25px;">THE LEGACY</h1>
-            <p style="font-size: clamp(1.1rem, 4vw, 1.8rem); font-weight: 400;">
+        <div style="max-width: 800px; text-align: center; line-height: 1.8; padding: 20px;">
+            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
+            <p style="font-size: clamp(1.2rem, 4vw, 1.8rem); font-family: 'Inter', sans-serif;">
                 This game was inspired from a game that i played called da hood.<br><br>
                 i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
                 and now its probably going to get released in 2028 since im busy with life.
@@ -214,51 +265,45 @@
                 <a href="https://www.roblox.com/users/3295874241/profile" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1018/1018285.png" class="social-icon"></a>
             </div>
 
-            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO GALLERY</button>
+            <button class="btn-fancy" style="margin-top:80px" onclick="backToLogs()">BACK TO DIARY</button>
         </div>
     </div>
 
     <script>
         const leafContainer = document.getElementById('leaf-container');
         
-        // SAKURA GENERATOR
         function createLeaf() {
             if (document.hidden) return;
-            
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
             
-            // Randomize size and timing for natural feel
-            const size = (Math.random() * 8 + 15) + 'px';
+            const size = (Math.random() * 10 + 15) + 'px';
             leaf.style.width = size;
             leaf.style.height = (parseFloat(size) * 1.2) + 'px';
-            leaf.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
             
-            // Interaction: Mouse and Touch
-            const glowEffect = () => {
+            const glow = () => {
                 leaf.classList.add('clicked');
                 setTimeout(() => leaf.remove(), 600);
             };
 
-            leaf.addEventListener('mousedown', glowEffect);
+            leaf.addEventListener('mousedown', glow);
             leaf.addEventListener('touchstart', (e) => {
-                e.preventDefault(); // Prevents double firing on mobile
-                glowEffect();
+                e.preventDefault();
+                glow();
             });
 
             leafContainer.appendChild(leaf);
             setTimeout(() => leaf.remove(), 10000);
         }
 
-        // Run Sakura - slower on mobile for performance
-        setInterval(createLeaf, 600);
+        setInterval(createLeaf, 500);
 
-        // TRANSITION LOGIC
         function godlyEnter() {
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(2.5) rotate(10deg)";
-            document.getElementById('bg').style.filter = "brightness(5) blur(30px)";
+            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
 
             setTimeout(() => {
@@ -266,7 +311,7 @@
                 const logs = document.getElementById('logs');
                 logs.style.display = 'flex';
                 setTimeout(() => logs.style.opacity = "1", 50);
-            }, 2500);
+            }, 2000);
         }
 
         function openStory() {
