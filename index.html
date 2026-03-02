@@ -8,6 +8,7 @@
     <style>
         :root { 
             --neon-pink: #ff2d95; 
+            --sakura-pink: #ffb7c5;
             --white-glow: rgba(255, 255, 255, 0.9);
         }
 
@@ -31,18 +32,28 @@
             transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
+        /* --- SAKURA PETALS --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
-            width: 12px; height: 12px;
-            background: var(--white-glow);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            pointer-events: none;
+            width: 15px; height: 10px;
+            background: linear-gradient(135deg, var(--sakura-pink), #ff8da1);
+            /* Creating a petal shape */
+            border-radius: 100% 0% 100% 0% / 100% 0% 100% 0%;
+            pointer-events: auto; /* Changed to auto so we can click them */
             animation: fallRotate linear infinite;
+            box-shadow: 0 0 5px rgba(255, 183, 197, 0.3);
+            transition: filter 0.3s, transform 0.3s;
+        }
+
+        /* The Glow Effect when clicked */
+        .leaf.clicked {
+            filter: brightness(2) drop-shadow(0 0 15px white);
+            transform: scale(1.5);
         }
 
         @keyframes fallRotate {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            20% { opacity: 0.6; }
+            20% { opacity: 0.8; }
             100% { transform: translateY(110vh) rotate(720deg) translateX(150px); opacity: 0; }
         }
 
@@ -188,11 +199,24 @@
 
     <script>
         const leafContainer = document.getElementById('leaf-container');
+        
+        // Sakura Generator
         setInterval(() => {
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
             leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            
+            // Randomly rotate starting position for more natural feel
+            leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+            // ADD CLICK GLOW EFFECT
+            leaf.addEventListener('mousedown', function() {
+                leaf.classList.add('clicked');
+                // Optional: remove glow after a bit
+                setTimeout(() => leaf.classList.remove('clicked'), 500);
+            });
+
             leafContainer.appendChild(leaf);
             setTimeout(() => leaf.remove(), 8000);
         }, 500);
