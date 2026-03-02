@@ -4,191 +4,211 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@700&family=Inter:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Montserrat:wght@300;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00d2ff;
             --neon-pink: #ff00ff;
             --sun-gold: #ffcc00;
+            --bg: #030303;
         }
 
         body {
-            background: #020202;
+            background: var(--bg);
             color: white;
             margin: 0;
-            padding: 0;
             overflow-x: hidden;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; opacity: 0.6; }
+
+        /* Smooth Hero Section */
+        .container {
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-        }
-
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
-
-        /* Main Branding */
-        .hero {
-            text-align: center;
-            transition: opacity 0.8s ease;
+            transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 12vw, 8rem);
+            font-size: clamp(5rem, 18vw, 10rem);
             margin: 0;
-            text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue);
-            animation: float 4s infinite ease-in-out;
+            background: linear-gradient(to bottom, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(0, 210, 255, 0.5));
+            animation: logoFloat 6s infinite ease-in-out;
         }
 
-        /* Clickable Non-Cursive Text */
-        .release-btn {
-            margin-top: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            color: var(--neon-pink);
-            letter-spacing: 8px;
+        /* Clicking this triggers the "Boss" effect */
+        .release-trigger {
+            margin-top: -20px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 15px;
+            color: #fff;
             background: none;
-            border: 2px solid var(--neon-pink);
-            padding: 15px 30px;
+            border: none;
             cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px var(--neon-pink);
-            transition: 0.3s;
             position: relative;
-            overflow: hidden;
+            padding: 20px;
+            transition: letter-spacing 0.5s cubic-bezier(0.23, 1, 0.32, 1), filter 0.3s;
         }
 
-        .release-btn:hover {
-            background: var(--neon-pink);
-            color: white;
-            box-shadow: 0 0 40px var(--neon-pink);
-            transform: scale(1.1);
+        .release-trigger:hover {
+            letter-spacing: 25px;
+            filter: drop-shadow(0 0 10px var(--neon-pink));
         }
 
-        /* Sunray Expansion Effect */
-        .sunburst {
+        /* The Sunray Expansion (Smoothed with Blurs) */
+        .sun-expansion {
             position: fixed;
             top: 50%;
             left: 50%;
-            width: 10px;
-            height: 10px;
+            width: 5px;
+            height: 5px;
             background: var(--sun-gold);
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
-            z-index: 10;
+            z-index: 99;
             pointer-events: none;
-            box-shadow: 0 0 100px 50px var(--sun-gold);
+            filter: blur(20px);
+            box-shadow: 0 0 200px 100px var(--sun-gold);
         }
 
-        .sunburst.active {
-            animation: expand 1.2s forwards ease-in;
+        .sun-expansion.active {
+            animation: sunBurst 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
         }
 
-        @keyframes expand {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(500); opacity: 0; }
-        }
-
-        /* Diary Section */
-        .diary-section {
-            display: none;
-            position: absolute;
+        /* Diary - Glassmorphism Aesthetic */
+        .diary-overlay {
+            position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            max-width: 800px;
-            padding: 100px 20px;
-            z-index: 5;
-            background: #020202;
+            height: 100vh;
+            background: rgba(3, 3, 3, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            display: none;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
-        .diary-entry {
-            margin-bottom: 80px;
-            border-left: 3px solid var(--neon-blue);
-            padding-left: 20px;
+        .diary-content {
+            max-width: 900px;
+            margin: 100px auto;
+            padding: 40px;
         }
 
-        .diary-entry img {
+        .entry {
+            margin-bottom: 100px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .entry.visible { opacity: 1; transform: translateY(0); }
+
+        .entry h2 { font-family: 'Syne', sans-serif; font-size: 3rem; color: var(--neon-blue); margin-bottom: 10px; }
+        .entry p { font-size: 1.2rem; line-height: 1.8; color: #ccc; font-weight: 300; }
+        
+        .entry img {
             width: 100%;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid #333;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.5s;
         }
 
-        .diary-date { font-family: 'Orbitron'; color: var(--neon-blue); }
+        .entry img:hover { transform: scale(1.02); }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        /* Animations */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-25px) rotate(1deg); }
         }
 
-        .hidden { opacity: 0; pointer-events: none; }
+        @keyframes sunBurst {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            70% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(600); opacity: 0; }
+        }
+
+        /* Scrollbar Hide */
+        ::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
 
-    <canvas id="snow"></canvas>
-    <div class="sunburst" id="sun"></div>
+    <canvas id="snowCanvas"></canvas>
+    <div class="sun-expansion" id="sun"></div>
 
-    <div class="hero" id="hero">
+    <div class="container" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="release-btn" onclick="openDiary()">Releasing 2028</button>
+        <button class="release-trigger" onclick="launchDiary()">2028</button>
     </div>
 
-    <div class="diary-section" id="diary">
-        <div class="diary-entry">
-            <h2 class="diary-date">MARCH 2026</h2>
-            <p>System update successful. The vision for Foggy Fights is becoming real.</p>
-            <img src="Screenshot_28.png" alt="Development log">
-        </div>
+    <div class="diary-overlay" id="diary">
+        <div class="diary-content">
+            <div class="entry" id="e1">
+                <h2>THE VISION</h2>
+                <p>Foggy Fights isn't just a project. It's the mist that consumes everything.</p>
+                <img src="Screenshot_28.png" alt="FF Entry 1">
+            </div>
 
-        <div class="diary-entry">
-            <h2 class="diary-date">FUTURE LOG</h2>
-            <p>Waiting for the 2028 deployment. The mist is coming.</p>
+            <div class="entry" id="e2">
+                <h2>THE DIARY</h2>
+                <p>2028 is the year the world changes. Recorded in the shadows.</p>
+                </div>
+
+            <button onclick="window.location.reload()" style="background:none; border: 1px solid white; color:white; padding: 15px 30px; cursor:pointer; font-family:'Syne';">REBOOT SYSTEM</button>
         </div>
-        
-        <button class="release-btn" onclick="location.reload()" style="font-size: 0.8rem;">← Back</button>
     </div>
 
     <script>
-        function openDiary() {
+        function launchDiary() {
             const sun = document.getElementById('sun');
             const hero = document.getElementById('hero');
             const diary = document.getElementById('diary');
 
-            // Start Sunray effect
             sun.classList.add('active');
+            hero.style.opacity = '0';
+            hero.style.transform = 'scale(0.9)';
 
-            // Transition content
             setTimeout(() => {
-                hero.classList.add('hidden');
                 diary.style.display = 'block';
-                window.scrollTo(0,0);
-            }, 600);
+                setTimeout(() => { 
+                    diary.style.opacity = '1'; 
+                    document.getElementById('e1').classList.add('visible');
+                    document.getElementById('e2').classList.add('visible');
+                }, 50);
+            }, 800);
         }
 
-        // Snow Script (Keep your existing snow)
-        const canvas = document.getElementById('snow');
+        // Professional Snow System
+        const canvas = document.getElementById('snowCanvas');
         const ctx = canvas.getContext('2d');
-        let width, height, flakes = [];
+        let particles = [];
         function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            flakes = [];
-            for(let i=0; i<100; i++) flakes.push({x: Math.random()*width, y: Math.random()*height, r: Math.random()*2+0.5, v: Math.random()*1+0.5});
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i<100; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, s: Math.random()*1+0.5});
         }
         function draw() {
-            ctx.clearRect(0,0,width,height);
-            ctx.fillStyle = "rgba(255,255,255,0.4)";
-            ctx.beginPath();
-            flakes.forEach(f => {
-                ctx.moveTo(f.x, f.y);
-                ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
-                f.y += f.v;
-                if(f.y > height) f.y = -10;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(255,255,255,0.3)";
+            particles.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+                p.y += p.s; if(p.y > canvas.height) p.y = -10;
             });
-            ctx.fill();
             requestAnimationFrame(draw);
         }
         window.addEventListener('resize', init);
