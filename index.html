@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glow: #ff2d95; /* Matches your sunset pink */
-            --accent: #00d2ff;
+            --glow-pink: #ff2d95;
+            --glass-bright: rgba(255, 255, 255, 0.15);
         }
 
         body, html {
@@ -17,47 +17,93 @@
             overflow: hidden;
             background: #0d0221;
             font-family: 'Syne', sans-serif;
+            color: white;
         }
 
-        /* --- THE BACKGROUND: EMBEDDED DATA --- */
-        .bg-canvas {
+        /* --- THE BACKGROUND --- */
+        .bg-img {
             position: fixed;
-            top: -2%; left: -2%;
-            width: 104%; height: 104%;
+            top: -5%; left: -5%;
+            width: 110%; height: 110%;
             background: url('https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/IMG_3002.jpg') no-repeat center center;
             background-size: cover;
             z-index: 1;
             filter: contrast(1.1) brightness(0.7);
-            animation: slowDrift 20s infinite alternate ease-in-out;
+            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        @keyframes slowDrift {
-            from { transform: scale(1) translate(0, 0); }
-            to { transform: scale(1.05) translate(-1%, -1%); }
+        /* --- THE GLASS BUTTON (EXTRA GLASSIER) --- */
+        .btn-glass {
+            margin-top: 80px; /* More space below logo */
+            padding: 20px 70px;
+            background: var(--glass-bright);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 18px;
+            cursor: pointer;
+            backdrop-filter: blur(30px) saturate(150%); /* Super Glassy */
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), 
+                        inset 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            z-index: 100;
         }
 
-        /* --- THE ATMOSPHERE: FOG & SUNRAYS --- */
-        .fog-layer {
+        .btn-glass:hover {
+            letter-spacing: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 40px var(--glow-pink);
+            transform: scale(1.05);
+        }
+
+        /* --- THE TRANSITION (SUNRAYS) --- */
+        .sunray-flash {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 999;
+            pointer-events: none;
+            box-shadow: 0 0 100px 50px #fff, 0 0 200px 100px var(--glow-pink);
+        }
+
+        .sunray-flash.active {
+            animation: flashExpand 1.2s forwards cubic-wheel;
+        }
+
+        @keyframes flashExpand {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(800); opacity: 0; }
+        }
+
+        /* --- DIARY SECTION --- */
+        .diary-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 60%, rgba(255, 45, 149, 0.2) 0%, transparent 70%);
-            z-index: 2;
-            pointer-events: none;
+            width: 100%; height: 100vh;
+            background: #000;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+            padding: 50px 20px;
+            box-sizing: border-box;
         }
 
-        .scanline {
-            position: fixed;
-            top: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%;
-            z-index: 5;
-            pointer-events: none;
+        .diary-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 1);
+            border: 1px solid #333;
+            padding: 40px;
+            border-radius: 15px;
         }
 
-        /* --- LOGO: NEON LIQUID --- */
-        .content {
+        /* --- UTILITY --- */
+        .hero {
             position: relative;
             z-index: 10;
             height: 100vh;
@@ -65,68 +111,52 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: opacity 1s;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(5rem, 18vw, 11rem);
-            color: #fff;
-            margin: 0;
-            text-shadow: 0 0 10px #fff, 0 0 30px var(--glow), 0 0 60px var(--glow), 0 0 100px var(--glow);
-            animation: breathe 4s infinite ease-in-out;
-            cursor: default;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1) translateY(0); filter: brightness(1); }
-            50% { transform: scale(1.05) translateY(-10px); filter: brightness(1.2) drop-shadow(0 0 30px var(--accent)); }
-        }
-
-        /* --- BUTTON: FROSTED GLASS --- */
-        .btn-entry {
-            margin-top: -10px;
-            padding: 15px 60px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 15px;
-            cursor: pointer;
-            backdrop-filter: blur(20px);
-            transition: 0.5s all cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-        }
-
-        .btn-entry:hover {
-            background: #fff;
-            color: #000;
-            letter-spacing: 25px;
-            box-shadow: 0 0 50px var(--glow);
-            transform: translateY(-5px);
-        }
-
-        /* --- CINEMATIC BORDER --- */
-        .vignette {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 150%);
-            z-index: 6;
-            pointer-events: none;
+            text-shadow: 0 0 30px var(--glow-pink);
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-canvas"></div>
-    <div class="fog-layer"></div>
-    <div class="scanline"></div>
-    <div class="vignette"></div>
+    <div class="bg-img" id="bg"></div>
+    <div class="sunray-flash" id="flash"></div>
 
-    <div class="content">
+    <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-entry" onclick="location.reload()">2028</button>
+        <button class="btn-glass" onclick="triggerSunray()">2028</button>
     </div>
 
+    <div class="diary-overlay" id="diary">
+        <div class="diary-card">
+            <h1 style="font-family:'Syne'; color:var(--glow-pink); letter-spacing: 5px;">THE LOGS</h1>
+            <hr style="border: 0.5px solid #444; margin: 30px 0;">
+            <p style="line-height: 1.8; color: #ccc;">Welcome to the inner circle. The Foggy Fights 2028 roadmap starts here.</p>
+            <button onclick="location.reload()" style="background:none; border:1px solid #fff; color:#fff; padding:10px 20px; cursor:pointer; margin-top:50px;">BACK</button>
+        </div>
+    </div>
+
+    <script>
+        function triggerSunray() {
+            const flash = document.getElementById('flash');
+            const hero = document.getElementById('hero');
+            const diary = document.getElementById('diary');
+            const bg = document.getElementById('bg');
+
+            // Start the flash
+            flash.classList.add('active');
+            bg.style.transform = 'scale(1.5)';
+            
+            setTimeout(() => {
+                hero.style.display = 'none';
+                diary.style.display = 'block';
+                window.scrollTo(0,0);
+            }, 700);
+        }
+    </script>
 </body>
 </html>
