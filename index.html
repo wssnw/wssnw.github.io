@@ -6,7 +6,12 @@
     <title>Foggy Fights | 2028</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-pink: #ff2d95; --neon-blue: #00f2ff; --sunset-purple: #7000ff; }
+        :root { 
+            --neon-pink: #ff2d95; 
+            --neon-blue: #00f2ff; 
+            --sunset-purple: #7000ff;
+            --glow-white: rgba(255, 255, 255, 0.8);
+        }
 
         body, html {
             margin: 0; padding: 0;
@@ -22,8 +27,25 @@
             position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
             background: #050112 url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover;
-            z-index: 1; filter: contrast(1.1) brightness(0.6);
-            transition: transform 4s cubic-bezier(0.19, 1, 0.22, 1), filter 2s;
+            z-index: 1; filter: contrast(1.2) brightness(0.6);
+            transition: transform 5s cubic-bezier(0.19, 1, 0.22, 1), filter 3s;
+        }
+
+        /* --- FALLING LEAVES SYSTEM --- */
+        .leaf {
+            position: fixed; top: -50px;
+            width: 20px; height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px 15px 2px 15px; /* Leaf shape */
+            z-index: 5; pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
         }
 
         .hero {
@@ -39,8 +61,8 @@
         }
 
         @keyframes breathe {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.03); filter: brightness(1.3); }
+            0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 10px var(--neon-pink)); }
+            50% { transform: scale(1.03); filter: brightness(1.4) drop-shadow(0 0 30px var(--neon-pink)); }
         }
 
         .btn-fog {
@@ -50,92 +72,115 @@
             text-transform: uppercase; letter-spacing: 15px;
             cursor: pointer; backdrop-filter: blur(20px);
             transition: 0.5s;
-            box-shadow: 0 0 20px rgba(112, 0, 255, 0.3);
+            box-shadow: 0 0 30px var(--sunset-purple);
         }
 
         .btn-fog:hover {
             letter-spacing: 20px; background: #fff; color: #000;
-            box-shadow: 0 0 50px var(--sunset-purple);
+            box-shadow: 0 0 60px var(--neon-blue), 0 0 100px var(--sunset-purple);
         }
 
-        /* --- SLOW VISIBLE RAYS --- */
+        /* --- HYPER-VISIBLE SLOW RAYS --- */
         .ray-box {
             position: fixed; top: 50%; left: 50%;
-            width: 1500vw; height: 1500vw;
+            width: 2000vw; height: 2000vw;
             transform: translate(-50%, -50%) scale(0);
-            background: conic-gradient(from 0deg, transparent 0, rgba(255,255,255,0.8) 5deg, transparent 15deg, rgba(255,255,255,0.8) 30deg, transparent 50deg);
-            filter: blur(80px) brightness(1.5);
+            background: conic-gradient(
+                from 0deg, 
+                transparent 0, 
+                var(--glow-white) 2deg, 
+                transparent 8deg, 
+                var(--glow-white) 15deg, 
+                transparent 25deg,
+                var(--glow-white) 40deg,
+                transparent 60deg
+            );
+            filter: blur(60px) brightness(2);
             z-index: 999; pointer-events: none; opacity: 0;
         }
 
-        .ray-active { animation: slowWarp 4s forwards ease-out; }
+        .ray-active { animation: superWarp 5s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
-        @keyframes slowWarp {
+        @keyframes superWarp {
             0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            30% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1) rotate(120deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(90deg); opacity: 0; }
         }
 
         /* --- HEAVEN SECTION --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(135deg, #ffffff 0%, #fceaff 100%);
+            background: linear-gradient(135deg, #050112 0%, #1a0b2e 100%);
             display: none; z-index: 1000;
-            overflow-y: auto; padding: 100px 0;
+            overflow-y: auto; padding: 80px 0;
             flex-direction: column; align-items: center;
         }
 
         .memory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 50px; width: 90%; max-width: 1200px;
-            margin-bottom: 100px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 60px; width: 90%; max-width: 1200px;
+            margin-bottom: 80px;
         }
 
         .diary-card {
             position: relative; background: #fff; padding: 15px 15px 60px 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            transition: 0.4s;
+            border-radius: 2px;
         }
 
-        .diary-card:hover { transform: translateY(-10px) rotate(1deg); }
+        .diary-card:hover { 
+            transform: translateY(-15px) rotate(2deg); 
+            box-shadow: 0 0 50px var(--neon-pink);
+        }
 
         .tape {
-            position: absolute; top: -20px; left: 50%; width: 120px; height: 40px;
-            background: rgba(255, 45, 149, 0.3); backdrop-filter: blur(2px);
-            transform: translateX(-50%) rotate(-2deg);
+            position: absolute; top: -20px; left: 50%; width: 130px; height: 45px;
+            background: rgba(255, 45, 149, 0.6); backdrop-filter: blur(5px);
+            transform: translateX(-50%) rotate(-3deg);
+            box-shadow: 0 0 20px var(--neon-pink);
+            z-index: 10;
         }
 
         .img-box {
-            width: 100%; height: 300px; background: #eee;
+            width: 100%; height: 320px; background: #111;
             background-size: cover; background-position: center;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .main-img { background-image: url('Screenshot_28.png'); animation: neonPulse 3s infinite alternate; }
+        .main-img { 
+            background-image: url('Screenshot_28.png'); 
+            animation: hyperGlow 3s infinite alternate; 
+        }
         
-        @keyframes neonPulse {
-            to { filter: saturate(1.5) drop-shadow(0 0 15px var(--neon-pink)); }
+        @keyframes hyperGlow {
+            from { filter: saturate(1.2) brightness(1); box-shadow: 0 0 10px transparent; }
+            to { filter: saturate(1.8) brightness(1.3); box-shadow: 0 0 40px var(--neon-pink); }
         }
 
-        .empty-slot { display: flex; align-items: center; justify-content: center; color: #ccc; font-style: italic; }
+        .empty-slot { display: flex; align-items: center; justify-content: center; color: #444; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
 
-        .memory-info { font-family: 'Dancing Script'; font-size: 1.5rem; color: #222; text-align: center; margin-top: 15px; }
+        .memory-info { font-family: 'Dancing Script'; font-size: 1.8rem; color: #111; text-align: center; margin-top: 20px; }
 
-        /* --- SOCIALS & BUTTONS --- */
-        .social-box { text-align: center; padding: 50px; background: rgba(0,0,0,0.03); width: 100%; }
+        /* --- SOCIALS & NAVIGATION --- */
+        .social-box { text-align: center; padding: 60px; background: rgba(255,255,255,0.05); width: 100%; border-top: 1px solid rgba(255,255,255,0.1); }
+        
         .social-link { 
-            display: inline-block; margin: 10px 20px; color: #222; 
-            text-decoration: none; font-weight: 600; font-size: 1.2rem;
-            transition: 0.3s;
+            display: inline-block; margin: 15px 25px; color: #fff; 
+            text-decoration: none; font-weight: 800; font-size: 1.1rem;
+            letter-spacing: 3px; transition: 0.3s;
+            text-shadow: 0 0 10px var(--neon-blue);
         }
-        .social-link:hover { color: var(--neon-pink); }
+        .social-link:hover { color: var(--neon-pink); text-shadow: 0 0 20px var(--neon-pink); }
 
-        .explore-btn {
-            padding: 15px 40px; border: 2px solid #000; background: none;
-            cursor: pointer; font-family: 'Syne'; font-weight: 800;
-            margin-bottom: 50px; transition: 0.3s;
+        .nav-btn {
+            padding: 15px 45px; border: 2px solid #fff; background: none;
+            color: #fff; cursor: pointer; font-family: 'Syne'; font-weight: 800;
+            margin: 20px; transition: 0.3s; box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
-        .explore-btn:hover { background: #000; color: #fff; }
+        .nav-btn:hover { background: #fff; color: #000; box-shadow: 0 0 40px #fff; }
+
     </style>
 </head>
 <body>
@@ -144,6 +189,7 @@
 
     <div class="bg-img" id="bg"></div>
     <div class="ray-box" id="rays"></div>
+    <div id="leaf-container"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
@@ -151,7 +197,7 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 style="color:#222; font-size: 3rem; margin-bottom: 50px;">Memories Found</h2>
+        <h2 style="color:#fff; font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 60px; text-shadow: 0 0 30px var(--neon-blue);">MEMORIES FOUND</h2>
         
         <div class="memory-grid">
             <div class="diary-card">
@@ -161,49 +207,65 @@
             </div>
             
             <div class="diary-card">
-                <div class="tape" style="background:rgba(0,242,255,0.2)"></div>
-                <div class="img-box empty-slot">Slot Empty...</div>
+                <div class="tape" style="background:var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue);"></div>
+                <div class="img-box empty-slot">Memory Locked</div>
                 <div class="memory-info">??/??/??</div>
             </div>
+
             <div class="diary-card">
                 <div class="tape"></div>
-                <div class="img-box empty-slot">Slot Empty...</div>
+                <div class="img-box empty-slot">Memory Locked</div>
                 <div class="memory-info">??/??/??</div>
             </div>
+
             <div class="diary-card">
-                <div class="tape" style="background:rgba(0,242,255,0.2)"></div>
-                <div class="img-box empty-slot">Slot Empty...</div>
+                <div class="tape" style="background:var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue);"></div>
+                <div class="img-box empty-slot">Memory Locked</div>
                 <div class="memory-info">??/??/??</div>
             </div>
         </div>
 
-        <button class="explore-btn" onclick="alert('Searching deeper into the fog...')">EXPLORE MORE</button>
+        <div>
+            <button class="nav-btn" onclick="alert('Searching deeper into the fog...')">EXPLORE MORE</button>
+            <button class="nav-btn" onclick="location.reload()">BACK TO START</button>
+        </div>
 
         <div class="social-box">
-            <h3 style="color:#222">Connect</h3>
-            <a href="https://instagram.com/promethazine" target="_blank" class="social-link">INSTA: @promethazine</a>
-            <a href="https://tiktok.com/@melody" target="_blank" class="social-link">TIKTOK: @melody</a>
+            <a href="https://instagram.com/promethazine" target="_blank" class="social-link">INSTAGRAM</a>
+            <a href="https://tiktok.com/@melody" target="_blank" class="social-link">TIKTOK</a>
             <a href="#" onclick="alert('Coming Soon')" class="social-link">DISCORD SERVER</a>
-            <br><br>
-            <button onclick="location.reload()" style="border:none; background:none; cursor:pointer; text-decoration:underline;">Return to Start</button>
         </div>
     </div>
 
     <script>
+        // CREATE FALLING LEAVES
+        const leafContainer = document.getElementById('leaf-container');
+        function createLeaf() {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDuration = Math.random() * 5 + 5 + 's';
+            leaf.style.opacity = Math.random();
+            leafContainer.appendChild(leaf);
+            setTimeout(() => { leaf.remove(); }, 10000);
+        }
+        setInterval(createLeaf, 300);
+
         function warp() {
             const wind = document.getElementById('wind');
             wind.volume = 0.2; wind.play().catch(() => {});
 
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(12) rotate(20deg)";
-            document.getElementById('bg').style.filter = "brightness(40) blur(60px)";
+            document.getElementById('bg').style.transform = "scale(15) rotate(30deg)";
+            document.getElementById('bg').style.filter = "brightness(50) blur(80px)";
             document.getElementById('hero').style.opacity = "0";
 
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
                 document.getElementById('logs').style.display = 'flex';
-                document.body.style.overflowY = "auto";
-            }, 2000);
+                // Change background to dark for better glow
+                document.body.style.background = "#050112";
+            }, 2500); // Slower transition for beauty
         }  
     </script>
 </body>
