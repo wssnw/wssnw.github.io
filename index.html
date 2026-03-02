@@ -6,7 +6,7 @@
     <title>Foggy Fights | 2028</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root { --neon-pink: #ff2d95; }
+        :root { --neon-pink: #ff2d95; --neon-blue: #00f2ff; }
 
         body, html {
             margin: 0; padding: 0;
@@ -16,12 +16,13 @@
             font-family: 'Syne', sans-serif;
         }
 
+        /* --- NEW START PAGE BG --- */
         .bg-img {
-            position: fixed; top: -10%; left: -10%; width: 120%; height: 120%;
-            background: url('https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/IMG_3002.jpg') no-repeat center center;
+            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
+            background: url('IMG_3002.jpg') no-repeat center center;
             background-size: cover;
-            z-index: 1; filter: contrast(1.2) brightness(0.6);
-            transition: transform 3.2s cubic-bezier(0.19, 1, 0.22, 1), filter 1.5s;
+            z-index: 1; filter: contrast(1.1) brightness(0.7);
+            transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1), filter 2s;
         }
 
         .hero {
@@ -39,85 +40,97 @@
 
         @keyframes breathe {
             0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.03); filter: brightness(1.4); }
+            50% { transform: scale(1.03); filter: brightness(1.3); }
         }
 
         .btn-fog {
-            margin-top: 60px; padding: 25px 70px;
+            margin-top: 50px; padding: 25px 70px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid #fff; color: #fff;
             text-transform: uppercase; letter-spacing: 15px;
-            cursor: pointer; backdrop-filter: blur(40px);
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: pointer; backdrop-filter: blur(20px);
+            transition: 0.5s;
         }
 
         .btn-fog:hover {
-            letter-spacing: 20px; background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 50px var(--neon-pink);
+            letter-spacing: 20px; background: #fff; color: #000;
+            box-shadow: 0 0 50px var(--neon-blue);
         }
 
-        /* --- THE INFINITE RAYS --- */
+        /* --- MASSIVE HEAVEN RAYS --- */
         .ray-box {
             position: fixed; top: 50%; left: 50%;
-            width: 1200vw; height: 1200vw; /* Massive width */
+            width: 1200vw; height: 1200vw;
             transform: translate(-50%, -50%) scale(0);
-            background: conic-gradient(from 0deg, transparent 0, #fff 5deg, transparent 15deg, #fff 35deg, transparent 60deg);
-            filter: blur(120px) brightness(2.5);
+            background: conic-gradient(from 0deg, transparent 0, #fff 10deg, transparent 20deg, #fff 45deg, transparent 70deg);
+            filter: blur(100px) brightness(2.5);
             z-index: 999; pointer-events: none; opacity: 0;
         }
 
-        .ray-active { animation: warpDrive 2s forwards ease-in; }
+        .ray-active { animation: warp 2.2s forwards ease-in; }
 
-        @keyframes warpDrive {
+        @keyframes warp {
             0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            25% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1) rotate(400deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.2) rotate(350deg); opacity: 0; }
         }
 
-        /* --- THE DIARY SECTION --- */
+        /* --- HEAVEN / MEMORY SECTION --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #fff; display: none; z-index: 1000;
+            background: linear-gradient(135deg, #fff 0%, #f0faff 100%);
+            display: none; z-index: 1000;
             align-items: center; justify-content: center;
         }
 
         .diary-card {
-            position: relative; width: 90%; max-width: 550px; 
+            position: relative; width: 90%; max-width: 600px;
             background: #fff; padding: 20px 20px 100px 20px;
-            box-shadow: 0 40px 120px rgba(0,0,0,0.15);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
             animation: windSway 6s infinite ease-in-out;
         }
 
         @keyframes windSway {
-            0%, 100% { transform: rotate(-1.5deg) translateY(0); }
-            50% { transform: rotate(1.5deg) translateY(-25px); }
+            0%, 100% { transform: rotate(-1deg) translateY(0); }
+            50% { transform: rotate(1deg) translateY(-20px); }
         }
 
         .tape-sticker {
-            position: absolute; top: -30px; left: 50%;
-            width: 160px; height: 55px;
-            background: rgba(255, 45, 149, 0.5); /* Neon pink tape */
-            backdrop-filter: blur(5px); transform: translateX(-50%) rotate(-3deg);
+            position: absolute; top: -25px; left: 50%;
+            width: 140px; height: 50px;
+            background: rgba(255, 45, 149, 0.4);
+            backdrop-filter: blur(4px); transform: translateX(-50%) rotate(-2deg);
             z-index: 10;
         }
 
+        /* GLOWING PHOTO EFFECT */
         .diary-img-box {
-            width: 100%; height: 450px;
-            background-color: #eee; /* Fallback color if pic fails */
-            background-image: url('Screenshot_28.png'); 
-            background-repeat: no-repeat;
-            background-position: center;
+            width: 100%; height: 400px;
+            background: url('Screenshot_28.png') no-repeat center center;
             background-size: cover;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            animation: neonPulse 3s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from { filter: saturate(1) brightness(1) drop-shadow(0 0 0px var(--neon-pink)); }
+            to { filter: saturate(1.4) brightness(1.2) drop-shadow(0 0 20px var(--neon-pink)); }
         }
 
         .diary-text {
-            font-family: 'Dancing Script'; font-size: 2.5rem;
-            text-align: center; margin-top: 30px; color: #111;
+            font-family: 'Dancing Script'; font-size: 2.2rem;
+            text-align: center; margin-top: 25px; color: #222;
+        }
+
+        .date-stamp {
+            font-family: 'Inter'; font-weight: 600; font-size: 0.9rem;
+            color: #888; text-align: center; letter-spacing: 2px; margin-top: 10px;
         }
     </style>
 </head>
 <body>
+
+    <audio id="wind" loop><source src="https://www.soundjay.com/nature/wind-01.mp3" type="audio/mpeg"></audio>
 
     <div class="bg-img" id="bg"></div>
     <div class="ray-box" id="rays"></div>
@@ -131,23 +144,27 @@
         <div class="diary-card">
             <div class="tape-sticker"></div>
             <div class="diary-img-box"></div>
-            <div class="diary-text">Memory Found...</div>
-            <button onclick="location.reload()" style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); border:1px solid #000; background:none; cursor:pointer; padding:10px 25px; font-family:'Syne';">BACK</button>
+            <div class="diary-text">Memory Found</div>
+            <div class="date-stamp">DATE: 08/15/25</div>
+            <button onclick="location.reload()" style="position:absolute; bottom:30px; left:50%; transform:translateX(-50%); border:1px solid #000; background:none; cursor:pointer; padding:8px 20px;">RETURN</button>
         </div>
     </div>
 
     <script>
         function warp() {
+            const wind = document.getElementById('wind');
+            wind.volume = 0.3; wind.play().catch(() => {});
+
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(12)";
-            document.getElementById('bg').style.filter = "brightness(30) blur(60px)";
+            document.getElementById('bg').style.transform = "scale(8) rotate(10deg)";
+            document.getElementById('bg').style.filter = "brightness(20) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
-            
+
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
                 document.getElementById('logs').style.display = 'flex';
                 document.body.style.background = "#fff";
-            }, 1600);
+            }, 1500);
         }
     </script>
 </body>
