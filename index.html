@@ -3,142 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foggy Fights | Professional Tropical</title>
+    <title>Foggy Fights | Ultra Realistic</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sea-dark: #005f8d;
-            --sea-light: #00d2ff;
-            --sand-main: #e6be8a;
-            --sand-shadow: #d4a36a;
-            --glow: #00f2ff;
+            --sea-deep: #004e92;
+            --sea-foam: #80deea;
+            --sand-wet: #c2a382;
+            --sand-dry: #e6be8a;
+            --neon: #00f2ff;
         }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background: #001a2d; /* Deep ocean base */
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #001a2d; }
 
-        /* --- SKY GRADIENT --- */
+        /* --- THE SKY: ATMOSPHERIC HAZE --- */
         .sky {
-            position: absolute; top: 0; width: 100%; height: 70vh;
-            background: linear-gradient(to bottom, #001f3f 0%, #0083b0 70%, #ffdfba 100%);
+            position: absolute; top: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #001f3f 0%, #0083b0 50%, #ffdfba 100%);
             z-index: 1;
         }
 
-        /* --- REALISTIC LAYERED WAVES --- */
-        .ocean {
-            position: absolute; bottom: 20vh; width: 100%; height: 15vh;
-            z-index: 3; filter: drop-shadow(0 -5px 15px rgba(0,210,255,0.3));
+        /* --- THE OCEAN: SVG DISPLACEMENT WAVES --- */
+        .ocean-container {
+            position: absolute; bottom: 15vh; width: 100%; height: 35vh;
+            z-index: 5; overflow: hidden;
         }
 
-        .wave-layer {
-            position: absolute; bottom: 0; width: 200%; height: 100%;
-            background-repeat: repeat-x;
-            animation: moveWaves 12s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
-            opacity: 0.8;
+        .water {
+            width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,119,190,0.8) 0%, rgba(0,78,146,1) 100%);
+            mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400"><path d="M0 100 Q400 50 800 100 T1600 100 V400 H0 Z" /></svg>');
+            animation: waveMotion 6s ease-in-out infinite alternate;
         }
 
-        .wave-layer.one {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 200"><path fill="%2300d2ff" d="M0,100 C200,150 400,50 600,100 C800,150 1000,50 1200,100 C1400,150 1600,50 1600,100 V200 H0 Z" /></svg>');
-            z-index: 5; animation-duration: 8s;
+        @keyframes waveMotion {
+            from { transform: translateY(10px) scaleY(1); }
+            to { transform: translateY(-10px) scaleY(1.05); }
         }
 
-        .wave-layer.two {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 200"><path fill="%230077be" d="M0,120 C300,70 600,170 900,120 C1200,70 1500,170 1800,120 V200 H0 Z" /></svg>');
-            z-index: 4; animation-duration: 12s; opacity: 0.5; bottom: 5px;
+        /* --- THE SHORELINE: FOAM & WET SAND --- */
+        .shoreline {
+            position: absolute; bottom: 18vh; width: 100%; height: 40px;
+            background: rgba(255,255,255,0.4);
+            filter: blur(10px);
+            z-index: 6;
+            animation: tide 8s infinite ease-in-out;
         }
 
-        @keyframes moveWaves {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        @keyframes tide {
+            0%, 100% { transform: scaleY(0.5) translateY(20px); opacity: 0.3; }
+            50% { transform: scaleY(1.2) translateY(-10px); opacity: 0.6; }
         }
 
-        /* --- DETAILED SAND TEXTURE --- */
+        /* --- THE BEACH: TEXTURED SAND --- */
         .beach {
             position: absolute; bottom: 0; width: 100%; height: 25vh;
-            background: var(--sand-main);
-            background-image: radial-gradient(var(--sand-shadow) 1px, transparent 0);
-            background-size: 4px 4px; /* Tiny sand grain detail */
-            z-index: 6;
-            box-shadow: inset 0 15px 30px rgba(0,0,0,0.2);
+            background: var(--sand-dry);
+            background-image: 
+                radial-gradient(circle at 50% 0%, var(--sand-wet) 30%, transparent 70%),
+                url('https://www.transparenttextures.com/patterns/sandpaper.png');
+            z-index: 7;
+            box-shadow: inset 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        /* --- HAND-CODED SVG PALM TREES --- */
-        .palm-container {
-            position: absolute; bottom: 22vh; z-index: 7;
-            width: 150px; height: 350px; transform-origin: bottom;
-            animation: trunkSway 6s infinite ease-in-out;
+        /* --- PALM TREES: INDEPENDENT LEAF SWAY --- */
+        .palm {
+            position: absolute; bottom: 20vh; z-index: 8;
+            width: 180px; height: 400px;
         }
 
-        .palm-leaves {
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-            animation: leafSway 3s infinite ease-in-out alternate;
+        .trunk {
+            width: 30px; height: 100%; background: #5d4037;
+            margin: 0 auto; clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+            background: linear-gradient(90deg, #3e2723, #6d4c41, #3e2723);
         }
 
-        .palm-trunk {
-            width: 25px; height: 300px; background: #5d4037;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
-            margin: 0 auto;
-            background: linear-gradient(90deg, #4e342e 0%, #6d4c41 50%, #4e342e 100%);
+        .leaves {
+            position: absolute; top: -50px; left: -60px; font-size: 150px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            animation: wind 5s infinite ease-in-out alternate;
+            transform-origin: center bottom;
         }
 
-        @keyframes trunkSway {
-            0%, 100% { transform: rotate(-1deg); }
-            50% { transform: rotate(1.5deg); }
+        @keyframes wind {
+            from { transform: rotate(-5deg) skewX(-2deg); }
+            to { transform: rotate(5deg) skewX(2deg); }
         }
 
-        @keyframes leafSway {
-            from { transform: translateX(-50%) rotate(-3deg); }
-            to { transform: translateX(-50%) rotate(3deg); }
-        }
-
-        /* --- THE LOGO: NEON LIQUID GLOW --- */
-        .content {
-            position: relative; z-index: 10;
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; height: 100vh;
+        /* --- THE LOGO: LIQUID NEON --- */
+        .logo-box {
+            position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 20; text-align: center;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4.5rem, 16vw, 10rem);
+            font-size: clamp(5rem, 18vw, 12rem);
             color: #fff;
-            text-align: center;
-            /* Multi-layer flickering glow */
-            text-shadow: 
-                0 0 10px #fff,
-                0 0 20px var(--glow),
-                0 0 40px var(--glow),
-                0 0 80px var(--glow),
-                0 0 120px var(--glow);
-            animation: flicker 3s infinite;
+            margin: 0;
+            filter: drop-shadow(0 0 20px var(--neon)) drop-shadow(0 0 60px var(--neon));
+            animation: liquidGlow 4s infinite alternate ease-in-out;
+            user-select: none;
         }
 
-        @keyframes flicker {
-            0%, 100% { opacity: 1; filter: brightness(1); transform: scale(1); }
-            50% { opacity: 0.95; filter: brightness(1.2); transform: scale(1.02); }
-            98% { opacity: 1; }
-            99% { opacity: 0.8; } /* Sudden flicker */
+        @keyframes liquidGlow {
+            0% { text-shadow: 0 0 10px #fff, 0 0 30px var(--neon); filter: hue-rotate(0deg); }
+            100% { text-shadow: 0 0 20px #fff, 0 0 80px var(--neon); filter: hue-rotate(15deg); transform: scale(1.03); }
         }
 
         /* --- COCONUT PHYSICS --- */
         .coconut {
-            position: absolute; font-size: 35px; z-index: 10;
-            filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.4));
-        }
-
-        .sand-impact {
-            position: absolute; background: var(--sand-shadow);
-            width: 40px; height: 10px; border-radius: 50%;
-            opacity: 0.6; z-index: 6; transform: scale(0);
-            animation: impact 2s forwards;
-        }
-
-        @keyframes impact {
-            0% { transform: scale(0); opacity: 0.8; }
-            20% { transform: scale(1.5); opacity: 0.4; }
-            100% { transform: scale(1.2); opacity: 0; }
+            position: absolute; font-size: 40px; z-index: 15;
+            filter: drop-shadow(5px 15px 10px rgba(0,0,0,0.5));
+            pointer-events: none;
         }
     </style>
 </head>
@@ -146,21 +123,25 @@
 
     <div class="sky"></div>
 
-    <div class="ocean">
-        <div class="wave-layer one"></div>
-        <div class="wave-layer two"></div>
+    <div class="ocean-container">
+        <div class="water"></div>
+        <div class="shoreline"></div>
     </div>
 
-    <div class="beach" id="beachBody"></div>
+    <div class="beach"></div>
 
-    <div class="palm-container" style="left: 5%;">
-        <div class="palm-leaves"><svg width="200" height="150" viewBox="0 0 200 150"><path d="M100,50 Q150,0 190,80 Q150,40 100,50 Z" fill="%232e7d32"/><path d="M100,50 Q50,0 10,80 Q50,40 100,50 Z" fill="%231b5e20"/><path d="M100,50 Q100,-20 150,30 Q110,10 100,50 Z" fill="%23388e3c"/></svg></div>
-        <div class="palm-trunk"></div>
+    <div class="palm" style="left: 5%;">
+        <div class="leaves">🌴</div>
+        <div class="trunk"></div>
+    </div>
+    <div class="palm" style="right: 5%; transform: scaleX(-1);">
+        <div class="leaves">🌴</div>
+        <div class="trunk"></div>
     </div>
 
-    <div class="content">
+    <div class="logo-box">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button style="background:none; border: 2px solid #fff; color:#fff; font-family:'Syne'; padding:10px 30px; letter-spacing:10px; cursor:pointer; margin-top:20px; backdrop-filter:blur(5px);">2028</button>
+        <p style="font-family:'Syne'; color:white; letter-spacing:15px; opacity:0.8; margin-top: -20px;">EST. 2028</p>
     </div>
 
     <script>
@@ -169,48 +150,49 @@
             coco.className = 'coconut';
             coco.innerHTML = '🥥';
             
-            const startX = Math.random() > 0.5 ? 10 : 85; // Drop near trees
-            coco.style.left = (startX + (Math.random()*5)) + '%';
-            coco.style.top = '15vh';
+            const startX = Math.random() > 0.5 ? 12 : 82;
+            coco.style.left = startX + '%';
+            coco.style.top = '20vh';
             document.body.appendChild(coco);
 
-            let posY = 15;
-            let velocity = 0;
-            const gravity = 0.4;
-            const floor = 82; // Beach level
+            let y = 20;
+            let vel = 0;
+            const grav = 0.6;
 
             const fall = setInterval(() => {
-                velocity += gravity;
-                posY += velocity;
-                coco.style.top = posY + 'vh';
+                vel += grav;
+                y += vel;
+                coco.style.top = y + 'vh';
 
-                if (posY >= floor) {
+                if (y >= 82) { // Hit the sand
                     clearInterval(fall);
-                    createImpact(coco.style.left);
+                    coco.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
                     
-                    // Small bounce
-                    velocity = -velocity * 0.3; 
-                    posY = floor;
-                    
+                    // Realistic bounce
+                    vel = -vel * 0.2;
+                    if (Math.abs(vel) > 1) {
+                        y = 81.5;
+                    }
+
+                    // Sinking into sand
                     setTimeout(() => {
-                        coco.style.transition = 'opacity 2s';
+                        coco.style.transition = 'all 2s ease';
                         coco.style.opacity = '0';
+                        coco.style.transform += ' translateY(10px)';
                         setTimeout(() => coco.remove(), 2000);
-                    }, 3000);
+                    }, 4000);
                 }
             }, 30);
         }
 
-        function createImpact(leftPos) {
-            const impact = document.createElement('div');
-            impact.className = 'sand-impact';
-            impact.style.left = leftPos;
-            impact.style.bottom = '17vh';
-            document.body.appendChild(impact);
-            setTimeout(() => impact.remove(), 2000);
+        // Random coconut drop timing
+        function scheduleNext() {
+            setTimeout(() => {
+                spawnCoconut();
+                scheduleNext();
+            }, Math.random() * 8000 + 4000);
         }
-
-        setInterval(spawnCoconut, 7000); // Drop every 7 seconds
+        scheduleNext();
     </script>
 </body>
 </html>
