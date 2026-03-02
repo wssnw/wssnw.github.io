@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glow-pink: #ff2d95;
-            --glass-bright: rgba(255, 255, 255, 0.15);
+            --neon-pink: #ff2d95;
+            --heaven-white: #ffffff;
+            --gold-glow: #ffdfba;
         }
 
         body, html {
@@ -17,10 +18,9 @@
             overflow: hidden;
             background: #0d0221;
             font-family: 'Syne', sans-serif;
-            color: white;
         }
 
-        /* --- THE BACKGROUND --- */
+        /* --- THE MASTER IMAGE --- */
         .bg-img {
             position: fixed;
             top: -5%; left: -5%;
@@ -29,80 +29,9 @@
             background-size: cover;
             z-index: 1;
             filter: contrast(1.1) brightness(0.7);
-            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), filter 2s;
         }
 
-        /* --- THE GLASS BUTTON (EXTRA GLASSIER) --- */
-        .btn-glass {
-            margin-top: 80px; /* More space below logo */
-            padding: 20px 70px;
-            background: var(--glass-bright);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 18px;
-            cursor: pointer;
-            backdrop-filter: blur(30px) saturate(150%); /* Super Glassy */
-            -webkit-backdrop-filter: blur(30px) saturate(150%);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8), 
-                        inset 0 0 15px rgba(255, 255, 255, 0.2);
-            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-            position: relative;
-            z-index: 100;
-        }
-
-        .btn-glass:hover {
-            letter-spacing: 25px;
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 40px var(--glow-pink);
-            transform: scale(1.05);
-        }
-
-        /* --- THE TRANSITION (SUNRAYS) --- */
-        .sunray-flash {
-            position: fixed;
-            top: 50%; left: 50%;
-            width: 10px; height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 999;
-            pointer-events: none;
-            box-shadow: 0 0 100px 50px #fff, 0 0 200px 100px var(--glow-pink);
-        }
-
-        .sunray-flash.active {
-            animation: flashExpand 1.2s forwards cubic-wheel;
-        }
-
-        @keyframes flashExpand {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(800); opacity: 0; }
-        }
-
-        /* --- DIARY SECTION --- */
-        .diary-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100vh;
-            background: #000;
-            z-index: 1000;
-            display: none;
-            overflow-y: auto;
-            padding: 50px 20px;
-            box-sizing: border-box;
-        }
-
-        .diary-card {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(20, 20, 20, 1);
-            border: 1px solid #333;
-            padding: 40px;
-            border-radius: 15px;
-        }
-
-        /* --- UTILITY --- */
         .hero {
             position: relative;
             z-index: 10;
@@ -111,51 +40,161 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 1s;
+            transition: opacity 1s ease;
         }
 
+        /* --- THE ORIGINAL GOATED GLOWING LOGO --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(5rem, 18vw, 11rem);
-            text-shadow: 0 0 30px var(--glow-pink);
+            color: #fff;
+            margin: 0;
+            /* Heavy multi-layer glow */
+            text-shadow: 
+                0 0 10px #fff,
+                0 0 20px var(--neon-pink),
+                0 0 40px var(--neon-pink),
+                0 0 80px var(--neon-pink),
+                0 0 120px var(--neon-pink);
+            animation: ultraBreathe 4s infinite ease-in-out;
         }
+
+        @keyframes ultraBreathe {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.3); }
+        }
+
+        /* --- GLASSIER 2028 BUTTON (MOVED DOWN) --- */
+        .btn-2028 {
+            margin-top: 120px; /* Pushed way down */
+            padding: 22px 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .btn-2028:hover {
+            letter-spacing: 30px;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 50px #fff;
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        /* --- THE HEAVENLY TRANSITION --- */
+        .sunray-burst {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 1px; height: 1px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 999;
+            pointer-events: none;
+            box-shadow: 0 0 100px 100px #fff, 0 0 300px 200px var(--gold-glow);
+            opacity: 0;
+        }
+
+        .sunray-burst.active {
+            animation: heavenFlash 1.5s forwards ease-in;
+        }
+
+        @keyframes heavenFlash {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            40% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2500); opacity: 0; }
+        }
+
+        /* --- THE HEAVEN LOGS --- */
+        .heaven-logs {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            background: linear-gradient(to bottom, #fff, var(--gold-glow));
+            display: none;
+            z-index: 1000;
+            overflow-y: auto;
+            color: #222;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .log-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: left;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .log-entry {
+            margin-bottom: 60px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 20px;
+        }
+
+        .log-date { font-weight: 600; color: #888; font-size: 0.9rem; letter-spacing: 2px; }
+        .log-title { font-family: 'Syne'; font-size: 2.5rem; margin: 10px 0; color: #000; }
+        .log-body { font-size: 1.1rem; line-height: 1.8; color: #444; }
+
     </style>
 </head>
 <body>
 
     <div class="bg-img" id="bg"></div>
-    <div class="sunray-flash" id="flash"></div>
+    <div class="sunray-burst" id="ray"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-glass" onclick="triggerSunray()">2028</button>
+        <button class="btn-2028" onclick="ascend()">2028</button>
     </div>
 
-    <div class="diary-overlay" id="diary">
-        <div class="diary-card">
-            <h1 style="font-family:'Syne'; color:var(--glow-pink); letter-spacing: 5px;">THE LOGS</h1>
-            <hr style="border: 0.5px solid #444; margin: 30px 0;">
-            <p style="line-height: 1.8; color: #ccc;">Welcome to the inner circle. The Foggy Fights 2028 roadmap starts here.</p>
-            <button onclick="location.reload()" style="background:none; border:1px solid #fff; color:#fff; padding:10px 20px; cursor:pointer; margin-top:50px;">BACK</button>
+    <div class="heaven-logs" id="logs">
+        <div class="log-container">
+            <div class="log-entry">
+                <div class="log-date">ENTRY #001 // 2026</div>
+                <h2 class="log-title">THE GENESIS</h2>
+                <p class="log-body">The vision is locked. We are building the atmosphere, the fight, and the fog. This is the start of the 2028 cycle.</p>
+            </div>
+
+            <div class="log-entry">
+                <div class="log-date">ENTRY #002 // FUTURE</div>
+                <h2 class="log-title">BEYOND THE MIST</h2>
+                <p class="log-body">Everything you see here is a fragment of the final world. Stay tuned to the frequency.</p>
+            </div>
+
+            <button onclick="location.reload()" style="background:none; border:1px solid #000; color:#000; padding:15px 30px; cursor:pointer; font-family:'Syne'; letter-spacing:5px; margin-top:40px;">RETURN TO MIST</button>
         </div>
     </div>
 
     <script>
-        function triggerSunray() {
-            const flash = document.getElementById('flash');
+        function ascend() {
+            const ray = document.getElementById('ray');
             const hero = document.getElementById('hero');
-            const diary = document.getElementById('diary');
+            const logs = document.getElementById('logs');
             const bg = document.getElementById('bg');
 
-            // Start the flash
-            flash.classList.add('active');
-            bg.style.transform = 'scale(1.5)';
+            // Trigger Crazy Sunrays
+            ray.classList.add('active');
+            bg.style.filter = 'brightness(5) white-balance(200%)';
+            bg.style.transform = 'scale(2)';
             
             setTimeout(() => {
                 hero.style.display = 'none';
-                diary.style.display = 'block';
-                window.scrollTo(0,0);
-            }, 700);
+                logs.style.display = 'block';
+                document.body.style.background = "#fff";
+            }, 800);
         }
     </script>
 </body>
