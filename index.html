@@ -3,36 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WSSNW | Official Hub</title>
+    <title>Foggy Fights | Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
     <style>
-        body { 
-            background-color: #0a0a0a; 
-            color: #ffffff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
+        body {
+            background-color: #050505;
             margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Dancing Script', cursive;
         }
-        .main-card {
-            border-left: 5px solid #007bff;
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: left;
+
+        .logo-container {
+            text-align: center;
         }
-        h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-        p { color: #888; margin-top: 10px; font-size: 1.1rem; }
-        .status { color: #007bff; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
+
+        .logo {
+            font-size: 8rem;
+            color: #fff;
+            text-decoration: none;
+            cursor: default;
+            /* The Blue Glow Effect */
+        
+            text-shadow: 
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #00d2ff,
+                0 0 82px #00d2ff,
+                0 0 92px #00d2ff,
+                0 0 102px #00d2ff,
+                0 0 151px #00d2ff;
+            /* Running both Flicker and Pulse animations */
+            animation: flicker 2s infinite alternate, pulse 3s infinite ease-in-out;
+        }
+
+        /* Animation 1: Random Neon Flicker */
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 
+                    0 0 7px #fff,
+                    0 0 10px #fff,
+                    0 0 21px #fff,
+                    0 0 42px #00d2ff,
+                    0 0 82px #00d2ff,
+                    0 0 92px #00d2ff,
+                    0 0 102px #00d2ff,
+                    0 0 151px #00d2ff;
+            }
+            20%, 24%, 55% {       
+                text-shadow: none;
+                color: #111;
+            }
+        }
+
+        /* Animation 2: Gentle Breathing Pulse */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-family: sans-serif;
+            color: #00d2ff;
+            letter-spacing: 5px;
+            font-size: 0.8rem;
+            margin-top: -20px;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
-    <div class="main-card">
-        <div class="status">System Active</div>
-        <h1>WSSNW</h1>
-        <p>Official Developer Environment</p>
+
+    <div class="logo-container">
+        <h1 class="logo">Foggy Fights</h1>
+        <p class="subtitle">Enter the Mist</p>
     </div>
+
 </body>
 </html>
