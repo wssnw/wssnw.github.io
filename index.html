@@ -24,76 +24,30 @@
             font-family: 'Dancing Script', cursive;
         }
 
+        /* Snow Canvas Overlay */
         canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
         .main-logo {
-            font-size: 7rem;
+            font-size: 8rem;
             margin: 0;
             text-shadow: 0 0 10px #fff, 0 0 20px var(--glow-blue), 0 0 60px var(--glow-blue);
-            animation: pulse 2s infinite ease-in-out;
+            animation: pulse 2.5s infinite ease-in-out;
+            cursor: default;
         }
-
-        .screenshot-frame {
-            position: relative;
-            padding: 10px;
-            background: linear-gradient(45deg, var(--glow-blue), var(--glow-pink));
-            border-radius: 20px;
-            box-shadow: 0 0 30px var(--glow-pink);
-            transform: rotate(-3deg);
-            animation: float 4s infinite ease-in-out;
-        }
-
-        .screenshot-frame img {
-            display: block;
-            width: 400px;
-            border-radius: 15px;
-        }
-
-        .discord-section {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .discord-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            padding: 15px 35px;
-            border: 2px solid white;
-            border-radius: 50px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.4);
-            transition: 0.3s;
-        }
-
-        .discord-link:hover {
-            background: white;
-            color: black;
-            box-shadow: 0 0 40px white;
-            transform: scale(1.1);
-        }
-
-        .discord-icon { width: 35px; fill: currentColor; }
 
         .release-tag {
             font-family: 'Orbitron', sans-serif;
             color: var(--glow-pink);
-            letter-spacing: 8px;
-            margin-top: 20px;
-            font-size: 1rem;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-20px) rotate(1deg); }
+            letter-spacing: 12px;
+            margin-top: 30px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 15px var(--glow-pink);
+            opacity: 0.8;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.02); opacity: 0.8; }
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.2); }
         }
     </style>
 </head>
@@ -102,46 +56,45 @@
     <canvas id="snow"></canvas>
 
     <h1 class="main-logo">Foggy Fights</h1>
-
-    <div class="screenshot-frame">
-        <img src="Screenshot_28.png" alt="FF Preview">
-    </div>
-
-    <div class="discord-section">
-        <a href="https://discord.gg/ff" class="discord-link">
-            <svg class="discord-icon" viewBox="0 0 127.14 96.36">
-                <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.06,72.06,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.71,32.65-1.82,56.6.48,80.1a105.73,105.73,0,0,0,32.19,16.26,77.7,77.7,0,0,0,6.89-11.11,68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.26c2.73-27.22-4.56-50.83-19.49-72.03ZM42.48,65.69C36.1,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.48,65.69Zm42.24,0C78.34,65.69,73.21,60,73.21,53s5-12.74,11.43-12.74S96.19,46,96.07,53,91,65.69,84.72,65.69Z"/>
-            </svg>
-            <span>gg/ff</span>
-        </a>
-        <div class="release-tag">RELEASING IN kys 138173</div>
-    </div>
+    
+    <div class="release-tag">RELEASING 2028</div>
 
     <script>
         const canvas = document.getElementById('snow');
         const ctx = canvas.getContext('2d');
         let width, height, flakes = [];
+
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             flakes = [];
-            for(let i=0; i<150; i++) flakes.push({x: Math.random()*width, y: Math.random()*height, r: Math.random()*2+1, d: Math.random()*1});
+            for(let i=0; i<100; i++) {
+                flakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 2 + 0.5,
+                    v: Math.random() * 1 + 0.5
+                });
+            }
         }
+
         function draw() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
             ctx.beginPath();
             flakes.forEach(f => {
                 ctx.moveTo(f.x, f.y);
-                ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
-                f.y += 1.5;
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                f.y += f.v;
                 if(f.y > height) f.y = -5;
             });
             ctx.fill();
             requestAnimationFrame(draw);
         }
+
         window.addEventListener('resize', init);
-        init(); draw();
+        init(); 
+        draw();
     </script>
 </body>
 </html>
