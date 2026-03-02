@@ -8,7 +8,7 @@
     <style>
         :root {
             --neon-pink: #ff2d95;
-            --heaven-glow: #ffd0eb;
+            --heaven-glow: #ffffff;
         }
 
         body, html {
@@ -19,19 +19,19 @@
             font-family: 'Syne', sans-serif;
         }
 
-        /* --- THE NEW BEACH BACKGROUND --- */
+        /* --- BACKGROUND --- */
         .bg-img {
             position: fixed;
-            top: -5%; left: -5%;
-            width: 110%; height: 110%;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
             background: url('https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/IMG_3002.jpg') no-repeat center center;
             background-size: cover;
             z-index: 1;
-            filter: contrast(1.2) brightness(0.6) saturate(1.4);
-            transition: transform 2.5s cubic-bezier(0.19, 1, 0.22, 1), filter 1.5s;
+            filter: contrast(1.2) brightness(0.6);
+            transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1), filter 1.5s;
         }
 
-        /* --- GOATED NEON LOGO (RESTORED) --- */
+        /* --- NEON LOGO --- */
         .hero {
             position: relative;
             z-index: 10;
@@ -40,99 +40,80 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: opacity 0.5s;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(5rem, 18vw, 11rem);
             color: #fff;
-            margin: 0;
-            /* Multi-layer neon radiance */
             text-shadow: 
                 0 0 10px #fff,
-                0 0 25px var(--neon-pink),
-                0 0 50px var(--neon-pink),
-                0 0 100px var(--neon-pink),
-                0 0 150px var(--neon-pink);
-            animation: radiantBreathe 4s infinite ease-in-out;
-            user-select: none;
+                0 0 30px var(--neon-pink),
+                0 0 60px var(--neon-pink),
+                0 0 100px var(--neon-pink);
+            animation: ultraBreathe 4s infinite ease-in-out;
         }
 
-        @keyframes radiantBreathe {
-            0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 10px var(--neon-pink)); }
-            50% { transform: scale(1.03); filter: brightness(1.3) drop-shadow(0 0 30px var(--neon-pink)); }
+        @keyframes ultraBreathe {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.4); }
         }
 
         /* --- CRYSTAL GLASS BUTTON --- */
         .btn-fog {
             margin-top: 140px;
-            padding: 25px 70px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.7);
+            padding: 25px 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.8);
             color: #fff;
             text-transform: uppercase;
             letter-spacing: 20px;
-            font-size: 1.1rem;
             cursor: pointer;
-            /* The Glassy refraction effect */
-            backdrop-filter: blur(45px) saturate(200%);
-            -webkit-backdrop-filter: blur(45px) saturate(200%);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 
-                        inset 0 0 20px rgba(255,255,255,0.3);
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            /* High-Refraction Glass */
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.2);
+            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .btn-fog:hover {
-            background: rgba(255, 255, 255, 0.2);
-            letter-spacing: 28px;
-            box-shadow: 0 0 80px var(--neon-pink), 0 0 30px #fff;
-            transform: translateY(-8px) scale(1.05);
+            letter-spacing: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 80px var(--neon-pink);
+            transform: translateY(-10px);
         }
 
-        /* --- THE HEAVENLY TELEPORT (NO BOXES) --- */
-        .teleport-flash {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: #fff;
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-        }
-
-        .god-rays {
+        /* --- HEAVEN RAYS (FIXED: NO RECTANGLE) --- */
+        .ray-container {
             position: fixed;
             top: 50%; left: 50%;
-            width: 400vw; height: 400vw;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0%,
-                #fff 2%,
-                transparent 5%,
-                #fff 15%,
-                transparent 25%,
-                #fff 40%,
-                transparent 60%,
-                #fff 85%,
-                transparent 100%
-            );
+            width: 500vw; height: 500vw; /* Massive size to hide edges */
             transform: translate(-50%, -50%) scale(0);
-            z-index: 1000;
+            z-index: 999;
             pointer-events: none;
             opacity: 0;
-            filter: blur(40px) brightness(2);
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                rgba(255,255,255,0.8) 5deg,
+                transparent 15deg,
+                rgba(255,255,255,0.9) 30deg,
+                transparent 50deg,
+                rgba(255,255,255,0.8) 70deg,
+                transparent 90deg
+            );
+            filter: blur(60px); /* Massive blur for high quality bloom */
         }
 
-        .warp-active {
-            animation: warpSequence 1.6s forwards ease-in;
+        .ray-active {
+            animation: heavenWarp 1.8s forwards ease-in;
         }
 
-        @keyframes warpSequence {
+        @keyframes heavenWarp {
             0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            30% { opacity: 1; }
-            90% { opacity: 1; filter: blur(20px) brightness(4); }
-            100% { transform: translate(-50%, -50%) scale(2) rotate(140deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5) rotate(180deg); opacity: 0; }
         }
 
         /* --- DIARY SECTION --- */
@@ -140,79 +121,78 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100vh;
-            background: linear-gradient(to bottom, #fff, var(--heaven-glow));
+            background: #fff;
             display: none;
-            z-index: 1100;
+            z-index: 1000;
             overflow-y: auto;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .diary-card {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: #fff;
-            padding: 30px;
-            border-radius: 2px;
-            box-shadow: 0 30px 100px rgba(255, 45, 149, 0.2);
-            border-top: 10px solid var(--neon-pink);
+            padding: 20px;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.1);
         }
 
-        .diary-pic {
+        .diary-image {
             width: 100%;
-            height: 450px;
+            height: 500px;
             background: url('https://raw.githubusercontent.com/wssnw/wssnw.github.io/main/IMG_3002.jpg') no-repeat center center;
             background-size: cover;
-            margin-bottom: 30px;
-            filter: sepia(0.1) contrast(1.1);
+            border: 15px solid #fff; /* Polaroid look */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
+        .diary-text {
+            padding: 40px;
+            font-family: 'Inter';
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
     <div class="bg-img" id="bg"></div>
-    <div class="teleport-flash" id="flash"></div>
-    <div class="god-rays" id="rays"></div>
+    <div class="ray-container" id="rays"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-fog" onclick="teleport()">Enter the Fog!</button>
+        <button class="btn-fog" onclick="warp()">Enter the Fog!</button>
     </div>
 
     <div class="heaven-logs" id="logs">
         <div class="diary-card">
-            <div class="diary-pic"></div>
-            <h1 style="font-family:'Syne'; letter-spacing:8px; color:#000;">STARDUST LOG // 001</h1>
-            <p style="font-family:'Inter'; color:#555; line-height:2; font-size:1.1rem;">
-                This is where the fog settles. The 2028 cycle has officially begun. Everything you see is a fragment of the vision.
-            </p>
-            <button onclick="location.reload()" style="background:none; border:1px solid #000; padding:15px 40px; cursor:pointer; font-family:'Syne'; letter-spacing:4px; margin-top:30px;">RE-ENTER THE MIST</button>
+            <div class="diary-image"></div>
+            <div class="diary-text">
+                <h1 style="font-family:'Syne'; text-transform:uppercase; letter-spacing:5px;">Entry #001 // The Beach</h1>
+                <p style="font-size: 1.2rem; line-height: 1.8;">The fog settled over the palms today. Everything feels like a dream from 2028. We are officially in the zone.</p>
+                <button onclick="location.reload()" style="background:#000; color:#fff; border:none; padding:15px 30px; cursor:pointer; font-family:'Syne'; margin-top:30px;">BACK TO REALITY</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function teleport() {
+        function warp() {
             const rays = document.getElementById('rays');
-            const flash = document.getElementById('flash');
             const bg = document.getElementById('bg');
             const hero = document.getElementById('hero');
             const logs = document.getElementById('logs');
 
-            // 1. Kick off the warp animation
-            rays.classList.add('warp-active');
-            flash.style.opacity = '1';
+            // Trigger Massive Rays
+            rays.classList.add('ray-active');
             
-            // 2. High-speed background blowout
-            bg.style.filter = 'brightness(15) contrast(0.5) blur(30px) saturate(0)';
-            bg.style.transform = 'scale(5)';
+            // Blow out background
+            bg.style.filter = 'brightness(15) blur(40px) saturate(0)';
+            bg.style.transform = 'scale(6)';
             hero.style.opacity = '0';
-            
-            // 3. Switch to Heaven
+
             setTimeout(() => {
                 hero.style.display = 'none';
                 logs.style.display = 'block';
                 document.body.style.background = "#fff";
-            }, 1000);
+            }, 1200);
         }
     </script>
 </body>
