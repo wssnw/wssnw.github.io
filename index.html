@@ -29,7 +29,7 @@
             background-size: cover;
             z-index: 1;
             filter: contrast(1.1) brightness(0.7);
-            transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), filter 2s;
+            transition: transform 2s cubic-bezier(0.19, 1, 0.22, 1), filter 1s;
         }
 
         .hero {
@@ -40,7 +40,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 1s ease;
+            transition: opacity 0.8s ease;
         }
 
         /* --- THE ORIGINAL GOATED GLOWING LOGO --- */
@@ -49,7 +49,6 @@
             font-size: clamp(5rem, 18vw, 11rem);
             color: #fff;
             margin: 0;
-            /* Heavy multi-layer glow */
             text-shadow: 
                 0 0 10px #fff,
                 0 0 20px var(--neon-pink),
@@ -64,53 +63,75 @@
             50% { transform: scale(1.05); filter: brightness(1.3); }
         }
 
-        /* --- GLASSIER 2028 BUTTON (MOVED DOWN) --- */
+        /* --- ULTRA GLASSIER 2028 BUTTON --- */
         .btn-2028 {
-            margin-top: 120px; /* Pushed way down */
-            padding: 22px 80px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin-top: 160px; /* Pushed down as requested */
+            padding: 25px 90px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.7); /* Thicker edge for glass look */
             color: #fff;
             text-transform: uppercase;
-            letter-spacing: 20px;
+            letter-spacing: 25px;
             cursor: pointer;
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            backdrop-filter: blur(40px) saturate(200%); /* Maximum Glass */
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), 
+                        inset 0 0 20px rgba(255,255,255,0.2);
+            transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .btn-2028:hover {
-            letter-spacing: 30px;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 50px #fff;
+            letter-spacing: 35px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 60px #fff;
             transform: translateY(-5px) scale(1.05);
         }
 
-        /* --- THE HEAVENLY TRANSITION --- */
+        /* --- TELEPORTATION SUNRAYS (SHARP BEAMS) --- */
         .sunray-burst {
             position: fixed;
             top: 50%; left: 50%;
-            width: 1px; height: 1px;
-            background: #fff;
-            border-radius: 50%;
+            width: 250vw; height: 250vw;
+            /* Conic gradient creates the teleportation "spikes" */
+            background: conic-gradient(
+                from 0deg,
+                transparent 0%,
+                #fff 5%,
+                transparent 10%,
+                #fff 20%,
+                transparent 30%,
+                #fff 45%,
+                transparent 60%,
+                #fff 75%,
+                transparent 85%,
+                #fff 95%,
+                transparent 100%
+            );
             transform: translate(-50%, -50%) scale(0);
             z-index: 999;
             pointer-events: none;
-            box-shadow: 0 0 100px 100px #fff, 0 0 300px 200px var(--gold-glow);
             opacity: 0;
+            filter: blur(1px);
         }
 
         .sunray-burst.active {
-            animation: heavenFlash 1.5s forwards ease-in;
+            animation: teleportFlash 1.5s forwards ease-in;
         }
 
-        @keyframes heavenFlash {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            40% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(2500); opacity: 0; }
+        @keyframes teleportFlash {
+            0% { 
+                transform: translate(-50%, -50%) scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            70% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1.5) rotate(120deg); 
+                opacity: 0; 
+            }
         }
-
+        
         /* --- THE HEAVEN LOGS --- */
         .heaven-logs {
             position: fixed;
@@ -134,7 +155,7 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(40px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -185,16 +206,20 @@
             const logs = document.getElementById('logs');
             const bg = document.getElementById('bg');
 
-            // Trigger Crazy Sunrays
+            // 1. Trigger Teleport Rays
             ray.classList.add('active');
-            bg.style.filter = 'brightness(5) white-balance(200%)';
-            bg.style.transform = 'scale(2)';
             
+            // 2. Blow out the background (Teleporting effect)
+            bg.style.filter = 'brightness(10) contrast(0.5) blur(10px)';
+            bg.style.transform = 'scale(3)';
+            hero.style.opacity = '0';
+            
+            // 3. Swap to Heaven Logs
             setTimeout(() => {
                 hero.style.display = 'none';
                 logs.style.display = 'block';
                 document.body.style.background = "#fff";
-            }, 800);
+            }, 900);
         }
     </script>
 </body>
