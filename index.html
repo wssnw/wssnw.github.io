@@ -4,152 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --neon-pink: #ff2d95; 
             --neon-blue: #00f2ff; 
             --sunset-purple: #7000ff;
-            --ray-color: rgba(255, 255, 255, 0.9); 
+            --white-glow: rgba(255, 255, 255, 0.9);
         }
 
+        * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            background: #050112;
+            background: #020008;
             font-family: 'Syne', sans-serif;
             color: white;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- START PAGE BG --- */
+        /* --- GODLY BACKGROUND ENGINE --- */
         .bg-img {
-            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
-            background: #050112 url('IMG_3002.jpeg') no-repeat center center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
+                        url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover;
-            z-index: 1; filter: contrast(1.2) brightness(0.6);
-            transition: transform 5s cubic-bezier(0.19, 1, 0.22, 1), filter 3s;
+            z-index: 1; transform: scale(1.05);
+            transition: transform 8s cubic-bezier(0.22, 1, 0.36, 1), filter 4s ease;
         }
 
+        /* --- SMOOTH LEAVES --- */
         .leaf {
-            position: fixed; top: -50px; width: 15px; height: 15px;
-            background: rgba(255, 255, 255, 0.3); border-radius: 2px 12px 2px 12px;
-            z-index: 5; pointer-events: none; animation: fall linear infinite;
+            position: fixed; top: -10%; z-index: 5;
+            width: 12px; height: 12px;
+            background: var(--white-glow);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            pointer-events: none;
+            animation: fallRotate linear infinite;
         }
 
-        @keyframes fall {
+        @keyframes fallRotate {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(150px); opacity: 0; }
         }
 
+        /* --- LOGO & HERO --- */
         .hero {
             position: relative; z-index: 10; height: 100vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.5s ease, transform 1.5s ease;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 15vw, 10rem);
-            text-shadow: 0 0 20px #fff, 0 0 40px var(--neon-pink), 0 0 80px var(--neon-pink);
+            font-size: clamp(5rem, 18vw, 12rem);
+            background: linear-gradient(to bottom, #fff, var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px var(--neon-pink));
+            animation: floating 4s ease-in-out infinite;
         }
 
-        .btn-fog {
-            margin-top: 50px; padding: 25px 70px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #fff; color: #fff;
-            text-transform: uppercase; letter-spacing: 15px;
-            cursor: pointer; backdrop-filter: blur(20px);
-            transition: 0.5s; box-shadow: 0 0 30px var(--sunset-purple);
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.02); }
         }
 
-        /* --- THE FIXED SUNRAYS --- */
+        /* --- WARP RAYS (FIXED CHOPPINESS) --- */
         .ray-box {
             position: fixed; top: 50%; left: 50%;
-            width: 3000vw; height: 3000vw;
+            width: 150vmax; height: 150vmax;
             transform: translate(-50%, -50%) scale(0);
-            background: conic-gradient(from 0deg, transparent 0%, var(--ray-color) 2%, transparent 4%, var(--ray-color) 10%, transparent 18%, var(--ray-color) 30%, transparent 45%);
-            filter: blur(40px) brightness(2.5) drop-shadow(0 0 50px var(--neon-pink));
-            z-index: 9999; pointer-events: none; opacity: 0;
+            background: radial-gradient(circle, transparent 20%, var(--white-glow) 21%, transparent 22%);
+            background-size: 10% 10%;
+            opacity: 0; z-index: 9999; pointer-events: none;
         }
 
-        .ray-active { animation: superWarp 4.5s forwards ease-out; }
+        .ray-active { animation: godlyWarp 3s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
 
-        @keyframes superWarp {
+        @keyframes godlyWarp {
             0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1) rotate(120deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(4) rotate(180deg); opacity: 0; }
         }
 
-        /* --- SECTIONS --- */
-        .heaven-logs, .story-section {
+        /* --- MEMORY CARDS --- */
+        .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: radial-gradient(circle at center, #1a0b2e 0%, #050112 100%);
-            display: none; z-index: 1000;
-            overflow-y: auto; padding: 80px 0;
+            background: #020008; display: none; z-index: 1000;
+            overflow-y: auto; padding: 100px 20px;
             flex-direction: column; align-items: center;
         }
 
-        .memory-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 60px; width: 90%; max-width: 1200px; margin-bottom: 80px;
-        }
-
         .diary-card {
-            position: relative; background: #fff; padding: 15px 15px 60px 15px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1); transition: 0.4s;
+            position: relative; background: white; padding: 10px 10px 50px 10px;
+            width: 100%; max-width: 400px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
         }
 
-        .diary-card:hover { transform: translateY(-15px) rotate(2deg); box-shadow: 0 0 50px var(--neon-pink); }
+        .diary-card:hover { transform: scale(1.05) rotate(2deg); z-index: 10; }
 
         .tape {
-            position: absolute; top: -20px; left: 50%; width: 130px; height: 45px;
-            background: rgba(255, 45, 149, 0.8); backdrop-filter: blur(5px);
-            transform: translateX(-50%) rotate(-3deg); box-shadow: 0 0 20px var(--neon-pink); z-index: 10;
+            position: absolute; top: -15px; left: 50%; width: 100px; height: 35px;
+            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-5deg);
+            box-shadow: 0 5px 15px var(--neon-pink);
         }
 
-        .img-box { width: 100%; height: 320px; background: #111; background-size: cover; background-position: center; }
-        .main-img { background-image: url('Screenshot_28.png'); animation: hyperGlow 3s infinite alternate; }
-        
-        @keyframes hyperGlow { to { filter: saturate(1.8) brightness(1.3); box-shadow: 0 0 40px var(--neon-pink); } }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .memory-info { font-family: 'Dancing Script'; font-size: 1.8rem; color: #111; text-align: center; margin-top: 20px; }
-
-        /* --- RGB ANIMATED TEXT --- */
-        .rgb-text {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: clamp(1.2rem, 4vw, 2.5rem);
-            text-align: center;
-            line-height: 1.6;
-            padding: 40px;
-            background: linear-gradient(to right, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rgbFlow 8s linear infinite, floatText 3s ease-in-out infinite;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+        /* --- STORY FORMATTING --- */
+        .story-content {
+            max-width: 700px; text-align: left; line-height: 1.8;
+            font-family: 'Inter', sans-serif; font-weight: 400;
         }
 
-        @keyframes rgbFlow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        .story-header {
+            font-size: 3rem; font-weight: 900; margin-bottom: 30px;
+            background: linear-gradient(90deg, #fff, var(--neon-blue), var(--neon-pink), #fff);
+            background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: rgbFlow 5s linear infinite;
         }
 
-        @keyframes floatText {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        @keyframes rgbFlow { 0% { background-position: 0%; } 100% { background-position: 300%; } }
 
-        .nav-btn {
-            padding: 15px 45px; border: 2px solid #fff; background: none;
-            color: #fff; cursor: pointer; font-family: 'Syne'; font-weight: 800;
-            margin: 20px; transition: 0.3s;
-        }
-        .nav-btn:hover { background: #fff; color: #000; box-shadow: 0 0 40px #fff; }
+        /* --- SOCIAL ICONS --- */
+        .social-icons { display: flex; gap: 40px; margin-top: 50px; }
+        .social-icon { width: 50px; height: 50px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: grayscale(1) invert(1); }
+        .social-icon:hover { transform: scale(1.3) rotate(10deg); filter: grayscale(0) invert(0); }
 
-        .social-box { text-align: center; padding: 60px; background: rgba(0,0,0,0.5); width: 100%; }
-        .social-link { display: inline-block; margin: 15px 25px; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.1rem; letter-spacing: 3px; }
+        .btn-fancy {
+            margin-top: 40px; padding: 15px 40px; border: 1px solid white;
+            background: none; color: white; cursor: pointer;
+            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
+        }
+        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
+
+        #story { display: none; }
     </style>
 </head>
 <body>
@@ -160,73 +155,76 @@
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-fog" onclick="warp()">Enter the Fog!</button>
+        <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 style="color:#fff; font-size: 3rem; margin-bottom: 60px; text-shadow: 0 0 30px var(--neon-pink);">MEMORIES FOUND</h2>
-        <div class="memory-grid">
+        <h2 class="story-header" style="text-align:center">MEMORIES</h2>
+        <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;">
             <div class="diary-card">
                 <div class="tape"></div>
-                <div class="img-box main-img"></div>
-                <div class="memory-info">08/15/25</div>
+                <div class="img-box"><img src="Screenshot_28.png"></div>
+                <p style="color:black; font-family:'Dancing Script'; text-align:center; font-size: 1.5rem;">08/15/25</p>
             </div>
-            <div class="diary-card">
-                <div class="tape" style="background:var(--neon-blue);"></div>
-                <div class="img-box" style="display:flex; align-items:center; justify-content:center; color:#444;">Locked</div>
-                <div class="memory-info">??/??/??</div>
-            </div>
-            <div class="diary-card"><div class="tape"></div><div class="img-box"></div><div class="memory-info">??/??/??</div></div>
-            <div class="diary-card"><div class="tape" style="background:var(--neon-blue);"></div><div class="img-box"></div><div class="memory-info">??/??/??</div></div>
         </div>
-
-        <div>
-            <button class="nav-btn" onclick="showStory()">EXPLORE MORE</button>
-            <button class="nav-btn" onclick="location.reload()">BACK</button>
-        </div>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
+        <button class="btn-fancy" style="border:none; opacity:0.5" onclick="location.reload()">BACK</button>
     </div>
 
-    <div class="story-section" id="story">
-        <div class="diary-card" style="max-width: 800px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
-            <div class="tape" style="background: var(--neon-blue);"></div>
-            <p class="rgb-text">
-                This game was inspired by a game I played called Da Hood.<br><br>
-                I started this journey at 13-14 years old, working alone. I tried to release the game in 2025, but life took its toll and time slipped away.<br><br>
-                I set the target to 2026, but now... it's looking like a 2028 release.<br><br>
-                Staying busy with life, but the fog never clears.
+    <div class="heaven-logs" id="story">
+        <div class="story-content">
+            <h1 class="story-header">THE LEGACY</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">
+                This vision was born from the streets of <strong>Da Hood</strong>. <br><br>
+                I started crafting this world alone at just <strong>13 years old</strong>. What began as a dream in 2024 was supposed to meet the world in 2025. But time is a heavy thing. <br><br>
+                The release shifted to 2026, and now, as life pulls me in different directions, <strong>2028</strong> has become the final destination. <br><br>
+                <em>Quality takes time. Life takes priority. The fog remains.</em>
             </p>
+            
+            <div class="social-icons">
+                <a href="https://www.tiktok.com/@melody" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-icon" title="TikTok">
+                </a>
+                <a href="https://www.instagram.com/promethazine" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="social-icon" title="Instagram">
+                </a>
+                <a href="https://www.roblox.com/users/3295874241/profile" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1018/1018285.png" class="social-icon" title="Roblox: 0dedzz">
+                </a>
+            </div>
+
+            <button class="btn-fancy" style="margin-top:80px" onclick="backToLogs()">BACK TO GALLERY</button>
         </div>
-        <button class="nav-btn" style="margin-top: 50px;" onclick="backToLogs()">BACK TO MEMORIES</button>
     </div>
 
     <script>
+        // Smooth Leaf Generator
         const leafContainer = document.getElementById('leaf-container');
-        function createLeaf() {
+        setInterval(() => {
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = Math.random() * 5 + 5 + 's';
+            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
             leafContainer.appendChild(leaf);
-            setTimeout(() => { leaf.remove(); }, 10000);
-        }
-        setInterval(createLeaf, 400);
+            setTimeout(() => leaf.remove(), 8000);
+        }, 500);
 
-        function warp() {
+        function godlyEnter() {
             document.getElementById('rays').classList.add('ray-active');
-            document.getElementById('bg').style.transform = "scale(15) rotate(40deg)";
-            document.getElementById('bg').style.filter = "brightness(50) blur(100px)";
+            document.getElementById('bg').style.transform = "scale(1.8) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(5) blur(20px)";
             document.getElementById('hero').style.opacity = "0";
 
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
                 document.getElementById('logs').style.display = 'flex';
-            }, 2500); 
+                document.getElementById('bg').style.display = 'none';
+            }, 1500);
         }
 
-        function showStory() {
+        function openStory() {
             document.getElementById('logs').style.display = 'none';
             document.getElementById('story').style.display = 'flex';
-            window.scrollTo(0,0);
         }
 
         function backToLogs() {
