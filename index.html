@@ -24,30 +24,57 @@
             font-family: 'Dancing Script', cursive;
         }
 
-        /* Snow Canvas Overlay */
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* Snow Overlay */
+        canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: -1; 
+            pointer-events: none;
+        }
 
         .main-logo {
-            font-size: 8rem;
+            font-size: clamp(4rem, 15vw, 9rem);
             margin: 0;
-            text-shadow: 0 0 10px #fff, 0 0 20px var(--glow-blue), 0 0 60px var(--glow-blue);
-            animation: pulse 2.5s infinite ease-in-out;
-            cursor: default;
+            color: #fff;
+            text-shadow: 
+                0 0 10px #fff, 
+                0 0 20px var(--glow-blue), 
+                0 0 40px var(--glow-blue),
+                0 0 80px var(--glow-blue);
+            animation: pulse 3s infinite ease-in-out;
+            user-select: none;
         }
 
         .release-tag {
             font-family: 'Orbitron', sans-serif;
             color: var(--glow-pink);
-            letter-spacing: 12px;
-            margin-top: 30px;
+            letter-spacing: 15px;
+            margin-top: 20px;
             font-size: 1.2rem;
             text-shadow: 0 0 15px var(--glow-pink);
-            opacity: 0.8;
+            opacity: 0.9;
+            text-transform: uppercase;
         }
 
+        /* Smooth Breathing Animation */
         @keyframes pulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.05); filter: brightness(1.2); }
+            0%, 100% { 
+                transform: scale(1); 
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: brightness(1.3);
+            }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            .release-tag {
+                letter-spacing: 5px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -56,8 +83,7 @@
     <canvas id="snow"></canvas>
 
     <h1 class="main-logo">Foggy Fights</h1>
-    
-    <div class="release-tag">RELEASING 2028</div>
+    <div class="release-tag">Releasing 2028</div>
 
     <script>
         const canvas = document.getElementById('snow');
@@ -68,27 +94,35 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             flakes = [];
-            for(let i=0; i<100; i++) {
+            // Create 120 snow particles
+            for(let i = 0; i < 120; i++) {
                 flakes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    r: Math.random() * 2 + 0.5,
-                    v: Math.random() * 1 + 0.5
+                    r: Math.random() * 2 + 0.5, // Size
+                    v: Math.random() * 1 + 0.5, // Speed
+                    o: Math.random() * 0.5 + 0.2 // Opacity
                 });
             }
         }
 
         function draw() {
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-            ctx.beginPath();
             flakes.forEach(f => {
-                ctx.moveTo(f.x, f.y);
+                ctx.fillStyle = `rgba(255, 255, 255, ${f.o})`;
+                ctx.beginPath();
                 ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Move snow down
                 f.y += f.v;
-                if(f.y > height) f.y = -5;
+                
+                // Reset flake to top if it leaves screen
+                if(f.y > height) {
+                    f.y = -10;
+                    f.x = Math.random() * width;
+                }
             });
-            ctx.fill();
             requestAnimationFrame(draw);
         }
 
