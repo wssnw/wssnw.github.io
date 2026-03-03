@@ -15,8 +15,9 @@
 
     <style>
         :root { 
-            --gold: #ffcf7a;
-            --white-glow: rgba(255, 255, 255, 0.8);
+            --gold-glow: #ffeb3b;
+            --white-pure: #ffffff;
+            --polaroid-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -26,194 +27,182 @@
             width: 100%; height: 100%;
             background: #000;
             font-family: 'Syne', sans-serif;
-            color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* --- Backgrounds --- */
+        /* --- Header / Translation --- */
+        #translate_section {
+            position: fixed; top: 20px; left: 20px; z-index: 9999;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            padding: 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* --- Main Background --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)), 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.05);
-            transition: 2s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1), filter 3s ease;
         }
 
-        /* --- Left-to-Right Moving Glow --- */
+        /* --- Logo with Moving Glow --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(4rem, 15vw, 10rem);
-            color: white;
             position: relative;
-            background: linear-gradient(90deg, #fff, var(--gold), #fff);
+            background: linear-gradient(90deg, #fff, var(--gold-glow), #fff);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 4s linear infinite, floating 4s ease-in-out infinite;
+            animation: shine 3s linear infinite, floating 4s ease-in-out infinite;
             z-index: 10;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
-
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* --- Translator Top Bar --- */
-        #translate_ui {
-            position: fixed; top: 15px; left: 15px; z-index: 10000;
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-            padding: 5px 15px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
-        }
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
         /* --- Socials Bar --- */
-        .socials-container {
-            display: flex; gap: 15px; margin-top: 20px; z-index: 20;
+        .socials-row {
+            display: flex; gap: 10px; margin-top: 25px; z-index: 100; flex-wrap: wrap; justify-content: center;
         }
 
-        .social-btn {
-            padding: 10px 20px; background: rgba(255,255,255,0.1);
-            border: 1px solid white; color: white; text-decoration: none;
-            font-weight: 900; font-size: 0.8rem; letter-spacing: 1px;
-            transition: 0.3s;
+        .social-link {
+            padding: 12px 24px; border: 1px solid white; color: white;
+            text-decoration: none; font-weight: 900; letter-spacing: 1px;
+            font-size: 0.7rem; transition: 0.3s; background: rgba(0,0,0,0.2);
         }
-        .social-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+        .social-link:hover { background: white; color: black; transform: translateY(-5px); }
 
-        /* --- Transition Flash --- */
-        #flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 10000; opacity: 0; pointer-events: none;
-        }
-
-        /* --- Memories / Legacy Beach Page --- */
+        /* --- The Beach Interface --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
                         url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
             background-size: cover; background-position: center;
-            display: none; z-index: 1000; overflow-y: auto; padding: 100px 20px;
+            display: none; z-index: 1000; overflow-y: scroll; padding: 100px 20px;
             flex-direction: column; align-items: center; opacity: 0;
         }
 
         .glowing-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 4rem; text-align: center; color: #fff;
-            text-shadow: 0 0 20px var(--gold); margin-bottom: 40px;
+            font-size: 4.5rem; color: white; text-align: center;
+            text-shadow: 0 0 20px var(--gold-glow); margin-bottom: 30px;
         }
 
-        /* --- Roadmap / Roadmap Box --- */
-        .roadmap-box {
-            background: rgba(255, 255, 255, 0.95); color: #4a3f35;
-            padding: 40px; max-width: 700px; width: 100%;
-            border-radius: 10px; margin-bottom: 50px; line-height: 1.8;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        /* --- Vision & Roadmap Card --- */
+        .vision-card {
+            background: rgba(255, 255, 255, 0.9); color: #222;
+            padding: 40px; border-radius: 15px; max-width: 800px; width: 100%;
+            margin-bottom: 40px; box-shadow: var(--polaroid-shadow);
+            border-left: 8px solid #ffb482;
         }
+
+        .vision-card h3 { font-family: 'Syne'; text-transform: uppercase; margin-top: 0; }
+        .vision-card li { margin-bottom: 10px; font-weight: 500; }
 
         .btn-fancy {
-            padding: 15px 40px; border: 2px solid white; background: transparent;
+            padding: 18px 50px; border: 2px solid white; background: transparent;
             color: white; font-weight: 900; text-transform: uppercase;
-            cursor: pointer; margin: 10px; transition: 0.4s;
+            cursor: pointer; transition: 0.4s; z-index: 2000;
         }
-        .btn-fancy:hover { background: white; color: #000; }
+        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
 
-        .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .flash-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 10000; opacity: 0; pointer-events: none;
+        }
+
+        .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
     </style>
 </head>
 <body>
 
-    <div id="flash"></div>
-
-    <div id="translate_ui">
-        <div id="google_translate_element"></div>
-    </div>
-
+    <div class="flash-overlay" id="flash"></div>
+    <div id="translate_section"><div id="google_translate_element"></div></div>
+    <div id="live-clock" style="position:fixed; top:20px; right:20px; color:white; z-index:5000; font-weight:900;">00:00:00</div>
+    
     <div class="bg-img" id="bg"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">Enter The Fog</button>
         
-        <div class="socials-container">
-            <a href="#" class="social-btn" onclick="alert('Discord coming soon!')">DISCORD</a>
-            <a href="#" class="social-btn" onclick="alert('Instagram coming soon!')">INSTAGRAM</a>
-            <a href="#" class="social-btn" onclick="alert('TikTok coming soon!')">TIKTOK</a>
-            <a href="https://www.roblox.com/communities/35978868" target="_blank" class="social-btn" style="background:#ffb482; border-color:#ffb482;">ROBLOX GROUP</a>
+        <div class="socials-row">
+            <a href="#" class="social-link" onclick="alert('TikTok coming soon!')">TIKTOK</a>
+            <a href="#" class="social-link" onclick="alert('Discord coming soon!')">DISCORD</a>
+            <a href="#" class="social-link" onclick="alert('Instagram coming soon!')">INSTAGRAM</a>
+            <a href="https://www.roblox.com/communities/35978868" target="_blank" class="social-link" style="border-color:#ffb482; background:rgba(255,180,130,0.2);">ROBLOX GROUP</a>
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="glowing-title">Future & Memories</h2>
-        
-        <div class="roadmap-box">
-            <h3 style="margin-top:0; font-family:'Syne';">PROJECT VISION 2028</h3>
-            <p>Our mission is to create a <b>Fair & Pure</b> gaming experience. We are currently developing:</p>
+        <h2 class="glowing-title">Our Vision</h2>
+
+        <div class="vision-card">
+            <h3>Coming Soon to 2028</h3>
+            <p>We are building more than just a game; we are building a <b>Legacy</b>. In the future, Foggy Fights will feature:</p>
             <ul>
-                <li><b>Custom Skins:</b> Unique visual identities for every player.</li>
-                <li><b>Anti-Cheat:</b> A strictly moderated community with <b>zero tolerance</b> for cheaters.</li>
-                <li><b>Good Vibes:</b> A non-toxic environment built by and for the community.</li>
+                <li><b>Custom Skins & Gear:</b> Express yourself with unique high-tier visuals.</li>
+                <li><b>Elite Anti-Cheat:</b> A zero-tolerance system for a fair and competitive environment.</li>
+                <li><b>Global Community:</b> A place where skill matters and the vibes are unmatched.</li>
             </ul>
         </div>
 
-        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
-            <div style="background:white; padding:10px; box-shadow:0 10px 30px rgba(0,0,0,0.2); transform:rotate(-2deg); width:280px;">
-                <img src="Screenshot_22.png" style="width:100%;">
-                <p style="color:#8d7765; font-family:'Dancing Script'; text-align:center; font-size:1.5rem;">2025 Roots</p>
+        <h2 class="glowing-title" style="font-size: 3rem;">The Memories</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:30px; justify-content:center; margin-bottom:50px;">
+            <div style="background:white; padding:15px; width:300px; transform:rotate(-2deg); box-shadow:var(--polaroid-shadow);">
+                <img src="Screenshot_22.png" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
+                <p style="color:#4a3f35; font-family:'Dancing Script'; font-size:1.5rem; text-align:center;">The Beginning</p>
             </div>
-            <div style="background:white; padding:10px; box-shadow:0 10px 30px rgba(0,0,0,0.2); transform:rotate(3deg); width:280px;">
-                <img src="RobloxScreenShot20260302_213405110.png" style="width:100%;">
-                <p style="color:#8d7765; font-family:'Dancing Script'; text-align:center; font-size:1.5rem;">The Grind</p>
+            <div style="background:white; padding:15px; width:300px; transform:rotate(3deg); box-shadow:var(--polaroid-shadow);">
+                <img src="RobloxScreenShot20260302_213405110.png" style="width:100%; aspect-ratio:1/1; object-fit:cover;">
+                <p style="color:#4a3f35; font-family:'Dancing Script'; font-size:1.5rem; text-align:center;">Summer 2025</p>
             </div>
         </div>
 
-        <div class="roadmap-box" style="margin-top:50px;">
-            <h3 style="margin-top:0; font-family:'Syne';">THE LEGACY</h3>
-            Inspired by <b>Da Hood</b>. Started as a solo project in 2025. Life gets busy, but the dream stays alive. 
-            Projected launch: <b style="color:#ff8d42;">2028</b>.
-        </div>
-
-        <button class="btn-fancy" onclick="backToHome()">BACK TO HOME</button>
+        <button class="btn-fancy" onclick="backToHome()">BACK TO MAIN</button>
     </div>
 
     <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         function godlyEnter() {
             const flash = document.getElementById('flash');
             const bg = document.getElementById('bg');
-            const hero = document.getElementById('hero');
-            const logs = document.getElementById('logs');
-
-            // 1. Intense White Flash
-            flash.style.opacity = "1";
             
-            // 2. Heavy Zoom Background
-            bg.style.transform = "scale(8) rotate(10deg)";
-            bg.style.filter = "brightness(5) blur(30px)";
+            // Start Animation
+            flash.style.opacity = "1";
+            bg.style.transform = "scale(10) rotate(15deg)";
+            bg.style.filter = "brightness(15) blur(40px)";
             
             setTimeout(() => {
-                hero.style.display = "none";
-                logs.style.display = "flex";
+                document.getElementById('hero').style.display = 'none';
+                const l = document.getElementById('logs');
+                l.style.display = 'flex';
                 
-                // 3. Fade flash out
-                flash.style.transition = "opacity 1.5s ease";
+                flash.style.transition = "opacity 2s ease";
                 flash.style.opacity = "0";
-                
-                // 4. Fade content in
-                setTimeout(() => { logs.style.opacity = "1"; }, 100);
-            }, 500);
+                setTimeout(() => { l.style.opacity = "1"; }, 100);
+            }, 600);
         }
 
         function backToHome() {
             const logs = document.getElementById('logs');
-            const hero = document.getElementById('hero');
-            const bg = document.getElementById('bg');
-
             logs.style.opacity = "0";
             setTimeout(() => {
-                logs.style.display = "none";
-                hero.style.display = "flex";
-                bg.style.transform = "scale(1.05) rotate(0deg)";
-                bg.style.filter = "brightness(1) blur(0px)";
-                setTimeout(() => { hero.style.opacity = "1"; }, 50);
-            }, 800);
+                logs.style.display = 'none';
+                const hero = document.getElementById('hero');
+                hero.style.display = 'flex';
+                document.getElementById('bg').style.transform = "scale(1.05)";
+                document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
+                setTimeout(() => hero.style.opacity = "1", 50);
+            }, 1000);
         }
     </script>
 </body>
