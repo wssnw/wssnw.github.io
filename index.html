@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --neon-pink: #ff2d95; 
@@ -13,15 +13,10 @@
             --white-glow: rgba(255, 255, 255, 0.9);
             --paper: #fdfaf0;
             --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
-            --map-ui: #00f2ff;
+            --map-bg: #e5e5e5;
         }
 
-        /* --- core reset, stop looking at my code skid --- */
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; 
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
         body, html {
             margin: 0; padding: 0;
@@ -32,32 +27,29 @@
             overflow: hidden;
         }
 
-        /* --- bg engine ig --- */
+        /* --- UI Elements --- */
+        #live-clock {
+            position: fixed; top: 20px; right: 20px;
+            font-weight: 900; font-family: 'Inter', sans-serif;
+            font-size: 1.2rem; z-index: 5000;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover;
-            z-index: 1; transform: scale(1.05);
+            background-size: cover; z-index: 1; transform: scale(1.05);
             transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
-        /* --- sakura --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
             width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
-            pointer-events: auto;
             animation: fallSway linear infinite;
             opacity: 0.8;
-            transition: filter 0.3s, transform 0.3s;
-            cursor: pointer;
-        }
-
-        .leaf.clicked {
-            filter: brightness(2) drop-shadow(0 0 15px white);
-            transform: scale(2.5) rotate(45deg) !important;
         }
 
         @keyframes fallSway {
@@ -66,19 +58,11 @@
             100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- titles n rgb glow --- */
-        .main-logo, .glow-header {
-            font-family: 'Dancing Script', cursive;
-            color: white;
-            text-align: center;
-            animation: rgbPulse 5s linear infinite;
-        }
-
         .main-logo {
+            font-family: 'Dancing Script', cursive;
             font-size: clamp(3.8rem, 16vw, 11rem);
             animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
-            margin: 0;
-            z-index: 10;
+            margin: 0; z-index: 10;
         }
 
         @keyframes rgbPulse {
@@ -87,330 +71,248 @@
             66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- TACTICAL MAP STYLES --- */
+        /* --- REAL MAP (GANGLO) --- */
         #map-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
             display: none; z-index: 3000; justify-content: center; align-items: center;
             opacity: 0; transition: 0.5s ease;
         }
 
         .map-window {
-            width: 95%; max-width: 900px; height: 85vh;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--map-ui);
-            border-radius: 15px; position: relative;
-            display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+            width: 95%; max-width: 1000px; height: 85vh;
+            background: #f0f0f0; border-radius: 12px;
+            overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .map-header {
+            padding: 15px 25px; background: white; color: #111;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #ddd; font-family: 'Inter', sans-serif;
         }
 
         .map-canvas {
-            flex-grow: 1; position: relative;
-            background-color: #050505;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
+            flex-grow: 1; position: relative; background: #e8e8e8;
+            background-image: linear-gradient(#dcdcdc 1px, transparent 1px), linear-gradient(90deg, #dcdcdc 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
         .poi {
-            position: absolute; padding: 10px 15px;
-            border: 1px solid var(--map-ui); background: rgba(0, 242, 255, 0.1);
-            color: var(--map-ui); font-size: 0.7rem; font-weight: 900;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            position: absolute; padding: 8px 16px; background: white;
+            color: #333; font-size: 14px; font-weight: 700; font-family: 'Inter', sans-serif;
+            border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            cursor: pointer; border: 1px solid #bbb; transition: 0.2s;
         }
+        .poi:hover { transform: scale(1.1); background: var(--neon-pink); color: white; border-color: var(--neon-pink); }
 
-        .poi:hover { background: var(--map-ui); color: black; box-shadow: 0 0 20px var(--map-ui); transform: scale(1.1); }
-
-        .ping {
-            position: absolute; width: 10px; height: 10px; background: var(--map-ui);
-            border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
-            animation: pingExpand 0.8s ease-out forwards;
-        }
-        @keyframes pingExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(12); opacity: 0; } }
-
-        /* --- diary --- */
+        /* --- DIARY & STORY --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.85);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            display: none; z-index: 1000;
-            overflow-y: scroll; padding: 60px 20px;
-            flex-direction: column; align-items: center;
-            opacity: 0; transition: opacity 1s ease;
+            background: rgba(2, 0, 8, 0.9); backdrop-filter: blur(25px);
+            display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
+            flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
         }
 
-        .diary-stack {
-            width: 100%; max-width: 450px;
-            display: flex; flex-direction: column; gap: 45px;
-            margin-bottom: 50px;
-        }
+        .diary-stack { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 40px; margin-bottom: 50px; }
 
         .diary-card {
-            position: relative; 
-            background: var(--paper); 
-            padding: 15px 15px 60px 15px;
-            width: 100%;
-            box-shadow: var(--heaven-glow);
-            transform: rotate(-1.5deg);
-            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .diary-card:nth-child(even) { transform: rotate(2deg); }
-
-        @keyframes diaryEntry {
-            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
-            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
+            position: relative; background: var(--paper); padding: 15px 15px 60px 15px;
+            box-shadow: var(--heaven-glow); transform: rotate(-1.5deg);
         }
 
         .tape {
-            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
-            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
-            box-shadow: 0 0 15px var(--neon-pink);
-            z-index: 5;
+            position: absolute; top: -15px; left: 50%; width: 100px; height: 35px;
+            background: rgba(255, 45, 149, 0.8); transform: translateX(-50%) rotate(-3deg);
+            box-shadow: 0 0 10px var(--neon-pink);
         }
 
-        .img-box { 
-            width: 100%; aspect-ratio: 16/9; background: #111; 
-            overflow: hidden; border: 1px solid rgba(0,0,0,0.1);
+        /* --- TICTACTOE --- */
+        #ttt-box {
+            margin-top: 40px; padding: 25px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; text-align: center;
         }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .diary-label {
-            color: #222; font-family: 'Syne', sans-serif;
-            font-size: 1.2rem; text-align: center; margin-top: 20px;
-            font-weight: 800; letter-spacing: 1px;
+        .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 220px; margin: 20px auto; }
+        .cell {
+            aspect-ratio: 1/1; background: rgba(255,255,255,0.1); border: 2px solid var(--neon-pink);
+            display: flex; align-items: center; justify-content: center; font-size: 2rem;
+            cursor: pointer; font-family: 'Inter', sans-serif; font-weight: 900;
         }
 
-        /* --- glowing buttons --- */
         .btn-fancy {
             margin: 10px; padding: 18px 40px; border: 2px solid white;
-            background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
-            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
-            backdrop-filter: blur(5px); text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            background: transparent; color: white; cursor: pointer;
+            letter-spacing: 5px; font-weight: 900; text-transform: uppercase; transition: 0.4s;
         }
-        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 40px white; }
+        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
 
-        .btn-play {
-            display: block; width: 100%; background: #000; color: white;
-            padding: 14px; margin-top: 15px; text-decoration: none;
-            text-align: center; font-weight: 900; letter-spacing: 2px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s;
-        }
-        .btn-play:hover { 
-            background: var(--neon-pink); 
-            box-shadow: 0 0 25px var(--neon-pink);
-        }
-
-        /* --- legacy / history glow --- */
-        .legacy-text {
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.8;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
-            animation: textBreath 3s ease-in-out infinite;
-        }
-
-        @keyframes textBreath {
-            0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
-        }
-
-        .made-by {
-            font-size: 0.7rem; opacity: 0.4; margin-top: 20px;
-            letter-spacing: 2px; text-transform: uppercase; text-align: center;
-        }
-
-        .hero {
-            position: relative; z-index: 10; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 1.5s ease;
-        }
-
-        @media (max-width: 600px) {
-            .diary-stack { max-width: 90%; }
-            .btn-fancy { width: 85%; }
-            .main-logo { font-size: 4rem; }
-        }
-
-        #story { display: none; }
+        .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .legacy-text { font-family: 'Inter', sans-serif; font-size: 1.2rem; line-height: 1.8; max-width: 700px; text-align: center; }
+        .made-by { font-size: 0.7rem; opacity: 0.4; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
+    <div id="live-clock">00:00:00</div>
     <div class="bg-img" id="bg"></div>
     <div id="leaf-container"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
-        <button class="btn-fancy" style="border-color: var(--map-ui); color: var(--map-ui);" onclick="toggleMap(true)">TACTICAL MAP</button>
+        <button class="btn-fancy" style="border-color: #00f2ff; color: #00f2ff;" onclick="toggleMap(true)">VIEW MAP</button>
         <div class="made-by">made by wssnw</div>
     </div>
 
     <div id="map-overlay">
         <div class="map-window">
-            <div style="padding: 20px; background: rgba(0, 242, 255, 0.1); border-bottom: 1px solid var(--map-ui); display: flex; justify-content: space-between; align-items: center;">
-                <div style="letter-spacing: 5px; font-weight: 900; color: var(--map-ui);">SATELLITE INTEL // 2028</div>
-                <button onclick="toggleMap(false)" style="background: var(--map-ui); border: none; color: black; padding: 5px 15px; cursor: pointer; font-weight: 900;">CLOSE</button>
+            <div class="map-header">
+                <span style="font-weight: 900; letter-spacing: 2px; font-size: 1.2rem;">MAP // REGION: GANGLO</span>
+                <button onclick="toggleMap(false)" style="background: #111; color: white; border: none; padding: 8px 20px; cursor: pointer; font-weight: 900;">EXIT</button>
             </div>
-            
-            <div class="map-canvas" id="mapCanvas">
-                <div class="poi" style="top: 20%; left: 45%;" onclick="mapPing(event)">Bank</div>
-                <div class="poi" style="top: 10%; left: 10%;" onclick="mapPing(event)">Uphill</div>
-                <div class="poi" style="bottom: 10%; left: 10%;" onclick="mapPing(event)">Downhill</div>
-                <div class="poi" style="top: 45%; left: 42%; border-color: #ff2d95; color: #ff2d95;" onclick="mapPing(event)">Park</div>
-                <div class="poi" style="top: 25%; right: 15%;" onclick="mapPing(event)">Casino</div>
-                <div class="poi" style="bottom: 25%; left: 40%;" onclick="mapPing(event)">Gas Station</div>
-                <div class="poi" style="top: 55%; right: 10%;" onclick="mapPing(event)">Warehouse</div>
-                <div class="poi" style="bottom: 15%; right: 30%;" onclick="mapPing(event)">Boxing Ring</div>
-                <div class="poi" style="top: 50%; left: 15%;" onclick="mapPing(event)">Playground</div>
-                <div class="poi" style="bottom: 5%; right: 5%; width: 140px; border-style: dashed;" onclick="mapPing(event)">Beach</div>
+            <div class="map-canvas">
+                <div class="poi" style="top: 20%; left: 15%;">UPHILL ESTATES</div>
+                <div class="poi" style="top: 45%; left: 45%;">CENTRAL BANK</div>
+                <div class="poi" style="bottom: 15%; left: 25%;">GAS STATION</div>
+                <div class="poi" style="top: 10%; right: 10%;">CASINO DISTRICT</div>
+                <div class="poi" style="bottom: 10%; right: 10%;">BEACH DOCKS</div>
+                <div class="poi" style="top: 60%; left: 10%;">PLAYGROUND</div>
+                <div class="poi" style="top: 50%; right: 25%;">WAREHOUSE</div>
+                <div class="poi" style="bottom: 30%; right: 40%;">BOXING RING</div>
             </div>
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 10px; margin-bottom: 50px;">MEMORIES</h2>
-        
+        <h2 style="font-family: 'Dancing Script'; font-size: 4rem; margin-bottom: 40px;">Memories</h2>
         <div class="diary-stack">
-            <div class="diary-card" style="animation-delay: 0.1s;">
+            <div class="diary-card">
                 <div class="tape"></div>
-                <div class="img-box"><img src="Screenshot_22.png"></div>
-                <div class="diary-label">11/08/2025</div>
+                <div style="height: 200px; background: #111;"><img src="Screenshot_22.png" style="width:100%; height:100%; object-fit:cover;"></div>
+                <div style="color:#222; text-align:center; padding-top:15px; font-weight:900;">11/08/2025</div>
             </div>
-
-            <div class="diary-card" style="animation-delay: 0.2s; transform: rotate(2deg);">
-                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
-                <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
-                <div class="diary-label">9/07/2025</div>
-            </div>
-
-            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
-                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
-                <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" style="object-fit: contain; background: #fff; padding: 10px;"></div>
-                <div class="diary-label">THE COMMUNITY</div>
-                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
-            </div>
-
-            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
-                <div class="tape" style="background: #fffb00; box-shadow: 0 0 15px #fffb00;"></div>
-                <div class="img-box"><img src="Screenshot_28.png"></div>
-                <div class="diary-label">08/15/25 - Progress</div>
+            <div class="diary-card" style="transform: rotate(2deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 10px #00f2ff;"></div>
+                <div style="height: 200px; background: #111;"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" style="width:100%; height:100%; object-fit:contain; background:white;"></div>
+                <div style="color:#222; text-align:center; padding-top:15px; font-weight:900;">COMMUNITY</div>
+                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" style="display:block; text-align:center; background:#000; color:#fff; padding:10px; margin-top:10px; text-decoration:none; font-weight:900;">JOIN GROUP</a>
             </div>
         </div>
-
-        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
-        <div class="made-by">made by wssnw</div>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE MORE</button>
+        <button class="btn-fancy" style="opacity:0.5; border:none;" onclick="backToHome()">BACK</button>
     </div>
 
     <div class="heaven-logs" id="story">
-        <div style="max-width: 800px; text-align: center; padding: 20px;">
-            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
-            <div class="legacy-text">
-                This game was inspired from a game that i played called da hood.<br><br>
-                i started this at a young age alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
-                and now its probably going to get released in 2028 since im busy with life.
-            </div>
-            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
-            <div class="made-by" style="margin-top:40px">made by wssnw</div>
+        <h1 style="font-size: 3.5rem; margin-bottom: 20px;">THE LEGACY</h1>
+        <div class="legacy-text">
+            This game was inspired by Da Hood. I started this journey at 13 alone. <br><br>
+            It was supposed to drop in 2025, then 2026... now 2028. Life gets busy, but the fog never clears.
         </div>
+
+        <div id="ttt-box">
+            <h3 style="letter-spacing:2px;">IN CASE UR BORED...</h3>
+            <p style="font-size: 0.9rem; opacity: 0.7;">PLAY TICTACTOE WITH A ROBOT</p>
+            <div class="ttt-grid" id="grid">
+                <div class="cell" onclick="play(0)"></div>
+                <div class="cell" onclick="play(1)"></div>
+                <div class="cell" onclick="play(2)"></div>
+                <div class="cell" onclick="play(3)"></div>
+                <div class="cell" onclick="play(4)"></div>
+                <div class="cell" onclick="play(5)"></div>
+                <div class="cell" onclick="play(6)"></div>
+                <div class="cell" onclick="play(7)"></div>
+                <div class="cell" onclick="play(8)"></div>
+            </div>
+            <div id="ttt-status" style="font-weight:900; color:var(--neon-pink);">YOUR TURN (X)</div>
+            <button onclick="resetTTT()" style="margin-top:15px; background:white; border:none; padding:5px 15px; font-weight:900; cursor:pointer;">RESET</button>
+        </div>
+
+        <button class="btn-fancy" style="margin-top:50px" onclick="backToLogs()">BACK TO DIARY</button>
     </div>
 
     <script>
-        const leafContainer = document.getElementById('leaf-container');
-        
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000); updateClock();
+
         function createLeaf() {
-            if (document.hidden) return;
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            const size = (Math.random() * 10 + 15) + 'px';
-            leaf.style.width = size;
-            leaf.style.height = (parseFloat(size) * 1.2) + 'px';
             leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            leafContainer.appendChild(leaf);
-            setTimeout(() => leaf.remove(), 10000);
+            document.getElementById('leaf-container').appendChild(leaf);
+            setTimeout(() => leaf.remove(), 8000);
         }
         setInterval(createLeaf, 500);
 
         function toggleMap(show) {
-            const map = document.getElementById('map-overlay');
-            if(show) {
-                map.style.display = 'flex';
-                setTimeout(() => map.style.opacity = "1", 10);
-            } else {
-                map.style.opacity = "0";
-                setTimeout(() => map.style.display = 'none', 500);
-            }
-        }
-
-        function mapPing(e) {
-            const canvas = document.getElementById('mapCanvas');
-            const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const ping = document.createElement('div');
-            ping.classList.add('ping');
-            ping.style.left = x + 'px';
-            ping.style.top = y + 'px';
-            canvas.appendChild(ping);
-            setTimeout(() => ping.remove(), 1000);
+            const m = document.getElementById('map-overlay');
+            m.style.display = show ? 'flex' : 'none';
+            setTimeout(() => m.style.opacity = show ? "1" : "0", 10);
         }
 
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
-            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
+            document.getElementById('bg').style.transform = "scale(2.2) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
-                const logs = document.getElementById('logs');
-                logs.style.display = 'flex';
-                setTimeout(() => logs.style.opacity = "1", 50);
-            }, 2000);
+                const l = document.getElementById('logs');
+                l.style.display = 'flex'; setTimeout(() => l.style.opacity = "1", 50);
+            }, 1500);
         }
 
         function openStory() {
-            const logs = document.getElementById('logs');
-            logs.style.opacity = "0";
-            setTimeout(() => {
-                logs.style.display = 'none';
-                const story = document.getElementById('story');
-                story.style.display = 'flex';
-                setTimeout(() => story.style.opacity = "1", 50);
-            }, 800);
+            document.getElementById('logs').style.display = 'none';
+            const s = document.getElementById('story');
+            s.style.display = 'flex'; setTimeout(() => s.style.opacity = "1", 50);
         }
 
         function backToLogs() {
-            const story = document.getElementById('story');
-            story.style.opacity = "0";
-            setTimeout(() => {
-                story.style.display = 'none';
-                const logs = document.getElementById('logs');
-                logs.style.display = 'flex';
-                setTimeout(() => logs.style.opacity = "1", 50);   
-            }, 800);
+            document.getElementById('story').style.display = 'none';
+            const l = document.getElementById('logs');
+            l.style.display = 'flex';
         }
 
-        function backToHome() {
-            const logs = document.getElementById('logs');
-            logs.style.opacity = "0";
-            setTimeout(() => {
-                logs.style.display = 'none';
-                const hero = document.getElementById('hero');
-                hero.style.display = 'flex';
-                document.getElementById('bg').style.transform = "scale(1.05)";
-                document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
-                setTimeout(() => hero.style.opacity = "1", 50);
-            }, 800);
+        function backToHome() { location.reload(); }
+
+        // TicTacToe Logic
+        let b = ["","","","","","","","",""], active = true;
+        function play(i) {
+            if(b[i] === "" && active) {
+                b[i] = "X"; document.getElementsByClassName('cell')[i].innerText = "X";
+                if(check()) return;
+                active = false; document.getElementById('ttt-status').innerText = "ROBOT THINKING...";
+                setTimeout(robot, 600);
+            }
+        }
+        function robot() {
+            let e = b.map((v,idx) => v === "" ? idx : null).filter(v => v !== null);
+            if(e.length > 0) {
+                let m = e[Math.floor(Math.random()*e.length)];
+                b[m] = "O"; document.getElementsByClassName('cell')[m].innerText = "O";
+                document.getElementById('ttt-status').innerText = "YOUR TURN (X)";
+                active = true; check();
+            }
+        }
+        function check() {
+            const w = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for(let c of w) {
+                if(b[c[0]] && b[c[0]] === b[c[1]] && b[c[0]] === b[c[2]]) {
+                    document.getElementById('ttt-status').innerText = b[c[0]] + " WINS!";
+                    active = false; return true;
+                }
+            }
+            if(!b.includes("")) { document.getElementById('ttt-status').innerText = "DRAW!"; return true; }
+            return false;
+        }
+        function resetTTT() {
+            b = ["","","","","","","","",""]; active = true;
+            document.getElementById('ttt-status').innerText = "YOUR TURN (X)";
+            Array.from(document.getElementsByClassName('cell')).forEach(c => c.innerText = "");
         }
     </script>
 </body>
