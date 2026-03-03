@@ -18,20 +18,20 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: #000; font-family: 'Syne', sans-serif;
-            color: white; overflow: hidden; position: fixed;
+            color: white; overflow-x: hidden; position: relative;
         }
 
-        /* --- Custom Language Toggle (Goodbye Ugly Google Bar) --- */
+        /* --- Custom Language Toggle --- */
         .lang-switcher {
             position: fixed; top: 20px; left: 20px; z-index: 10005;
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(20px);
-            padding: 8px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            font-size: 12px; font-weight: 900; letter-spacing: 1px; cursor: pointer;
-            transition: 0.3s; color: var(--gold);
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(25px);
+            padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer;
+            transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); color: var(--gold);
         }
-        .lang-switcher:hover { background: var(--gold); color: black; }
+        .lang-switcher:hover { background: var(--white); color: #000; transform: scale(1.05); }
 
-        /* --- The Background Core --- */
+        /* --- Background Animation --- */
         .bg-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; overflow: hidden;
@@ -42,10 +42,10 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; transform: scale(1.1);
-            transition: transform 4s cubic-bezier(0.16, 1, 0.3, 1), filter 3s ease;
+            transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 4s ease;
         }
 
-        /* --- Logo: Inner Glow + Dynamic Sweep --- */
+        /* --- Logo with Infinite Glow --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(3.5rem, 15vw, 10rem);
@@ -53,64 +53,63 @@
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(255,255,255,0.3));
-            animation: shine 3s linear infinite, floating 4s ease-in-out infinite;
-            text-align: center; pointer-events: none;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.3));
+            animation: shine 4s linear infinite, floating 6s ease-in-out infinite;
+            text-align: center;
         }
 
         @keyframes shine { to { background-position: 200% center; } }
-        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-15px) rotate(1deg); } }
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-25px) rotate(1deg); } }
 
-        /* --- Socials: Neon Icons --- */
-        .socials-box { display: flex; gap: 20px; margin-top: 30px; z-index: 100; }
-        .s-icon {
-            width: 48px; height: 48px; cursor: pointer;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-        }
-        .s-icon:hover { transform: scale(1.4) rotate(10deg); filter: drop-shadow(0 0 20px var(--gold)); }
-
-        /* --- CRAZY VOLUMETRIC CANVAS --- */
+        /* --- Triple-Layer Volumetric Canvas --- */
         #fx-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10002; pointer-events: none; mix-blend-mode: overlay;
+            z-index: 10002; pointer-events: none; mix-blend-mode: screen;
+            filter: blur(2px);
         }
 
-        /* --- THE ENTRY BUTTON (Mobile Optimized) --- */
+        /* --- Smooth Button --- */
         .btn-enter {
-            position: relative; padding: 22px 60px; font-weight: 900;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.2); color: white;
-            border-radius: 50px; cursor: pointer; overflow: hidden;
-            letter-spacing: 4px; transition: 0.5s; font-size: 14px;
+            position: relative; padding: 25px 70px; font-weight: 900;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2); color: white;
+            border-radius: 100px; cursor: pointer;
+            letter-spacing: 5px; transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            font-size: 14px; margin-top: 20px;
         }
-        .btn-enter:hover { background: white; color: black; box-shadow: 0 0 50px white; transform: scale(1.05); }
+        .btn-enter:hover { background: white; color: black; box-shadow: 0 0 60px rgba(255,255,255,0.4); transform: translateY(-5px); }
 
-        /* --- CONTENT PAGE --- */
+        /* --- Memory Interface --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), 
                         url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
             background-size: cover; display: none; z-index: 10003; 
-            overflow-y: auto; padding: 60px 20px; flex-direction: column; align-items: center;
-            opacity: 0; transition: 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            overflow-y: auto; padding: 80px 20px; flex-direction: column; align-items: center;
+            opacity: 0; transition: 2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(50px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 35px;
-            border-radius: 25px; max-width: 600px; width: 100%; margin-bottom: 25px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(60px);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 40px;
+            border-radius: 30px; max-width: 650px; width: 100%; margin-bottom: 30px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
         }
 
-        /* --- Fun Fact Box --- */
-        .fact-box {
-            text-align: center; border: 1px solid var(--gold); 
-            animation: pulse-border 2s infinite;
+        /* --- Your Screenshots --- */
+        .screenshot-grid {
+            display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px;
         }
-        @keyframes pulse-border { 0%, 100% { border-color: var(--gold); } 50% { border-color: white; } }
 
-        .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10; }
+        .polaroid {
+            background: white; padding: 12px 12px 40px 12px;
+            border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 280px; transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .polaroid img { width: 100%; height: auto; display: block; border: 1px solid #eee; }
+        .polaroid:hover { transform: scale(1.08) rotate(0deg) translateY(-10px); z-index: 10; }
+
+        .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10; transition: 1.5s; }
     </style>
 </head>
 <body>
@@ -126,53 +125,48 @@
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
         
-        <div class="socials-box">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="s-icon" onclick="alert('Instagram Soon!')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="s-icon" onclick="alert('TikTok Soon!')">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" class="s-icon" onclick="window.open('https://www.roblox.com/communities/35978868')">
+        <div style="display:flex; gap:25px; margin-top:40px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" style="width:40px; cursor:pointer;" onclick="alert('Instagram Soon!')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" style="width:40px; cursor:pointer;" onclick="alert('TikTok Soon!')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" style="width:40px; cursor:pointer;" onclick="window.open('https://www.roblox.com/communities/35978868')">
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <div class="glass-panel fact-box">
-            <h4 style="margin:0; font-size: 10px; letter-spacing: 3px; color: var(--gold);">FUN FACT</h4>
-            <p style="margin: 10px 0 0; font-style: italic;">Did you know? Foggy Fights was born from a solo 2025 dream!</p>
+        
+        <h2 style="font-family:'Dancing Script'; font-size: 3rem; color: var(--gold); margin-bottom: 40px;">Memories</h2>
+
+        <div class="screenshot-grid">
+            <div class="polaroid" style="transform: rotate(-3deg);">
+                <img src="Screenshot_22.png">
+                <p style="color:black; font-family:'Dancing Script'; text-align:center; margin-top:15px; font-size: 1.2rem;">Initial Build</p>
+            </div>
+            <div class="polaroid" style="transform: rotate(3deg);">
+                <img src="RobloxScreenShot20260302_213405110.png">
+                <p style="color:black; font-family:'Dancing Script'; text-align:center; margin-top:15px; font-size: 1.2rem;">Summer Development</p>
+            </div>
         </div>
 
-        <div class="glass-panel">
-            <h3 style="color: var(--gold); margin-top:0;">2028 ROADMAP</h3>
-            <ul style="line-height: 2.2; font-size: 14px;">
-                <li><b>Elite Anti-Cheat:</b> No hackers, just pure skills.</li>
-                <li><b>Custom Skins:</b> Exclusive drip for the OGs.</li>
-                <li><b>Community:</b> A toxic-free world for the grinders.</li>
-            </ul>
-        </div>
-
-        <div class="glass-panel" style="border-left: 4px solid var(--gold);">
+        <div class="glass-panel" style="border-left: 5px solid var(--gold);">
             <h3 style="color: var(--gold); margin-top:0;">THE LEGACY</h3>
-            <p style="font-size: 14px; line-height: 1.8;">
+            <p style="font-size: 15px; line-height: 2;">
                 This game was inspired by a game that I played called <b style="color:var(--accent);">Da Hood</b>.<br><br>
                 I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026.<br><br>
                 And now it's probably going to get released in <b style="color:var(--accent);">2028</b> since I'm busy with life.
             </p>
         </div>
 
-        <button class="btn-enter" onclick="location.reload()">BACK TO START</button>
+        <button class="btn-enter" onclick="location.reload()" style="margin-bottom: 50px;">BACK TO HOME</button>
     </div>
 
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script>
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         }
         function triggerTranslate() {
-            const el = document.querySelector('.goog-te-combo');
-            if (el) {
-                alert("Please select language in the popup!");
-                document.getElementById('google_translate_element').style.display = 'block';
-            } else {
-                location.href = '#google_translate_element';
-            }
+            alert("Translate bar activated at top!");
+            document.getElementById('google_translate_element').style.display = 'block';
         }
 
         const canvas = document.getElementById('fx-canvas');
@@ -187,37 +181,36 @@
         window.addEventListener('resize', resize);
         resize();
 
-        class Spark {
+        class LightRay {
             constructor() {
                 this.x = canvas.width/2;
                 this.y = canvas.height/2;
                 this.angle = Math.random() * Math.PI * 2;
-                this.velocity = Math.random() * 20 + 10;
-                this.size = Math.random() * 5 + 2;
+                this.length = 0;
+                this.speed = Math.random() * 5 + 2; // Slower speed for smoothness
                 this.alpha = 1;
+                this.width = Math.random() * 40 + 10;
             }
             draw() {
+                this.length += this.speed;
                 ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                let tx = this.x + Math.cos(this.angle) * 1000;
-                let ty = this.y + Math.sin(this.angle) * 1000;
-                let grad = ctx.createLinearGradient(this.x, this.y, tx, ty);
-                grad.addColorStop(0, `rgba(255, 255, 255, ${this.alpha})`);
-                grad.addColorStop(0.2, `rgba(255, 200, 100, ${this.alpha * 0.5})`);
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                let grad = ctx.createLinearGradient(0, 0, 0, this.length);
+                grad.addColorStop(0, `rgba(255, 255, 255, ${this.alpha * 0.3})`);
                 grad.addColorStop(1, 'transparent');
-                ctx.strokeStyle = grad;
-                ctx.lineWidth = this.size;
-                ctx.lineTo(tx, ty);
-                ctx.stroke();
-                this.alpha *= 0.95;
+                ctx.fillStyle = grad;
+                ctx.fillRect(-this.width/2, 0, this.width, this.length);
+                ctx.restore();
+                this.alpha *= 0.99;
             }
         }
 
         function anim() {
             if(!explode) return;
-            ctx.fillStyle = 'rgba(0,0,0,0.1)';
-            ctx.fillRect(0,0,canvas.width, canvas.height);
-            if(particles.length < 100) particles.push(new Spark());
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            if(particles.length < 50) particles.push(new LightRay());
             particles.forEach(p => p.draw());
             requestAnimationFrame(anim);
         }
@@ -229,8 +222,9 @@
             const hero = document.getElementById('hero');
             const logs = document.getElementById('logs');
 
-            bg.style.transform = "scale(40) rotate(30deg)";
-            bg.style.filter = "brightness(20) blur(100px)";
+            // Massive Slower Zoom
+            bg.style.transform = "scale(50) rotate(15deg)";
+            bg.style.filter = "brightness(25) blur(120px)";
             hero.style.opacity = "0";
 
             setTimeout(() => {
@@ -238,10 +232,10 @@
                 logs.style.display = 'flex';
                 setTimeout(() => { 
                     logs.style.opacity = "1";
-                    explode = false;
-                    ctx.clearRect(0,0,canvas.width, canvas.height);
-                }, 100);
-            }, 900);
+                    // Gently clear canvas after transition
+                    setTimeout(() => { explode = false; ctx.clearRect(0,0,canvas.width, canvas.height); }, 2000);
+                }, 200);
+            }, 1200); // Wait longer for the zoom to peak
         }
     </script>
 </body>
