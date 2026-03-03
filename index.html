@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | Nostalgia</title>
+    <title>Foggy Fights | Golden Glass</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #ffb347;
-            --warm-white: #fffcf2;
-            --nostalgia-overlay: rgba(255, 180, 50, 0.1);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shine: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -18,104 +19,105 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: #000; font-family: 'Syne', sans-serif;
-            color: var(--warm-white); overflow-x: hidden;
+            color: #fff; overflow: hidden;
         }
 
-        /* --- Fixed Translation UI --- */
-        #google_translate_element {
-            position: fixed; top: 20px; left: 20px; z-index: 10005;
-            opacity: 0.8; transition: 0.5s;
-        }
-        #google_translate_element:hover { opacity: 1; }
-        .goog-te-gadget-icon { display: none !important; }
-        .goog-te-gadget-simple { 
-            background: rgba(255,255,255,0.1) !important; 
-            border: 1px solid var(--gold) !important;
-            padding: 5px 10px !important; border-radius: 50px !important;
-        }
-
-        /* --- Background Layers --- */
+        /* --- Backgrounds --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), 
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.1);
-            filter: sepia(0.4) saturate(1.3);
-            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1), filter 4s ease;
+            filter: sepia(0.3) saturate(1.2);
+            transition: all 4.5s cubic-bezier(0.1, 0, 0, 1);
         }
 
-        .golden-wash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, var(--nostalgia-overlay), transparent);
-            z-index: 2; pointer-events: none;
-        }
-
-        /* --- Logo & Main UI --- */
-        .hero { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            height: 100vh; position: relative; z-index: 10; transition: 2s ease;
-        }
-
+        /* --- THE SHINING LOGO --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 15vw, 9rem);
-            color: var(--gold);
-            text-shadow: 0 0 50px rgba(255, 179, 71, 0.6);
-            animation: float 6s ease-in-out infinite;
-            margin: 0;
+            font-size: clamp(3.5rem, 15vw, 9rem);
+            position: relative;
+            background: linear-gradient(90deg, #fff 0%, var(--gold) 50%, #fff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoSweep 3s linear infinite, float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 179, 71, 0.4));
+        }
+
+        @keyframes logoSweep {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
         }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        .btn-enter {
-            padding: 20px 60px; font-weight: 900; background: none;
-            border: 2px solid var(--gold); color: var(--gold);
-            cursor: pointer; letter-spacing: 5px; transition: 0.8s;
-            margin-top: 30px; font-size: 14px; box-shadow: 0 0 20px rgba(255, 179, 71, 0.2);
+        /* --- GLASS BUTTONS --- */
+        .glass-btn {
+            position: relative;
+            padding: 22px 60px;
+            font-weight: 900;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            letter-spacing: 4px;
+            overflow: hidden;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+            font-size: 14px;
+            text-transform: uppercase;
         }
-        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 40px var(--gold); }
 
-        /* --- Corrected Icons --- */
-        .socials { display: flex; gap: 25px; margin-top: 40px; }
-        .s-icon { 
-            width: 40px; height: 40px; cursor: pointer; transition: 0.5s;
-            filter: drop-shadow(0 0 5px var(--gold));
+        .glass-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--shine);
+            transition: 0.5s;
         }
-        .s-icon:hover { transform: scale(1.2); filter: drop-shadow(0 0 15px var(--gold)); }
 
-        /* --- NEW LEGACY PAGE (Heart & Vibe) --- */
+        .glass-btn:hover::before { left: 100%; }
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255, 179, 71, 0.2);
+        }
+
+        /* --- Legacy Content --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(255, 179, 71, 0.1), rgba(0, 0, 0, 0.9)), 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
                         url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
-            background-size: cover; background-position: center;
-            display: none; z-index: 10003; overflow-y: auto; padding: 60px 20px;
-            flex-direction: column; align-items: center; opacity: 0;
-            transition: 2.5s cubic-bezier(0.1, 0, 0.1, 1);
+            background-size: cover; display: none; z-index: 10003; 
+            overflow-y: auto; padding: 60px 20px; flex-direction: column; align-items: center;
+            opacity: 0; transition: 3s ease;
         }
 
-        .legacy-content {
-            max-width: 800px; width: 100%; text-align: center;
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
-            padding: 40px; border: 1px solid rgba(255, 179, 71, 0.2);
-            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+        .photo-card {
+            background: #fff; padding: 10px 10px 40px 10px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            width: 300px; transition: 1s ease-in-out;
+            animation: drift 8s infinite alternate;
+        }
+        @keyframes drift { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+
+        .legacy-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px; border-radius: 20px;
+            max-width: 700px; width: 100%; margin: 40px 0;
         }
 
-        .screenshot-container {
-            display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px;
-        }
-
-        .photo {
-            background: #fffef0; padding: 10px 10px 35px 10px;
-            width: 280px; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-            transform: rotate(-2deg); animation: drift 10s ease-in-out infinite alternate;
-        }
-        .photo img { width: 100%; filter: sepia(0.2); }
-        .photo p { color: #555; font-family: 'Dancing Script'; margin-top: 10px; font-size: 1.2rem; }
-
-        @keyframes drift { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
-
-        #fx-canvas {
+        .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10; transition: 2s; }
+        
+        /* --- Cinematic Fog Rays --- */
+        #fog-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 10002; pointer-events: none; mix-blend-mode: screen;
         }
@@ -123,103 +125,85 @@
 </head>
 <body>
 
-    <div id="google_translate_element"></div>
-    <div class="golden-wash"></div>
-    <canvas id="fx-canvas"></canvas>
-    
+    <canvas id="fog-canvas"></canvas>
     <div class="bg-img" id="bg"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
+        <button class="glass-btn" onclick="startCinematic()">Enter the Fog</button>
         
-        <div class="socials">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="s-icon" onclick="alert('Discord Soon!')" alt="Discord">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" class="s-icon" onclick="window.open('https://www.roblox.com/communities/35978868')" alt="Roblox">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="s-icon" onclick="alert('TikTok Soon!')" alt="TikTok">
+        <div style="display:flex; gap:30px; margin-top:50px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" style="width:40px; cursor:pointer;" onclick="alert('Discord Soon!')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" style="width:40px; cursor:pointer;" onclick="window.open('https://www.roblox.com/communities/35978868')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" style="width:40px; cursor:pointer;" onclick="alert('TikTok Soon!')">
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        
-        <div class="screenshot-container">
-            <div class="photo">
-                <img src="Screenshot_22.png">
-                <p>The First Spark</p>
-            </div>
-            <div class="photo" style="animation-delay: -5s; transform: rotate(2deg);">
-                <img src="RobloxScreenShot20260302_213405110.png">
-                <p>Golden Dreams</p>
-            </div>
+        <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center; margin-top:50px;">
+            <div class="photo-card"><img src="Screenshot_22.png" style="width:100%"><p style="color:#000; text-align:center; font-family:'Dancing Script'; margin-top:15px;">2025 Vision</p></div>
+            <div class="photo-card" style="animation-delay: -4s;"><img src="RobloxScreenShot20260302_213405110.png" style="width:100%"><p style="color:#000; text-align:center; font-family:'Dancing Script'; margin-top:15px;">Development Peak</p></div>
         </div>
 
-        <div class="legacy-content">
-            <h2 style="font-family:'Dancing Script'; font-size: 3rem; color: var(--gold); margin-top: 0;">Our Journey</h2>
-            <p style="font-size: 1.1rem; line-height: 2; color: #eee; text-align: left;">
-                This game was inspired by a game that I played called <b style="color:var(--gold);">Da Hood</b>.<br><br>
-                I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026.<br><br>
+        <div class="legacy-glass">
+            <h2 style="color:var(--gold); font-family:'Dancing Script'; font-size: 3rem; margin:0;">The Legacy</h2>
+            <p style="line-height:2.2; color:#ccc;">
+                This game was inspired by a game that I played called <b style="color:var(--gold);">Da Hood</b>. 
+                I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026. 
                 And now it's probably going to get released in <b style="color:var(--gold);">2028</b> since I'm busy with life.
             </p>
-            <button class="btn-enter" onclick="location.reload()" style="margin-top: 40px; border-radius: 0;">BACK HOME</button>
         </div>
-        
-        <div style="height: 100px;"></div>
+        <button class="glass-btn" onclick="location.reload()">Back Home</button>
     </div>
 
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script>
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-        }
-
-        const canvas = document.getElementById('fx-canvas');
+        const canvas = document.getElementById('fog-canvas');
         const ctx = canvas.getContext('2d');
         let active = false;
-        let rays = [];
+        let fogParticles = [];
 
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
 
-        class Ray {
+        class FogLayer {
             constructor() {
-                this.angle = Math.random() * Math.PI * 2;
-                this.l = 0; this.s = Math.random() * 3 + 2;
-                this.a = 1;
+                this.x = canvas.width/2; this.y = canvas.height/2;
+                this.r = 0; this.maxR = Math.max(canvas.width, canvas.height);
+                this.opacity = 0.4;
             }
             draw() {
-                this.l += this.s; this.a *= 0.99;
-                ctx.save(); ctx.translate(canvas.width/2, canvas.height/2); ctx.rotate(this.angle);
-                let g = ctx.createLinearGradient(0,0,0,this.l);
-                g.addColorStop(0, `rgba(255, 179, 71, ${this.a * 0.2})`);
+                this.r += 8; this.opacity -= 0.002;
+                let g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+                g.addColorStop(0, `rgba(255, 200, 100, ${this.opacity})`);
                 g.addColorStop(1, 'transparent');
-                ctx.fillStyle = g; ctx.fillRect(-20, 0, 40, this.l);
-                ctx.restore();
+                ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill();
             }
         }
 
-        function anim() {
+        function animate() {
             if(!active) return;
             ctx.clearRect(0,0,canvas.width, canvas.height);
-            if(rays.length < 25) rays.push(new Ray());
-            rays.forEach(r => r.draw());
-            requestAnimationFrame(anim);
+            if(fogParticles.length < 10) fogParticles.push(new FogLayer());
+            fogParticles.forEach(f => f.draw());
+            requestAnimationFrame(animate);
         }
 
-        function godlyEnter() {
-            active = true; anim();
+        function startCinematic() {
+            active = true; animate();
             const bg = document.getElementById('bg');
             const hero = document.getElementById('hero');
             const logs = document.getElementById('logs');
 
-            bg.style.transform = "scale(80) rotate(5deg)";
-            bg.style.filter = "brightness(40) blur(120px) sepia(1)";
+            bg.style.transform = "scale(100) rotate(10deg)";
+            bg.style.filter = "brightness(50) blur(150px) sepia(1)";
             hero.style.opacity = "0";
 
             setTimeout(() => {
                 hero.style.display = 'none';
                 logs.style.display = 'flex';
                 setTimeout(() => { logs.style.opacity = "1"; }, 100);
-            }, 3000); // Super slow transition
+            }, 3500);
         }
     </script>
 </body>
