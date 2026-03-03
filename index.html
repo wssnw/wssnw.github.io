@@ -10,7 +10,8 @@
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
             --polaroid-white: #ffffff;
-            --sun-ray: rgba(255, 236, 181, 0.2);
+            --sun-glow: rgba(255, 236, 181, 0.4);
+            --text-glow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 200, 100, 0.3);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
@@ -24,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* --- Main Background (Reverted) --- */
+        /* --- Main Background --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), 
@@ -33,134 +34,133 @@
             transition: transform 2.5s cubic-bezier(0.22, 1, 0.36, 1), filter 2.5s ease;
         }
 
-        /* --- Sunray Effect --- */
+        /* --- Global God Rays --- */
         .sunrays {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, var(--sun-ray) 2deg, transparent 4deg, var(--sun-ray) 6deg, transparent 10deg);
-            animation: raysRotate 120s linear infinite;
+            background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.1) 2deg, transparent 5deg, rgba(255,255,255,0.05) 10deg);
+            animation: raysRotate 150s linear infinite;
             pointer-events: none; z-index: 1001; opacity: 0; transition: 2s ease;
         }
 
         @keyframes raysRotate { 100% { transform: rotate(360deg); } }
 
-        .leaf {
-            position: fixed; top: -10%; z-index: 5;
-            width: 18px; height: 22px;
-            background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
-            clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
-            animation: fallSway linear infinite; opacity: 0.6;
+        /* --- Logo Aura Glow --- */
+        .logo-aura {
+            position: absolute; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            z-index: 9; filter: blur(30px);
+            animation: pulseAura 4s ease-in-out infinite;
         }
 
-        @keyframes fallSway {
-            0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            15% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
+        @keyframes pulseAura {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0.6; }
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(4rem, 15vw, 10rem);
             color: white;
-            text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            text-shadow: var(--text-glow);
             margin: 0; z-index: 10;
             animation: floating 4s ease-in-out infinite;
+            position: relative;
         }
 
         @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-15px) rotate(1deg); } }
 
-        /* --- Memory & Legacy Section (Beach Vibes) --- */
+        /* --- Memory/Legacy Section --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(255, 230, 200, 0.4), rgba(255, 180, 100, 0.4)), 
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), 
                         url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
             background-size: cover; background-position: center;
             display: none; z-index: 1000; overflow-y: scroll; padding: 80px 20px;
             flex-direction: column; align-items: center; opacity: 0; transition: 1.5s ease;
         }
 
-        .section-title {
+        /* --- Glowing Titles --- */
+        .glowing-title {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(3.5rem, 12vw, 6rem);
             color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            margin-bottom: 50px;
             text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,200,100,0.5);
+            animation: textShimmer 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textShimmer {
+            from { filter: drop-shadow(0 0 5px white); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 230, 150, 0.8)); }
         }
 
         .diary-card {
             position: relative; background: var(--polaroid-white); padding: 12px 12px 45px 12px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
             margin-bottom: 40px; width: 100%; max-width: 350px;
             transition: 0.4s; z-index: 5;
         }
+        .diary-card:hover { transform: rotate(0deg) scale(1.08); box-shadow: 0 20px 60px rgba(255,255,255,0.3); }
 
-        .diary-card:hover { transform: rotate(0deg) scale(1.08); z-index: 10; }
-
-        .img-box { width: 100%; aspect-ratio: 1/1; background: #eee; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.05) contrast(0.95); }
-
-        .diary-label {
-            color: #8d7765; text-align: center; margin-top: 15px; 
-            font-family: 'Dancing Script', cursive; font-size: 1.8rem;
-        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .btn-fancy {
             margin: 10px; padding: 15px 45px; border: 2px solid white;
             background: rgba(255,255,255,0.15); color: white; cursor: pointer;
             backdrop-filter: blur(10px); letter-spacing: 3px; font-weight: 900; 
             text-transform: uppercase; transition: 0.4s; z-index: 2000;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
-        .btn-fancy:hover { background: white; color: #ffb482; transform: scale(1.05); }
+        .btn-fancy:hover { background: white; color: #ffb482; box-shadow: 0 0 30px white; }
 
         .legacy-text {
             font-size: 1.3rem; font-family: 'Inter', sans-serif; line-height: 2;
             color: #4a3f35; text-align: center;
-            background: rgba(255,255,255,0.85); padding: 50px; border-radius: 5px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.9); padding: 50px; border-radius: 5px;
+            box-shadow: 0 0 40px rgba(255,255,255,0.2);
+        }
+
+        .flash-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 10000; opacity: 0; pointer-events: none;
         }
 
         .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1.5s; }
-        .made-by { font-size: 0.7rem; opacity: 0.6; color: white; margin-top: 20px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div id="live-clock">00:00:00</div>
+    <div class="flash-overlay" id="flash"></div>
+    <div id="live-clock" style="position:fixed; top:20px; right:20px; color:white; z-index:5000; font-weight:900;">00:00:00</div>
     <div class="bg-img" id="bg"></div>
     <div class="sunrays" id="rays"></div>
-    <div id="leaf-container"></div>
 
     <div class="hero" id="hero">
+        <div class="logo-aura"></div>
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">Enter The Fog</button>
-        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="section-title">Sweet Memories</h2>
+        <h2 class="glowing-title">Sweet Memories</h2>
         
         <div class="diary-card" style="transform: rotate(-2deg);">
-            <div class="img-box"><img src="Screenshot_22.png"></div>
-            <div class="diary-label">Initial Build</div>
+            <div class="img-box" style="width:100%; aspect-ratio:1/1; overflow:hidden;"><img src="Screenshot_22.png" style="width:100%;"></div>
+            <div class="diary-label" style="font-family:'Dancing Script'; text-align:center; font-size:1.8rem; margin-top:10px;">Initial Build</div>
         </div>
 
         <div class="diary-card" style="transform: rotate(3deg);">
-            <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
-            <div class="diary-label">Summer Heat</div>
-        </div>
-
-        <div class="diary-card" style="transform: rotate(-1deg);">
-            <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp"></div>
-            <div class="diary-label">The Hub</div>
-            <a href="https://www.roblox.com/communities/35978868" target="_blank" style="display:block; background:#ffb482; color:#fff; text-align:center; padding:10px; margin-top:10px; text-decoration:none; font-family: 'Inter'; font-weight:900; font-size: 0.8rem;">JOIN GROUP</a>
+            <div class="img-box" style="width:100%; aspect-ratio:1/1; overflow:hidden;"><img src="RobloxScreenShot20260302_213405110.png" style="width:100%;"></div>
+            <div class="diary-label" style="font-family:'Dancing Script'; text-align:center; font-size:1.8rem; margin-top:10px;">Summer Heat</div>
         </div>
 
         <button class="btn-fancy" onclick="openStory()">OUR STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.8; font-size: 0.7rem;" onclick="backToHome()">BACK TO MAIN</button>
+        <button class="btn-fancy" style="border:none; opacity:0.8; font-size:0.7rem;" onclick="backToHome()">BACK TO MAIN</button>
     </div>
 
     <div class="heaven-logs" id="story">
-        <h1 class="section-title">The Legacy</h1>
+        <h1 class="glowing-title">The Legacy</h1>
         <div class="legacy-text" style="max-width: 750px;">
             This game was inspired from a game that I played called <b style="color:#ff8d42;">Da Hood</b>.<br><br>
             I started this alone and tried to release the game in 2025, but it took more time so I set it to 2026.<br><br>
@@ -177,30 +177,27 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        function createLeaf() {
-            if (document.hidden) return;
-            const leaf = document.createElement('div');
-            leaf.classList.add('leaf');
-            leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            document.getElementById('leaf-container').appendChild(leaf);
-            setTimeout(() => leaf.remove(), 10000);
-        }
-        setInterval(createLeaf, 600);
-
         function godlyEnter() {
-            // "Godly" Entry Animation
-            document.getElementById('bg').style.transform = "scale(3)";
-            document.getElementById('bg').style.filter = "brightness(5) blur(20px)";
+            // Flash Effect
+            const flash = document.getElementById('flash');
+            flash.style.opacity = "1";
+            flash.style.transition = "none";
+            
+            // Background Godly Zoom
+            document.getElementById('bg').style.transform = "scale(4)";
+            document.getElementById('bg').style.filter = "brightness(10) blur(20px)";
             document.getElementById('hero').style.opacity = "0";
             
             setTimeout(() => {
+                flash.style.transition = "opacity 1.5s ease";
+                flash.style.opacity = "0";
+                
                 document.getElementById('hero').style.display = 'none';
                 const l = document.getElementById('logs');
                 l.style.display = 'flex';
                 document.getElementById('rays').style.opacity = "1";
                 setTimeout(() => l.style.opacity = "1", 50);
-            }, 1200);
+            }, 600);
         }
 
         function openStory() {
