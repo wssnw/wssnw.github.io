@@ -25,7 +25,6 @@
             overflow: hidden;
         }
 
-        /* --- Live Clock Section --- */
         #live-clock {
             position: fixed; top: 20px; right: 20px;
             font-family: 'Inter', sans-serif; font-weight: 900;
@@ -40,16 +39,15 @@
             66% { color: #48ff00; text-shadow: 0 0 10px #48ff00; }
         }
 
-        /* --- Background Engine --- */
+        /* --- Better Background --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
-                        url('IMG_3002.jpeg') no-repeat center center;
+            background: linear-gradient(to bottom, rgba(2,0,8,0.5), rgba(2,0,8,0.9)), 
+                        url('https://images.unsplash.com/photo-1542931415-162aeab4418f?q=80&w=2000&auto=format&fit=crop') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.05);
             transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1), filter 3s ease;
         }
 
-        /* --- Sakura Physics --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
             width: 18px; height: 22px;
@@ -64,7 +62,6 @@
             100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- Typography --- */
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(3.8rem, 16vw, 11rem);
@@ -80,10 +77,9 @@
 
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- Layout & Cards --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.88); backdrop-filter: blur(30px);
+            background: rgba(2, 0, 8, 0.92); backdrop-filter: blur(40px);
             display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
             flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
         }
@@ -95,7 +91,7 @@
             transition: 0.3s;
         }
 
-        .diary-card:hover { transform: rotate(0deg) scale(1.02); }
+        .diary-card:hover { transform: rotate(0deg) scale(1.05); }
 
         .tape {
             position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
@@ -105,6 +101,15 @@
 
         .img-box { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Better Memory Text --- */
+        .memory-label {
+            color: #111; text-align: center; margin-top: 20px; 
+            font-weight: 900; letter-spacing: 2px; font-size: 1.1rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--neon-pink);
+            display: inline-block; width: 100%;
+        }
 
         .btn-fancy {
             margin: 10px; padding: 18px 40px; border: 2px solid white;
@@ -117,10 +122,7 @@
         .legacy-text {
             font-size: 1.4rem; font-family: 'Inter', sans-serif; line-height: 1.8;
             text-shadow: 0 0 15px var(--neon-pink); text-align: center;
-            animation: textBreath 3s ease-in-out infinite;
         }
-
-        @keyframes textBreath { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
         .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
         .made-by { font-size: 0.7rem; opacity: 0.4; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
@@ -144,51 +146,37 @@
         <div class="diary-card">
             <div class="tape"></div>
             <div class="img-box"><img src="Screenshot_22.png"></div>
-            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900; letter-spacing:1px;">THE BEGINNING</div>
+            <div class="memory-label">11/08/2025</div>
         </div>
 
         <div class="diary-card" style="transform: rotate(2deg);">
             <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
+            <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
+            <div class="memory-label">9/07/2025</div>
+        </div>
+
+        <div class="diary-card" style="transform: rotate(-1deg);">
+            <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
             <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp"></div>
-            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">COMMUNITY HUB</div>
+            <div class="memory-label">THE COMMUNITY</div>
             <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment" target="_blank" style="display:block; background:#000; color:#fff; text-align:center; padding:12px; margin-top:10px; text-decoration:none; font-weight:900;">JOIN GROUP</a>
         </div>
 
-        <button class="btn-fancy" onclick="openStory()">THE STORY</button>
-        <button class="btn-fancy" onclick="openWorld()">EXPLORE WORLD</button>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
         <button class="btn-fancy" style="border:none; opacity:0.5;" onclick="backToHome()">BACK</button>
     </div>
 
     <div class="heaven-logs" id="story">
         <h1 class="main-logo" style="font-size: 3.5rem;">THE LEGACY</h1>
         <div class="legacy-text" style="max-width: 700px; padding: 20px;">
-            Inspired by the gritty streets of Da Hood. <br><br>
-            I started this journey alone at 13. Releasing was the plan for 2025, then 2026... <br><br>
-            Life moves fast. Now, the fog clears in 2028. The grind never stops.
+            This game was inspired from a game that I played called da hood.<br><br>
+            I started this at alone and tried to release the game in 2025 but it took alot of time so I set it to 2026<br><br>
+            and now its probably going to get released in 2028 since im busy with life.
         </div>
         <button class="btn-fancy" style="margin-top:50px;" onclick="backToLogs()">BACK TO DIARY</button>
     </div>
 
-    <div class="heaven-logs" id="world">
-        <h1 class="main-logo" style="font-size: 3.5rem;">THE FOG</h1>
-        
-        <div class="diary-card">
-            <div class="tape" style="background:#48ff00; box-shadow:0 0 15px #48ff00;"></div>
-            <div class="img-box"><img src="Screenshot_28.png"></div>
-            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">UPHILL DISTRICT</div>
-        </div>
-
-        <div class="diary-card" style="transform: rotate(-2deg);">
-            <div class="tape" style="background:#fffb00; box-shadow:0 0 15px #fffb00;"></div>
-            <div style="height:200px; background:#111; display:flex; align-items:center; justify-content:center; font-weight:900; color: #555;">[ REDACTED ]</div>
-            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">CENTRAL BANK</div>
-        </div>
-
-        <button class="btn-fancy" onclick="backToLogs()">BACK</button>
-    </div>
-
     <script>
-        // 1. Live Clock Engine
         function updateClock() {
             const now = new Date();
             const time = now.toLocaleTimeString('en-GB', { hour12: false });
@@ -197,7 +185,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. Sakura Engine
         function createLeaf() {
             if (document.hidden) return;
             const leaf = document.createElement('div');
@@ -209,7 +196,6 @@
         }
         setInterval(createLeaf, 600);
 
-        // 3. Navigation Engine
         function godlyEnter() {
             document.getElementById('bg').style.transform = "scale(2.5) rotate(5deg)";
             document.getElementById('bg').style.filter = "brightness(3) blur(30px)";
@@ -222,20 +208,16 @@
             }, 1200);
         }
 
-        function openStory() { switchSection('logs', 'story'); }
-        function openWorld() { switchSection('logs', 'world'); }
+        function openStory() {
+            document.getElementById('logs').style.display = 'none';
+            const s = document.getElementById('story');
+            s.style.display = 'flex';
+            setTimeout(() => s.style.opacity = "1", 50);
+        }
         
         function backToLogs() { 
             document.getElementById('story').style.display = 'none';
-            document.getElementById('world').style.display = 'none';
             document.getElementById('logs').style.display = 'flex';
-        }
-
-        function switchSection(oldId, newId) {
-            document.getElementById(oldId).style.display = 'none';
-            const n = document.getElementById(newId);
-            n.style.display = 'flex';
-            setTimeout(() => n.style.opacity = "1", 50);
         }
 
         function backToHome() {
