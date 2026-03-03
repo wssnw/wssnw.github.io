@@ -13,30 +13,53 @@
             --white-glow: rgba(255, 255, 255, 0.9);
             --paper: #fdfaf0;
             --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
-            --glass: rgba(255, 255, 255, 0.1);
-            --map-cyan: #00f2ff;
+            --map-ui: #00f2ff;
         }
 
-        /* --- core reset --- */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #020008; font-family: 'Syne', sans-serif; color: white; overflow: hidden; }
+        /* --- core reset, stop looking at my code skid --- */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+        }
+        
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: #020008;
+            font-family: 'Syne', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
 
-        /* --- bg engine --- */
+        /* --- bg engine ig --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover; z-index: 1; transform: scale(1.05);
+            background-size: cover;
+            z-index: 1; transform: scale(1.05);
             transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
         /* --- sakura --- */
         .leaf {
-            position: fixed; top: -10%; z-index: 5; width: 18px; height: 22px;
+            position: fixed; top: -10%; z-index: 5;
+            width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
-            animation: fallSway linear infinite; opacity: 0.8; cursor: pointer;
+            pointer-events: auto;
+            animation: fallSway linear infinite;
+            opacity: 0.8;
+            transition: filter 0.3s, transform 0.3s;
+            cursor: pointer;
         }
+
+        .leaf.clicked {
+            filter: brightness(2) drop-shadow(0 0 15px white);
+            transform: scale(2.5) rotate(45deg) !important;
+        }
+
         @keyframes fallSway {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
             15% { opacity: 0.8; }
@@ -44,88 +67,180 @@
         }
 
         /* --- titles n rgb glow --- */
-        .main-logo, .glow-header { font-family: 'Dancing Script', cursive; color: white; text-align: center; animation: rgbPulse 5s linear infinite; }
-        .main-logo { font-size: clamp(3.8rem, 16vw, 11rem); animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite; margin: 0; z-index: 10; }
+        .main-logo, .glow-header {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            text-align: center;
+            animation: rgbPulse 5s linear infinite;
+        }
+
+        .main-logo {
+            font-size: clamp(3.8rem, 16vw, 11rem);
+            animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
+            margin: 0;
+            z-index: 10;
+        }
+
         @keyframes rgbPulse {
             0%, 100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px var(--neon-pink)); }
             33% { filter: drop-shadow(0 0 15px #00f2ff) drop-shadow(0 0 30px #7000ff); }
             66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
         }
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- Glassy Map UI (THE NEW GANG) --- */
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- TACTICAL MAP STYLES --- */
         #map-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
             display: none; z-index: 3000; justify-content: center; align-items: center;
             opacity: 0; transition: 0.5s ease;
         }
 
-        .map-container {
+        .map-window {
             width: 95%; max-width: 900px; height: 85vh;
-            background: rgba(10, 10, 20, 0.6); border: 1px solid var(--map-cyan);
-            border-radius: 10px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--map-ui);
+            border-radius: 15px; position: relative;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.2);
         }
 
-        .map-header {
-            padding: 15px; background: rgba(0, 242, 255, 0.1);
-            text-align: center; letter-spacing: 5px; font-weight: 900;
-            border-bottom: 1px solid var(--map-cyan); color: var(--map-cyan);
-        }
-
-        .map-grid {
+        .map-canvas {
             flex-grow: 1; position: relative;
+            background-color: #050505;
             background-image: 
                 linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 50px 50px;
         }
 
-        .map-zone {
-            position: absolute; border: 1px solid var(--map-cyan);
-            background: rgba(0, 242, 255, 0.05); color: var(--map-cyan);
-            padding: 8px 12px; font-size: 0.7rem; text-transform: uppercase;
-            font-weight: 900; cursor: pointer; transition: 0.3s;
-            clip-path: polygon(0% 0%, 90% 0%, 100% 30%, 100% 100%, 0% 100%);
+        .poi {
+            position: absolute; padding: 10px 15px;
+            border: 1px solid var(--map-ui); background: rgba(0, 242, 255, 0.1);
+            color: var(--map-ui); font-size: 0.7rem; font-weight: 900;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
         }
 
-        .map-zone:hover { background: var(--map-cyan); color: #000; box-shadow: 0 0 20px var(--map-cyan); transform: scale(1.05); }
+        .poi:hover { background: var(--map-ui); color: black; box-shadow: 0 0 20px var(--map-ui); transform: scale(1.1); }
 
-        /* Ping Animation */
         .ping {
-            position: absolute; width: 20px; height: 20px; border: 2px solid var(--map-cyan);
+            position: absolute; width: 10px; height: 10px; background: var(--map-ui);
             border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%);
-            animation: pingOut 1s ease-out forwards;
+            animation: pingExpand 0.8s ease-out forwards;
         }
-        @keyframes pingOut { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(6); opacity: 0; } }
+        @keyframes pingExpand { 0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(12); opacity: 0; } }
 
-        /* --- Original Diary & Story CSS --- */
+        /* --- diary --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.85); backdrop-filter: blur(25px);
-            display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
-            flex-direction: column; align-items: center; opacity: 0; transition: opacity 1s ease;
+            background: rgba(2, 0, 8, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: none; z-index: 1000;
+            overflow-y: scroll; padding: 60px 20px;
+            flex-direction: column; align-items: center;
+            opacity: 0; transition: opacity 1s ease;
         }
-        .diary-stack { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 45px; margin-bottom: 50px; }
-        .diary-card { position: relative; background: var(--paper); padding: 15px 15px 60px 15px; width: 100%; box-shadow: var(--heaven-glow); transform: rotate(-1.5deg); animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes diaryEntry { from { opacity: 0; transform: translateY(100px) rotate(10deg); } to { opacity: 1; transform: translateY(0) rotate(-1.5deg); } }
-        .tape { position: absolute; top: -15px; left: 50%; width: 110px; height: 40px; background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg); box-shadow: 0 0 15px var(--neon-pink); z-index: 5; }
-        .img-box { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .diary-label { color: #222; font-family: 'Syne', sans-serif; font-size: 1.2rem; text-align: center; margin-top: 20px; font-weight: 800; letter-spacing: 1px; }
 
+        .diary-stack {
+            width: 100%; max-width: 450px;
+            display: flex; flex-direction: column; gap: 45px;
+            margin-bottom: 50px;
+        }
+
+        .diary-card {
+            position: relative; 
+            background: var(--paper); 
+            padding: 15px 15px 60px 15px;
+            width: 100%;
+            box-shadow: var(--heaven-glow);
+            transform: rotate(-1.5deg);
+            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .diary-card:nth-child(even) { transform: rotate(2deg); }
+
+        @keyframes diaryEntry {
+            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
+            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
+        }
+
+        .tape {
+            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
+            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 5;
+        }
+
+        .img-box { 
+            width: 100%; aspect-ratio: 16/9; background: #111; 
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.1);
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .diary-label {
+            color: #222; font-family: 'Syne', sans-serif;
+            font-size: 1.2rem; text-align: center; margin-top: 20px;
+            font-weight: 800; letter-spacing: 1px;
+        }
+
+        /* --- glowing buttons --- */
         .btn-fancy {
             margin: 10px; padding: 18px 40px; border: 2px solid white;
             background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
             letter-spacing: 5px; font-weight: 900; transition: 0.4s;
             backdrop-filter: blur(5px); text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
         }
         .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 40px white; }
 
-        .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.5s ease; }
+        .btn-play {
+            display: block; width: 100%; background: #000; color: white;
+            padding: 14px; margin-top: 15px; text-decoration: none;
+            text-align: center; font-weight: 900; letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .btn-play:hover { 
+            background: var(--neon-pink); 
+            box-shadow: 0 0 25px var(--neon-pink);
+        }
+
+        /* --- legacy / history glow --- */
+        .legacy-text {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
+            animation: textBreath 3s ease-in-out infinite;
+        }
+
+        @keyframes textBreath {
+            0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
+        }
+
+        .made-by {
+            font-size: 0.7rem; opacity: 0.4; margin-top: 20px;
+            letter-spacing: 2px; text-transform: uppercase; text-align: center;
+        }
+
+        .hero {
+            position: relative; z-index: 10; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.5s ease;
+        }
+
+        @media (max-width: 600px) {
+            .diary-stack { max-width: 90%; }
+            .btn-fancy { width: 85%; }
+            .main-logo { font-size: 4rem; }
+        }
+
         #story { display: none; }
-        .legacy-text { font-size: clamp(1.2rem, 4vw, 1.8rem); line-height: 1.8; text-shadow: 0 0 20px var(--neon-pink); }
     </style>
 </head>
 <body>
@@ -136,81 +251,124 @@
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
-        <button class="btn-fancy" style="border-color: var(--map-cyan); color: var(--map-cyan);" onclick="toggleMap(true)">OPEN MAP</button>
-        <div class="made-by" style="opacity: 0.4; font-size: 0.7rem; margin-top: 20px; letter-spacing: 2px;">made by wssnw</div>
+        <button class="btn-fancy" style="border-color: var(--map-ui); color: var(--map-ui);" onclick="toggleMap(true)">TACTICAL MAP</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div id="map-overlay">
-        <div class="map-container">
-            <div class="map-header">TACTICAL OVERLAY // 2028</div>
-            <div class="map-grid" id="mapGrid">
-                <div class="map-zone" style="top:10%; left:10%;" onclick="pingLoc(event)">Uphill</div>
-                <div class="map-zone" style="top:15%; left:45%;" onclick="pingLoc(event)">Bank</div>
-                <div class="map-zone" style="top:10%; right:10%;" onclick="pingLoc(event)">Casino</div>
-                <div class="map-zone" style="top:45%; left:15%;" onclick="pingLoc(event)">Gas Station</div>
-                <div class="map-zone" style="top:40%; left:42%; border-color:var(--neon-pink); color:var(--neon-pink);" onclick="pingLoc(event)">The Park</div>
-                <div class="map-zone" style="top:45%; right:15%;" onclick="pingLoc(event)">Warehouse</div>
-                <div class="map-zone" style="bottom:20%; left:10%;" onclick="pingLoc(event)">Downhill</div>
-                <div class="map-zone" style="bottom:15%; left:35%;" onclick="pingLoc(event)">Playground</div>
-                <div class="map-zone" style="bottom:35%; right:20%;" onclick="pingLoc(event)">Boxing Ring</div>
-                <div class="map-zone" style="bottom:10%; right:10%; border-style: dashed;" onclick="pingLoc(event)">The Beach</div>
+        <div class="map-window">
+            <div style="padding: 20px; background: rgba(0, 242, 255, 0.1); border-bottom: 1px solid var(--map-ui); display: flex; justify-content: space-between; align-items: center;">
+                <div style="letter-spacing: 5px; font-weight: 900; color: var(--map-ui);">SATELLITE INTEL // 2028</div>
+                <button onclick="toggleMap(false)" style="background: var(--map-ui); border: none; color: black; padding: 5px 15px; cursor: pointer; font-weight: 900;">CLOSE</button>
             </div>
-            <button class="btn-fancy" style="margin: 0; border: none; background: var(--map-cyan); color: #000;" onclick="toggleMap(false)">CLOSE MAP</button>
+            
+            <div class="map-canvas" id="mapCanvas">
+                <div class="poi" style="top: 20%; left: 45%;" onclick="mapPing(event)">Bank</div>
+                <div class="poi" style="top: 10%; left: 10%;" onclick="mapPing(event)">Uphill</div>
+                <div class="poi" style="bottom: 10%; left: 10%;" onclick="mapPing(event)">Downhill</div>
+                <div class="poi" style="top: 45%; left: 42%; border-color: #ff2d95; color: #ff2d95;" onclick="mapPing(event)">Park</div>
+                <div class="poi" style="top: 25%; right: 15%;" onclick="mapPing(event)">Casino</div>
+                <div class="poi" style="bottom: 25%; left: 40%;" onclick="mapPing(event)">Gas Station</div>
+                <div class="poi" style="top: 55%; right: 10%;" onclick="mapPing(event)">Warehouse</div>
+                <div class="poi" style="bottom: 15%; right: 30%;" onclick="mapPing(event)">Boxing Ring</div>
+                <div class="poi" style="top: 50%; left: 15%;" onclick="mapPing(event)">Playground</div>
+                <div class="poi" style="bottom: 5%; right: 5%; width: 140px; border-style: dashed;" onclick="mapPing(event)">Beach</div>
+            </div>
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
         <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 10px; margin-bottom: 50px;">MEMORIES</h2>
+        
         <div class="diary-stack">
-            <div class="diary-card"><div class="tape"></div><div class="img-box"><img src="Screenshot_22.png"></div><div class="diary-label">11/08/2025</div></div>
-            <div class="diary-card" style="transform: rotate(2deg);"><div class="tape" style="background:#00f2ff;"></div><div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div><div class="diary-label">9/07/2025</div></div>
+            <div class="diary-card" style="animation-delay: 0.1s;">
+                <div class="tape"></div>
+                <div class="img-box"><img src="Screenshot_22.png"></div>
+                <div class="diary-label">11/08/2025</div>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.2s; transform: rotate(2deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
+                <div class="diary-label">9/07/2025</div>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" style="object-fit: contain; background: #fff; padding: 10px;"></div>
+                <div class="diary-label">THE COMMUNITY</div>
+                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
+                <div class="tape" style="background: #fffb00; box-shadow: 0 0 15px #fffb00;"></div>
+                <div class="img-box"><img src="Screenshot_28.png"></div>
+                <div class="diary-label">08/15/25 - Progress</div>
+            </div>
         </div>
+
         <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5;" onclick="backToHome()">BACK</button>
+        <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="story">
         <div style="max-width: 800px; text-align: center; padding: 20px;">
-            <h1 class="glow-header" style="font-size: 3.5rem;">THE LEGACY</h1>
-            <div class="legacy-text">Inspired by Da Hood. Started at 13. Releasing 2028.</div>
-            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK</button>
+            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
+            <div class="legacy-text">
+                This game was inspired from a game that i played called da hood.<br><br>
+                i started this at a young age alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
+                and now its probably going to get released in 2028 since im busy with life.
+            </div>
+            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
+            <div class="made-by" style="margin-top:40px">made by wssnw</div>
         </div>
     </div>
 
     <script>
-        // Leaf system
+        const leafContainer = document.getElementById('leaf-container');
+        
         function createLeaf() {
+            if (document.hidden) return;
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
+            const size = (Math.random() * 10 + 15) + 'px';
+            leaf.style.width = size;
+            leaf.style.height = (parseFloat(size) * 1.2) + 'px';
+            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
             leafContainer.appendChild(leaf);
             setTimeout(() => leaf.remove(), 10000);
         }
-        const leafContainer = document.getElementById('leaf-container');
         setInterval(createLeaf, 500);
 
-        // Map logic
         function toggleMap(show) {
-            const m = document.getElementById('map-overlay');
-            if(show) { m.style.display='flex'; setTimeout(()=>m.style.opacity='1', 10); }
-            else { m.style.opacity='0'; setTimeout(()=>m.style.display='none', 500); }
+            const map = document.getElementById('map-overlay');
+            if(show) {
+                map.style.display = 'flex';
+                setTimeout(() => map.style.opacity = "1", 10);
+            } else {
+                map.style.opacity = "0";
+                setTimeout(() => map.style.display = 'none', 500);
+            }
         }
 
-        function pingLoc(e) {
-            const rect = document.getElementById('mapGrid').getBoundingClientRect();
+        function mapPing(e) {
+            const canvas = document.getElementById('mapCanvas');
+            const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             const ping = document.createElement('div');
             ping.classList.add('ping');
             ping.style.left = x + 'px';
             ping.style.top = y + 'px';
-            document.getElementById('mapGrid').appendChild(ping);
+            canvas.appendChild(ping);
             setTimeout(() => ping.remove(), 1000);
         }
 
-        // Navigation
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.2) blur(40px)";
+            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
@@ -221,18 +379,38 @@
         }
 
         function openStory() {
-            document.getElementById('logs').style.display = 'none';
-            document.getElementById('story').style.display = 'flex';
-            document.getElementById('story').style.opacity = '1';
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const story = document.getElementById('story');
+                story.style.display = 'flex';
+                setTimeout(() => story.style.opacity = "1", 50);
+            }, 800);
         }
 
         function backToLogs() {
-            document.getElementById('story').style.display = 'none';
-            document.getElementById('logs').style.display = 'flex';
+            const story = document.getElementById('story');
+            story.style.opacity = "0";
+            setTimeout(() => {
+                story.style.display = 'none';
+                const logs = document.getElementById('logs');
+                logs.style.display = 'flex';
+                setTimeout(() => logs.style.opacity = "1", 50);   
+            }, 800);
         }
 
         function backToHome() {
-            location.reload(); // Quick reset for the demo
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const hero = document.getElementById('hero');
+                hero.style.display = 'flex';
+                document.getElementById('bg').style.transform = "scale(1.05)";
+                document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
+                setTimeout(() => hero.style.opacity = "1", 50);
+            }, 800);
         }
     </script>
 </body>
