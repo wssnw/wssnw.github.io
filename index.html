@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foggy Fights | Internal Docs</title>
+    <title>Foggy Fights | Glass Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #ffb347;
-            --gold-glow: rgba(255, 179, 71, 0.4);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --blur: blur(15px);
         }
 
         body, html {
@@ -18,122 +20,119 @@
             color: #fff; overflow-x: hidden;
         }
 
-        /* --- THE RIGHT-TO-LEFT SWEEP (STILL HITTING HARD) --- */
+        /* --- THE SWEEP (RIGHT TO LEFT) --- */
         .sweep {
             position: fixed; top: 0; left: 0; width: 200%; height: 100%;
-            background: linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.15) 50%, transparent 80%);
+            background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.2) 50%, transparent 75%);
             z-index: 100; pointer-events: none;
-            animation: sweepRightToLeft 5s ease-in-out infinite;
-            filter: blur(80px);
+            animation: sweepRightToLeft 7s ease-in-out infinite;
+            filter: blur(60px);
         }
 
         @keyframes sweepRightToLeft {
-            0% { transform: translateX(80%); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateX(-120%); opacity: 0; }
+            0% { transform: translateX(60%); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateX(-110%); opacity: 0; }
         }
 
-        /* --- THE BG --- */
-        .bg-img {
+        /* --- BEACH BACKGROUND --- */
+        .beach-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.9)), 
-                        url('IMG_3002.jpeg') center/cover no-repeat;
-            z-index: 1; filter: sepia(0.5) brightness(0.6);
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            z-index: 1; filter: saturate(1.2) brightness(0.8);
         }
 
-        /* --- LOGO AT TOP --- */
+        /* --- THE LOGO --- */
         .header {
-            position: relative; z-index: 10; text-align: center; padding-top: 50px;
+            position: relative; z-index: 10; text-align: center; padding-top: 60px;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: 6rem;
+            font-size: clamp(4rem, 12vw, 8rem);
             color: var(--gold);
-            text-shadow: 0 0 30px var(--gold-glow);
+            text-shadow: 0 0 30px rgba(255, 179, 71, 0.5);
             margin: 0;
+            animation: float 6s ease-in-out infinite;
         }
 
-        /* --- THE "SHIT" MEMORIES LAYOUT (MESSY) --- */
-        .memories-folder {
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* --- GLASSY MEMORIES --- */
+        .glass-gallery {
             position: relative; z-index: 10;
-            width: 100%; max-width: 1200px;
-            margin: 100px auto;
-            display: flex; flex-wrap: wrap; justify-content: space-around;
-            padding: 20px;
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 40px; padding: 80px 20px;
         }
 
-        .raw-photo {
-            background: #eee;
-            padding: 10px 10px 40px 10px;
-            box-shadow: 10px 20px 50px rgba(0,0,0,0.8);
-            margin: -20px; /* Overlap them like shit */
-            border: 1px solid #ccc;
-            transition: 0.3s;
-            cursor: move;
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            padding: 15px 15px 45px 15px;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transform: rotate(var(--r));
+            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        .raw-photo img {
-            width: 250px; height: auto; display: block;
-            filter: saturate(1.2) contrast(1.1);
-        }
-
-        .raw-photo p {
-            color: #111; font-family: 'Dancing Script';
-            font-size: 1.2rem; margin-top: 10px; text-align: center;
-        }
-
-        /* RANDOM SHIT ROTATIONS */
-        .p1 { transform: rotate(-8deg); }
-        .p2 { transform: rotate(12deg) translateY(50px); }
-        .p3 { transform: rotate(-3deg) translateX(-30px); }
-        .p4 { transform: rotate(5deg) translateY(-20px); }
-
-        .raw-photo:hover {
+        .glass-card:hover {
             transform: scale(1.1) rotate(0deg);
-            z-index: 500;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold);
+            z-index: 50;
         }
 
-        .doc-label {
-            width: 100%; text-align: center; color: var(--gold);
-            font-family: monospace; opacity: 0.5; margin-bottom: 20px;
+        .glass-card img {
+            width: 280px; border-radius: 2px;
+            filter: brightness(1.1) contrast(1.05);
+        }
+
+        .glass-card p {
+            font-family: 'Dancing Script';
+            color: #fff; font-size: 1.5rem;
+            text-align: center; margin-top: 15px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .doc-tag {
+            width: 100%; text-align: center; color: #fff;
+            font-family: monospace; opacity: 0.4; font-size: 10px;
+            letter-spacing: 5px; margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="sweep"></div>
-    <div class="bg-img"></div>
+    <div class="beach-bg"></div>
 
     <div class="header">
         <h1 class="main-logo">Foggy Fights</h1>
-        <p class="doc-label">[ MEMORY_DUMP_V1_2025 ]</p>
+        <div class="doc-tag">GLASS_COLLECTION // ARCHIVE_01</div>
     </div>
 
-    <div class="memories-folder">
-        <div class="raw-photo p1">
-            <img src="Screenshot_22.png">
-            <p>raw_spark.png</p>
+    <div class="glass-gallery">
+        <div class="glass-card" style="--r: -5deg;">
+            <img src="Screenshot_22.png" alt="Memory 1">
+            <p>The Spark</p>
         </div>
 
-        <div class="raw-photo p2">
-            <img src="RobloxScreenShot20260302_213405110.png">
-            <p>golden_test_01.png</p>
+        <div class="glass-card" style="--r: 3deg;">
+            <img src="RobloxScreenShot20260302_213405110.png" alt="Memory 2">
+            <p>Golden Era</p>
         </div>
 
-        <div class="raw-photo p3">
-            <img src="Screenshot_22.png">
-            <p>temp_backup.png</p>
-        </div>
-
-        <div class="raw-photo p4">
-            <img src="RobloxScreenShot20260302_213405110.png">
-            <p>unnamed_file.png</p>
+        <div class="glass-card" style="--r: -2deg;">
+            <img src="Screenshot_22.png" alt="Memory 3">
+            <p>Legacy</p>
         </div>
     </div>
 
-    <div style="height: 200px;"></div>
+    <div style="height: 150px;"></div>
 
 </body>
 </html>
