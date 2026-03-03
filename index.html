@@ -36,7 +36,6 @@
         .main-logo {
             font-family: 'Dancing Script', cursive;
             font-size: clamp(3.5rem, 15vw, 9rem);
-            position: relative;
             background: linear-gradient(90deg, #fff 0%, var(--gold) 50%, #fff 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -54,148 +53,102 @@
 
         /* --- GLASS BUTTONS --- */
         .glass-btn {
-            position: relative;
-            padding: 22px 60px;
-            font-weight: 900;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            border-radius: 12px;
-            cursor: pointer;
-            letter-spacing: 4px;
-            overflow: hidden;
-            transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
-            font-size: 14px;
-            text-transform: uppercase;
+            position: relative; padding: 22px 60px; font-weight: 900;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); color: #fff;
+            border-radius: 12px; cursor: pointer; letter-spacing: 4px;
+            overflow: hidden; transition: 0.5s cubic-bezier(0.2, 1, 0.2, 1);
+            font-size: 14px; text-transform: uppercase;
         }
+        .glass-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: var(--gold); transform: translateY(-3px); }
 
-        .glass-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: var(--shine);
-            transition: 0.5s;
+        /* --- AI ASSISTANT --- */
+        #ai-bot {
+            position: fixed; bottom: 25px; right: 25px; z-index: 10006;
+            width: 60px; height: 60px; background: var(--glass);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.5s; font-size: 24px;
         }
+        #ai-bot:hover { transform: scale(1.1) rotate(10deg); border-color: var(--gold); }
 
-        .glass-btn:hover::before { left: 100%; }
-        .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--gold);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3), 0 0 20px rgba(255, 179, 71, 0.2);
+        #ai-chat {
+            position: fixed; bottom: 100px; right: 25px; width: 300px;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 20px; display: none; z-index: 10006; flex-direction: column; gap: 10px;
         }
 
         /* --- Legacy Content --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), 
                         url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
             background-size: cover; display: none; z-index: 10003; 
             overflow-y: auto; padding: 60px 20px; flex-direction: column; align-items: center;
             opacity: 0; transition: 3s ease;
         }
 
-        .photo-card {
-            background: #fff; padding: 10px 10px 40px 10px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
-            width: 300px; transition: 1s ease-in-out;
-            animation: drift 8s infinite alternate;
-        }
-        @keyframes drift { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
-
-        .legacy-glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px; border-radius: 20px;
-            max-width: 700px; width: 100%; margin: 40px 0;
-        }
-
         .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10; transition: 2s; }
-        
-        /* --- Cinematic Fog Rays --- */
-        #fog-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 10002; pointer-events: none; mix-blend-mode: screen;
-        }
     </style>
 </head>
 <body>
 
-    <canvas id="fog-canvas"></canvas>
     <div class="bg-img" id="bg"></div>
+
+    <div id="ai-bot" onclick="toggleChat()">✨</div>
+    <div id="ai-chat">
+        <div style="font-weight: 900; color: var(--gold); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">Foggy Assistant</div>
+        <div id="chat-res" style="font-size: 13px; line-height: 1.5;">Welcome! Ask me about the legacy.</div>
+        <input type="text" id="ai-input" placeholder="Type..." style="background:transparent; border:1px solid var(--gold); color:white; padding:5px; border-radius:5px;" onkeypress="if(event.key === 'Enter') askAI()">
+    </div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="glass-btn" onclick="startCinematic()">Enter the Fog</button>
         
         <div style="display:flex; gap:30px; margin-top:50px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" style="width:40px; cursor:pointer;" onclick="alert('Discord Soon!')">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" style="width:40px; cursor:pointer;" onclick="window.open('https://www.roblox.com/communities/35978868')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" style="width:40px; cursor:pointer;" onclick="alert('TikTok Soon!')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" style="width:40px; cursor:pointer;" onclick="alert('Discord Soon!')" alt="Discord">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" style="width:40px; cursor:pointer;" onclick="window.open('https://www.roblox.com/communities/35978868')" alt="Roblox">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" style="width:40px; cursor:pointer;" onclick="alert('TikTok Soon!')" alt="TikTok">
         </div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center; margin-top:50px;">
-            <div class="photo-card"><img src="Screenshot_22.png" style="width:100%"><p style="color:#000; text-align:center; font-family:'Dancing Script'; margin-top:15px;">2025 Vision</p></div>
-            <div class="photo-card" style="animation-delay: -4s;"><img src="RobloxScreenShot20260302_213405110.png" style="width:100%"><p style="color:#000; text-align:center; font-family:'Dancing Script'; margin-top:15px;">Development Peak</p></div>
-        </div>
-
-        <div class="legacy-glass">
-            <h2 style="color:var(--gold); font-family:'Dancing Script'; font-size: 3rem; margin:0;">The Legacy</h2>
-            <p style="line-height:2.2; color:#ccc;">
-                This game was inspired by a game that I played called <b style="color:var(--gold);">Da Hood</b>. 
-                I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026. 
-                And now it's probably going to get released in <b style="color:var(--gold);">2028</b> since I'm busy with life.
+        <div class="hero">
+            <h2 style="color:var(--gold); font-family:'Dancing Script'; font-size: 4rem;">The Legacy</h2>
+            <p style="max-width: 600px; line-height: 2; text-align: center;">
+                Inspired by <b>Da Hood</b>. What started as a solo vision in 2025 has grown. 
+                Life happens, so we are aiming for <b>2028</b> for the ultimate release.
             </p>
+            <button class="glass-btn" onclick="location.reload()">Return Home</button>
         </div>
-        <button class="glass-btn" onclick="location.reload()">Back Home</button>
     </div>
 
     <script>
-        const canvas = document.getElementById('fog-canvas');
-        const ctx = canvas.getContext('2d');
-        let active = false;
-        let fogParticles = [];
-
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-
-        class FogLayer {
-            constructor() {
-                this.x = canvas.width/2; this.y = canvas.height/2;
-                this.r = 0; this.maxR = Math.max(canvas.width, canvas.height);
-                this.opacity = 0.4;
-            }
-            draw() {
-                this.r += 8; this.opacity -= 0.002;
-                let g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
-                g.addColorStop(0, `rgba(255, 200, 100, ${this.opacity})`);
-                g.addColorStop(1, 'transparent');
-                ctx.fillStyle = g;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fill();
-            }
+        function toggleChat() {
+            const chat = document.getElementById('ai-chat');
+            chat.style.display = chat.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function animate() {
-            if(!active) return;
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            if(fogParticles.length < 10) fogParticles.push(new FogLayer());
-            fogParticles.forEach(f => f.draw());
-            requestAnimationFrame(animate);
+        function askAI() {
+            const input = document.getElementById('ai-input');
+            const res = document.getElementById('chat-res');
+            const val = input.value.toLowerCase();
+            
+            if(val.includes('release')) res.innerText = "Foggy Fights is projected to release in 2028!";
+            else if(val.includes('hood')) res.innerText = "The game is heavily inspired by the vibes of Da Hood.";
+            else if(val.includes('who')) res.innerText = "I am the Foggy Assistant, here to help you navigate the memory lane.";
+            else res.innerText = "I'm still learning! Ask about the release date or inspiration.";
+            input.value = "";
         }
 
         function startCinematic() {
-            active = true; animate();
             const bg = document.getElementById('bg');
             const hero = document.getElementById('hero');
             const logs = document.getElementById('logs');
 
-            bg.style.transform = "scale(100) rotate(10deg)";
+            bg.style.transform = "scale(100) rotate(15deg)";
             bg.style.filter = "brightness(50) blur(150px) sepia(1)";
             hero.style.opacity = "0";
 
