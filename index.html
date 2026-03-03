@@ -3,258 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | Golden Hour Legacy</title>
+    <title>Foggy Fights | The Golden Era</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- 1. CORE THEME & LIGHTING --- */
         :root {
-            --gold-primary: #ffb347;
+            --gold-main: #ffb347;
             --gold-bright: #ffd194;
-            --gold-deep: #8b5a00;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --sunset-orange: rgba(255, 100, 0, 0.2);
+            --gold-shadow: #8b5a00;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.15);
+            --sunset: rgba(255, 120, 0, 0.2);
+            --blur: blur(25px);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         body, html {
             width: 100%; height: 100%;
-            background: #080500; font-family: 'Syne', sans-serif;
+            background: #0a0800; font-family: 'Syne', sans-serif;
             color: #fff; overflow: hidden; user-select: none;
         }
 
-        /* --- THE GOLDEN HOUR ENGINE --- */
-        .atmosphere {
+        /* --- 2. THE GOLDEN HOUR ENGINE --- */
+        .lighting-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 3; pointer-events: none;
-            background: radial-gradient(circle at 80% 20%, rgba(255, 180, 50, 0.15) 0%, transparent 60%),
-                        linear-gradient(to bottom, transparent, rgba(139, 90, 0, 0.2));
+            z-index: 5; pointer-events: none;
+            background: radial-gradient(circle at 80% 20%, rgba(255, 180, 50, 0.2) 0%, transparent 50%),
+                        linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
         }
 
-        .sun-flare {
-            position: fixed; top: -10%; right: -10%; width: 60%; height: 60%;
-            background: radial-gradient(circle, rgba(255, 200, 100, 0.2) 0%, transparent 70%);
-            z-index: 4; filter: blur(60px); animation: flarePulse 10s infinite alternate;
+        .god-rays {
+            position: fixed; top: -20%; right: -10%; width: 100%; height: 140%;
+            background: repeating-linear-gradient(45deg, transparent, rgba(255,200,100,0.03) 10%, transparent 20%);
+            z-index: 4; pointer-events: none; animation: rayMove 20s linear infinite;
         }
 
-        @keyframes flarePulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.2); opacity: 0.8; } }
+        @keyframes rayMove { from { transform: translateX(-10%); } to { transform: translateX(10%); } }
 
-        .background-layer {
+        .bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('IMG_3002.jpeg') center/cover no-repeat;
-            z-index: 1; filter: sepia(0.5) saturate(1.5) brightness(0.8) contrast(1.1);
-            transform: scale(1.05); transition: 4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: url('IMG_3002.jpeg') center/cover no-repeat;
+            z-index: 1; filter: sepia(0.6) saturate(1.6) brightness(0.7);
+            transform: scale(1.1); transition: 5s cubic-bezier(0.2, 1, 0.2, 1);
         }
 
-        /* --- THE "FULL" METALLIC LOGO --- */
-        .logo-wrapper { perspective: 1000px; margin-bottom: 40px; z-index: 10; }
+        /* --- 3. THE 3D METALLIC LOGO --- */
+        .logo-section { perspective: 1000px; margin-bottom: 50px; z-index: 10; text-align: center; }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4.5rem, 18vw, 11rem);
-            color: var(--gold-primary);
-            position: relative;
-            background: linear-gradient(to bottom, #fff 20%, var(--gold-primary) 45%, var(--gold-deep) 55%, var(--gold-bright) 85%);
+            font-size: clamp(4.5rem, 18vw, 12rem);
+            background: linear-gradient(to bottom, #fff 10%, var(--gold-main) 40%, var(--gold-shadow) 60%, var(--gold-bright) 90%);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-            filter: drop-shadow(0 0 2px rgba(0,0,0,1)) 
-                    drop-shadow(0 10px 15px rgba(0,0,0,0.5))
-                    drop-shadow(0 0 30px var(--sunset-orange));
-            animation: float 5s ease-in-out infinite, metallicSweep 4s linear infinite;
-            background-size: 200% auto;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.8)) 
+                    drop-shadow(0 15px 20px rgba(0,0,0,0.6))
+                    drop-shadow(0 0 40px var(--sunset));
+            animation: logoFloat 6s ease-in-out infinite, shineSweep 4s linear infinite;
+            transform-style: preserve-3d;
+            display: inline-block;
         }
 
-        @keyframes metallicSweep {
-            0% { background-position: -100% 0; }
-            100% { background-position: 100% 0; }
+        @keyframes shineSweep { 0% { background-position: -100% 0; } 100% { background-position: 100% 0; } }
+        @keyframes logoFloat { 0%, 100% { transform: translateY(0) rotateX(10deg); } 50% { transform: translateY(-25px) rotateX(15deg); } }
+
+        /* --- 4. NAVIGATION BUTTONS --- */
+        .btn-stack { z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 30px; }
+
+        .glass-action {
+            background: var(--glass); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--border); padding: 25px 80px;
+            font-size: 16px; font-weight: 900; color: #fff;
+            text-transform: uppercase; letter-spacing: 6px;
+            cursor: pointer; border-radius: 4px; transition: 0.5s;
+            position: relative; overflow: hidden;
         }
 
-        @keyframes float { 
-            0%, 100% { transform: translateY(0) rotateX(10deg); } 
-            50% { transform: translateY(-20px) rotateX(15deg); } 
+        .glass-action:hover {
+            background: rgba(255, 255, 255, 0.12); border-color: var(--gold-main);
+            transform: translateY(-8px); box-shadow: 0 15px 40px rgba(255, 179, 71, 0.3);
         }
 
-        /* --- GLASS BUTTONS --- */
-        .btn-container { z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 25px; }
-
-        .glass-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            padding: 22px 70px;
-            font-size: 15px;
-            font-weight: 900;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass-btn::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: 0.5s;
-        }
-
-        .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 50px rgba(255, 179, 71, 0.4);
-            transform: translateY(-5px) scale(1.02);
-        }
-
-        .glass-btn:hover::before { left: 100%; }
-
-        /* --- ROBLOX & SOCIALS --- */
-        .socials { display: flex; gap: 35px; margin-top: 40px; }
-        .icon { 
-            width: 45px; cursor: pointer; transition: 0.3s; 
+        /* --- 5. SOCIALS (ROBLOX SILVER) --- */
+        .social-row { display: flex; gap: 40px; margin-top: 50px; z-index: 20; }
+        .social-link { 
+            width: 48px; cursor: pointer; transition: 0.4s;
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         }
-        .icon:hover { transform: scale(1.2) rotate(5deg); filter: drop-shadow(0 0 20px var(--gold-primary)); }
-        .roblox-logo { filter: invert(1) brightness(2); }
+        .social-link:hover { transform: scale(1.3) rotate(10deg); filter: drop-shadow(0 0 25px var(--gold-main)); }
+        .roblox-silver { filter: invert(1) brightness(1.8) drop-shadow(0 0 5px #fff); }
 
-        /* --- LEGACY PAGE --- */
-        .legacy-screen {
+        /* --- 6. MEMORIES & POLAROIDS --- */
+        .legacy-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(30, 15, 0, 0.9), #000);
+            background: radial-gradient(circle at center, rgba(20, 10, 0, 0.95), #000);
             z-index: 1000; display: none; opacity: 0; transition: 2s;
-            overflow-y: auto; padding: 60px 20px; flex-direction: column; align-items: center;
+            overflow-y: auto; padding: 100px 20px; flex-direction: column; align-items: center;
         }
 
-        .polaroid-frame {
-            background: #fdfdfd; padding: 15px 15px 50px 15px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            width: 320px; cursor: zoom-in; margin: 20px;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s;
-            transform: rotate(var(--r));
+        .polaroid-item {
+            background: #fff; padding: 18px 18px 60px 18px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9);
+            width: 340px; cursor: zoom-in; margin: 30px;
+            transition: transform 0.7s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transform: rotate(var(--rot));
         }
 
-        .polaroid-frame.zoomed {
-            position: fixed; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) scale(1.8) rotate(0deg) !important;
-            z-index: 2000; cursor: zoom-out; box-shadow: 0 0 100px rgba(0,0,0,1);
-        }
-
-        .polaroid-frame img { width: 100%; filter: contrast(1.1) sepia(0.2); }
-        .polaroid-frame p { 
+        .polaroid-item img { width: 100%; filter: sepia(0.3) contrast(1.1); pointer-events: none; }
+        .polaroid-item p { 
             color: #222; font-family: 'Dancing Script'; text-align: center; 
-            font-size: 1.6rem; margin-top: 15px; 
+            font-size: 1.8rem; margin-top: 20px; font-weight: bold; pointer-events: none;
         }
 
-        /* --- AI --- */
-        .ai-core {
-            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
-            background: var(--glass-bg); backdrop-filter: blur(20px);
-            border-radius: 50%; border: 1px solid var(--gold-primary);
+        .polaroid-item.active {
+            position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(1.75) rotate(0deg) !important;
+            z-index: 5000; cursor: zoom-out;
+        }
+
+        .legacy-info {
+            background: var(--glass); border: 1px solid var(--border);
+            padding: 60px; max-width: 800px; margin-top: 60px; text-align: center;
+            backdrop-filter: var(--blur);
+        }
+
+        /* --- 7. AI ASSISTANT --- */
+        .ai-anchor {
+            position: fixed; bottom: 35px; right: 35px; width: 70px; height: 70px;
+            background: var(--glass); backdrop-filter: var(--blur);
+            border-radius: 50%; border: 1px solid var(--gold-main);
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 3000; transition: 0.4s;
-        }
-        .ai-core:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--gold-primary); }
-        
-        .ai-box {
-            position: fixed; bottom: 100px; left: 30px; width: 300px;
-            background: rgba(15, 10, 0, 0.95); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 15px;
-            padding: 20px; display: none; z-index: 3000; flex-direction: column; gap: 10px;
+            cursor: pointer; z-index: 4000; font-size: 30px; transition: 0.5s;
+            box-shadow: 0 0 25px var(--sunset);
         }
 
-        input { background: transparent; border: 1px solid var(--gold-primary); color: #fff; padding: 10px; border-radius: 5px; outline: none; }
+        .ai-anchor:hover { transform: scale(1.2) rotate(-15deg); }
+
+        .ai-bubble {
+            position: fixed; bottom: 120px; right: 35px; width: 320px;
+            background: rgba(10, 5, 0, 0.98); border: 1px solid var(--border);
+            border-radius: 20px; padding: 25px; display: none; z-index: 4000;
+            flex-direction: column; gap: 15px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .ai-input-field {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--gold-main);
+            color: #fff; padding: 12px; border-radius: 8px; outline: none;
+        }
+
+        .zoom-darken {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+            z-index: 4500; display: none; opacity: 0; transition: 0.6s;
+        }
     </style>
 </head>
 <body>
 
-    <div class="atmosphere"></div>
-    <div class="sun-flare"></div>
-    <div class="background-layer" id="bg-main"></div>
+    <div class="bg-layer" id="bg-visual"></div>
+    <div class="god-rays"></div>
+    <div class="lighting-overlay"></div>
+    <div class="zoom-darken" id="darken"></div>
 
-    <div class="ui-container btn-container" id="home" style="height: 100vh; justify-content: center; display: flex;">
-        <div class="logo-wrapper">
+    <div class="btn-stack" id="main-ui" style="height: 100vh; justify-content: center; display: flex;">
+        <div class="logo-section">
             <h1 class="main-logo">Foggy Fights</h1>
         </div>
         
-        <button class="glass-btn" onclick="openLegacy()">Enter the Fog</button>
+        <button class="glass-action" onclick="enterLegacy()">Enter the Fog</button>
         
-        <div class="socials">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="icon" onclick="alert('Discord Soon!')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="icon roblox-logo" onclick="window.open('https://www.roblox.com/communities/35978868')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="icon" onclick="alert('TikTok Soon!')">
+        <div class="social-row">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="social-link" onclick="alert('Discord Soon!')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="social-link roblox-silver" onclick="window.open('https://www.roblox.com/communities/35978868')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-link" onclick="alert('TikTok Soon!')">
         </div>
     </div>
 
-    <div class="ai-core" onclick="toggleAI()">📜</div>
-    <div class="ai-box" id="ai-box">
-        <p style="color: var(--gold-primary); font-weight: 900; font-size: 12px;">FOGGY CHRONICLES</p>
-        <p id="ai-text" style="font-size: 13px;">What memory shall we recover today?</p>
-        <input type="text" id="ai-input" placeholder="Ask about 2028..." onkeypress="handleAI(event)">
+    <div class="ai-anchor" onclick="toggleChat()">✨</div>
+    <div class="ai-bubble" id="chat-box">
+        <p style="color: var(--gold-main); font-weight: 900; font-size: 14px; letter-spacing: 2px;">FOGGY ASSISTANT</p>
+        <p id="chat-text" style="font-size: 14px; line-height: 1.5; color: #ccc;">Welcome traveler. I hold the archives of 2025. What do you seek?</p>
+        <input type="text" class="ai-input-field" id="ai-query" placeholder="Ask about 2028..." onkeypress="runAI(event)">
     </div>
 
-    <div class="legacy-screen" id="legacy">
+    <div class="legacy-container" id="legacy-view">
         <div style="display: flex; flex-wrap: wrap; justify-content: center; width: 100%;">
-            <div class="polaroid-frame" style="--r: -3deg;" onclick="zoom(this)">
+            <div class="polaroid-item" style="--rot: -4deg;" onclick="triggerZoom(this)">
                 <img src="Screenshot_22.png">
-                <p>The First Spark</p>
+                <p>The 2025 Spark</p>
             </div>
-            <div class="polaroid-frame" style="--r: 4deg;" onclick="zoom(this)">
+            <div class="polaroid-item" style="--rot: 5deg;" onclick="triggerZoom(this)">
                 <img src="RobloxScreenShot20260302_213405110.png">
-                <p>Golden Era Dev</p>
+                <p>Golden Hour Build</p>
             </div>
         </div>
 
-        <div style="background: var(--glass-bg); padding: 40px; max-width: 700px; margin-top: 40px; border: 1px solid var(--glass-border); text-align: center;">
-            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold-primary);">The Solo Journey</h2>
-            <p style="line-height: 2; color: #ddd; margin-top: 20px;">
-                Inspired by the grit of <b>Da Hood</b>. A solo vision born in 2025. 
-                Though life has moved the clocks, the fog will finally settle in <b>2028</b>.
+        <div class="legacy-info">
+            <h2 style="font-family: 'Dancing Script'; font-size: 4rem; color: var(--gold-main);">The Solo Legacy</h2>
+            <p style="font-size: 1.2rem; line-height: 2.2; color: #ddd; margin-top: 30px;">
+                Deeply rooted in the atmosphere of <b>Da Hood</b>.<br>
+                What began as a solo dream in 2025 has weathered the storms of life.<br>
+                The vision remains. The fog is set to finally clear in <b style="color:var(--gold-main)">2028</b>.
             </p>
-            <button class="glass-btn" style="margin-top: 30px;" onclick="location.reload()">Return Home</button>
+            <button class="glass-action" style="margin-top: 50px;" onclick="location.reload()">Return Home</button>
         </div>
+        <div style="height: 150px;"></div>
     </div>
 
     <script>
-        const paperSound = new Audio('https://www.soundjay.com/misc/sounds/paper-turn-1.mp3');
+        const sfx = new Audio('https://www.soundjay.com/misc/sounds/paper-turn-1.mp3');
 
-        function openLegacy() {
-            const bg = document.getElementById('bg-main');
-            const home = document.getElementById('home');
-            const leg = document.getElementById('legacy');
+        function enterLegacy() {
+            const bg = document.getElementById('bg-visual');
+            const ui = document.getElementById('main-ui');
+            const leg = document.getElementById('legacy-view');
 
-            bg.style.transform = "scale(150) rotate(30deg)";
-            bg.style.filter = "brightness(40) blur(100px) sepia(1)";
-            home.style.opacity = "0";
+            bg.style.transform = "scale(150) rotate(45deg)";
+            bg.style.filter = "brightness(30) blur(100px) sepia(1)";
+            ui.style.opacity = "0";
 
             setTimeout(() => {
-                home.style.display = 'none';
+                ui.style.display = 'none';
                 leg.style.display = 'flex';
                 setTimeout(() => leg.style.opacity = "1", 100);
-            }, 3000);
+            }, 3500);
         }
 
-        function zoom(el) {
-            paperSound.currentTime = 0;
-            paperSound.play();
-            el.classList.toggle('zoomed');
+        function triggerZoom(el) {
+            const dark = document.getElementById('darken');
+            if (!el.classList.contains('active')) {
+                sfx.currentTime = 0;
+                sfx.play();
+                dark.style.display = 'block';
+                setTimeout(() => dark.style.opacity = '1', 10);
+                el.classList.add('active');
+            } else {
+                dark.style.opacity = '0';
+                setTimeout(() => dark.style.display = 'none', 600);
+                el.classList.remove('active');
+            }
         }
 
-        function toggleAI() {
-            const box = document.getElementById('ai-box');
-            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+        function toggleChat() {
+            const box = document.getElementById('chat-box');
+            box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        function handleAI(e) {
-            if(e.key === 'Enter') {
-                const q = e.target.value.toLowerCase();
-                const out = document.getElementById('ai-text');
-                if(q.includes('release')) out.innerText = "The grand release is written for 2028.";
-                else if(q.includes('hood')) out.innerText = "Da Hood was our foundation and spark.";
-                else out.innerText = "The fog is too thick to see that answer yet.";
+        function runAI(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.toLowerCase();
+                const txt = document.getElementById('chat-text');
+                txt.style.opacity = "0.5";
+                
+                setTimeout(() => {
+                    if (val.includes('release')) {
+                        txt.innerText = "The archives state the fog settles in 2028. We value quality over haste.";
+                    } else if (val.includes('hood')) {
+                        txt.innerText = "Da Hood was the original flame that inspired this gritty, golden world.";
+                    } else if (val.includes('who')) {
+                        txt.innerText = "I am the Foggy Assistant, chronicling a solo developer's journey since 2025.";
+                    } else {
+                        txt.innerText = "The memories are hazy on that point. Ask about the release or our inspirations.";
+                    }
+                    txt.style.opacity = "1";
+                }, 400);
                 e.target.value = "";
             }
         }
