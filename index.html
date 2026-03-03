@@ -3,319 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | 2028 | Solo Grind</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Foggy Fights | 2028</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --neon-pink: #ff2d95; 
-            --neon-blue: #00f2ff;
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
+            --white-glow: rgba(255, 255, 255, 0.9);
             --paper: #fdfaf0;
-            --heaven-glow: 0 0 30px rgba(255, 45, 149, 0.6), 0 0 60px rgba(0, 242, 255, 0.3);
+            --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        /* --- core reset, stop looking at my code skid --- */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+        }
         
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: #020008; font-family: 'Syne', sans-serif;
-            color: white; overflow: hidden;
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: #020008;
+            font-family: 'Syne', sans-serif;
+            color: white;
+            overflow: hidden;
         }
 
-        /* --- BACKGROUND & OVERLAYS --- */
+        /* --- bg engine ig --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.2), rgba(2,0,8,0.9)), 
+            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover; z-index: 1; transform: scale(1.1);
-            transition: transform 10s ease-in-out, filter 2s ease;
+            background-size: cover;
+            z-index: 1; transform: scale(1.05);
+            transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
         }
 
-        .glitch-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 2px);
-            pointer-events: none; z-index: 2000; opacity: 0.3;
-        }
-
-        /* --- SAKURA ENGINE --- */
+        /* --- sakura --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
-            width: 16px; height: 20px;
+            width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
-            clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
+            clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
+            pointer-events: auto;
             animation: fallSway linear infinite;
+            opacity: 0.8;
+            transition: filter 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .leaf.clicked {
+            filter: brightness(2) drop-shadow(0 0 15px white);
+            transform: scale(2.5) rotate(45deg) !important;
         }
 
         @keyframes fallSway {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(1080deg) translateX(150px); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- CORE ANIMATIONS --- */
-        @keyframes rgbPulse {
-            0%, 100% { color: #ff0000; text-shadow: 0 0 20px #ff0000; border-color: #ff0000; }
-            33% { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); border-color: var(--neon-blue); }
-            66% { color: #48ff00; text-shadow: 0 0 20px #48ff00; border-color: #48ff00; }
-        }
-
-        @keyframes cardShake {
-            0% { transform: rotate(-1.5deg) translate(1px, 1px); }
-            25% { transform: rotate(1deg) translate(-1px, -1px); }
-            50% { transform: rotate(-1deg) translate(-2px, 1px); }
-            75% { transform: rotate(1.5deg) translate(1px, -1px); }
-            100% { transform: rotate(-1.5deg) translate(1px, 1px); }
-        }
-
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
-
-        /* --- HUD ELEMENTS --- */
-        #live-clock {
-            position: fixed; top: 25px; right: 25px;
-            font-weight: 900; font-family: 'Inter', sans-serif;
-            font-size: 1.4rem; z-index: 5000;
-            animation: rgbPulse 4s linear infinite;
+        /* --- titles n rgb glow --- */
+        .main-logo, .glow-header {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            text-align: center;
+            animation: rgbPulse 5s linear infinite;
         }
 
         .main-logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(4.5rem, 18vw, 12rem);
+            font-size: clamp(3.8rem, 16vw, 11rem);
             animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
-            margin: 0; z-index: 10; cursor: default;
+            margin: 0;
+            z-index: 10;
         }
 
-        /* --- MEMORIES SYSTEM --- */
+        @keyframes rgbPulse {
+            0%, 100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px var(--neon-pink)); }
+            33% { filter: drop-shadow(0 0 15px #00f2ff) drop-shadow(0 0 30px #7000ff); }
+            66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- diary --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.94); backdrop-filter: blur(40px);
-            display: none; z-index: 3000; overflow-y: scroll; padding: 100px 20px;
-            flex-direction: column; align-items: center; opacity: 0; transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(2, 0, 8, 0.85);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: none; z-index: 1000;
+            overflow-y: scroll; padding: 60px 20px;
+            flex-direction: column; align-items: center;
+            opacity: 0; transition: opacity 1s ease;
+        }
+
+        .diary-stack {
+            width: 100%; max-width: 450px;
+            display: flex; flex-direction: column; gap: 45px;
+            margin-bottom: 50px;
         }
 
         .diary-card {
-            position: relative; background: var(--paper); padding: 15px 15px 70px 15px;
+            position: relative; 
+            background: var(--paper); 
+            padding: 15px 15px 60px 15px;
+            width: 100%;
+            /* heavy glow shii */
             box-shadow: var(--heaven-glow);
-            animation: cardShake 0.15s infinite ease-in-out;
-            margin-bottom: 60px; width: 100%; max-width: 420px;
-            cursor: pointer; transition: 0.4s;
+            transform: rotate(-1.5deg);
+            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        .diary-card:nth-child(even) { transform: rotate(2deg); }
 
-        .diary-card:hover { 
-            animation-play-state: paused; 
-            transform: scale(1.08) rotate(0deg) !important;
-            box-shadow: 0 0 50px white;
+        @keyframes diaryEntry {
+            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
+            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
         }
-        
-        .diary-card img { width: 100%; height: 280px; object-fit: cover; background: #000; border: 1px solid #ddd; }
 
         .tape {
-            position: absolute; top: -20px; left: 50%; width: 110px; height: 40px;
-            background: rgba(255, 45, 149, 0.8); transform: translateX(-50%) rotate(-3deg);
-            box-shadow: 0 0 15px var(--neon-pink); z-index: 5;
+            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
+            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
+            box-shadow: 0 0 15px var(--neon-pink);
+            z-index: 5;
         }
 
-        .card-label {
-            position: absolute; bottom: 20px; left: 0; width: 100%;
-            color: #111; text-align: center; font-weight: 900; font-size: 1.1rem;
-            font-family: 'Inter'; text-transform: uppercase;
+        .img-box { 
+            width: 100%; aspect-ratio: 16/9; background: #111; 
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.1);
+        }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .diary-label {
+            color: #222; font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; text-align: center; margin-top: 20px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
-        /* --- BUTTONS --- */
+        /* --- glowing buttons --- */
         .btn-fancy {
-            margin: 15px; padding: 20px 50px; border: 4px solid white;
-            background: transparent; color: white; cursor: pointer;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 6px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
+            margin: 10px; padding: 18px 40px; border: 2px solid white;
+            background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
+            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
+            backdrop-filter: blur(5px); text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 40px white; }
+
+        .btn-play {
+            display: block; width: 100%; background: #000; color: white;
+            padding: 14px; margin-top: 15px; text-decoration: none;
+            text-align: center; font-weight: 900; letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .btn-play:hover { 
+            background: var(--neon-pink); 
+            box-shadow: 0 0 25px var(--neon-pink);
         }
 
-        .btn-fancy:hover { background: white; color: black; transform: scale(1.1); }
-
-        /* --- TIC TAC TOE (MINIMAX) --- */
-        #ttt-box {
-            margin-top: 50px; padding: 30px; border: 3px solid white;
-            background: rgba(0,0,0,0.9); box-shadow: var(--heaven-glow);
-            animation: rgbPulse 10s infinite linear;
+        /* --- legacy / history glow --- */
+        .legacy-text {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            color: #fff;
+            /* glowing text */
+            text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
+            animation: textBreath 3s ease-in-out infinite;
         }
-        .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 270px; margin: 25px auto; }
-        .cell {
-            aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 2px solid #fff;
-            display: flex; align-items: center; justify-content: center; font-size: 2.8rem;
-            cursor: pointer; transition: 0.2s; font-weight: 900;
-        }
-        .cell:hover { background: rgba(255, 255, 255, 0.1); }
 
+        @keyframes textBreath {
+            0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
+        }
+
+        .made-by {
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .hero {
+            position: relative; z-index: 10; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.5s ease;
+        }
+
+        @media (max-width: 600px) {
+            .diary-stack { max-width: 90%; }
+            .btn-fancy { width: 85%; }
+            .main-logo { font-size: 4rem; }
+        }
+
+        #story { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="glitch-overlay"></div>
-    <div id="live-clock">00:00:00</div>
     <div class="bg-img" id="bg"></div>
     <div id="leaf-container"></div>
 
-    <div class="hero" id="hero" style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; z-index:100;">
+    <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="main-logo" style="font-size: 4rem;">MEMORIES</h2>
+        <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 10px; margin-bottom: 50px;">MEMORIES</h2>
         
-        <div class="diary-card" onclick="window.open('https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about', '_blank')">
-            <div class="tape"></div>
-            <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" style="object-fit: contain; background: white;">
-            <div class="card-label">CLICK TO JOIN THE CREW</div>
+        <div class="diary-stack">
+            <div class="diary-card" style="animation-delay: 0.1s;">
+                <div class="tape"></div>
+                <div class="img-box">
+                    <img src="Screenshot_22.png" alt="Foggy Fights Game">
+                </div>
+                <div class="diary-label">The Deep Fog</div>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.2s; transform: rotate(2deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box">
+                    <img src="RobloxScreenShot20260302_213405110.png" alt="Beachside">
+                </div>
+                <div class="diary-label">Beachside Calm</div>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box">
+                    <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" alt="Group Icon" style="object-fit: contain; background: #fff; padding: 10px;">
+                </div>
+                <div class="diary-label">The Community</div>
+                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
+                <div class="tape" style="background: #fffb00; box-shadow: 0 0 15px #fffb00;"></div>
+                <div class="img-box"><img src="Screenshot_28.png" alt="Development"></div>
+                <div class="diary-label">08/15/25 - Progress</div>
+            </div>
         </div>
 
-        <div class="diary-card" style="animation-delay: 0.1s;">
-            <div class="tape" style="background: var(--neon-blue);"></div>
-            <img src="Screenshot_22.png">
-            <div class="card-label">THE 2028 VISION</div>
-        </div>
-
-        <button class="btn-fancy" onclick="openStory()">EXPLORE MORE</button>
-        <button class="btn-fancy" onclick="location.reload()">BACK HOME</button>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
+        <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="story">
-        <h1 class="main-logo" style="font-size: 3rem;">MY JOURNEY</h1>
-        <div style="max-width: 650px; text-align: center; line-height: 2; font-family: 'Inter'; font-weight: 700; font-size: 1.2rem; padding: 20px;">
-            Started this at 13. Solo grind. <br><br>
-            2025 was the goal. Then 2026. Life hits hard, and I'm a one-man army. <br>
-            But the fog doesn't clear. 2028 is the year. I haven't stopped building.
-        </div>
-
-        <div id="ttt-box">
-            <div id="ttt-status" style="text-align:center; font-weight:900; font-size: 1.5rem; letter-spacing: 2px;">THE MACHINE IS READY</div>
-            <div class="ttt-grid" id="grid">
-                <div class="cell" onclick="userMove(0)"></div>
-                <div class="cell" onclick="userMove(1)"></div>
-                <div class="cell" onclick="userMove(2)"></div>
-                <div class="cell" onclick="userMove(3)"></div>
-                <div class="cell" onclick="userMove(4)"></div>
-                <div class="cell" onclick="userMove(5)"></div>
-                <div class="cell" onclick="userMove(6)"></div>
-                <div class="cell" onclick="userMove(7)"></div>
-                <div class="cell" onclick="userMove(8)"></div>
+        <div style="max-width: 800px; text-align: center; padding: 20px;">
+            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
+            <div class="legacy-text">
+                This game was inspired from a game that i played called da hood.<br><br>
+                i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
+                and now its probably going to get released in 2028 since im busy with life.
             </div>
-            <button onclick="resetGame()" style="width:100%; padding:15px; font-weight:900; cursor:pointer; background:white; color:black; border:none;">REBOOT SYSTEM</button>
+            
+            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
+            <div class="made-by" style="margin-top:40px">made by wssnw</div>
         </div>
-
-        <button class="btn-fancy" onclick="backToLogs()" style="margin-top: 40px;">BACK TO MEMORIES</button>
     </div>
 
     <script>
-        // 1. CLOCK ENGINE
-        function updateClock() { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }
-        setInterval(updateClock, 1000); updateClock();
-
-        // 2. SAKURA ENGINE
+        const leafContainer = document.getElementById('leaf-container');
+        
         function createLeaf() {
+            if (document.hidden) return;
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 3 + 4) + 's';
-            leaf.style.width = (Math.random() * 10 + 10) + 'px';
-            document.getElementById('leaf-container').appendChild(leaf);
-            setTimeout(() => leaf.remove(), 7000);
+            const size = (Math.random() * 10 + 15) + 'px';
+            leaf.style.width = size;
+            leaf.style.height = (parseFloat(size) * 1.2) + 'px';
+            leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            leafContainer.appendChild(leaf);
+            setTimeout(() => leaf.remove(), 10000);
         }
-        setInterval(createLeaf, 350);
+        setInterval(createLeaf, 500);
 
-        // 3. NAVIGATION ENGINE
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.5) rotate(5deg)";
-            document.getElementById('bg').style.filter = "blur(15px) brightness(0.5)";
+            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
-                const l = document.getElementById('logs');
-                l.style.display = 'flex'; setTimeout(() => l.style.opacity = "1", 50);
-            }, 1200);
+                const logs = document.getElementById('logs');
+                logs.style.display = 'flex';
+                setTimeout(() => logs.style.opacity = "1", 50);
+            }, 2000);
         }
 
         function openStory() {
-            document.getElementById('logs').style.display = 'none';
-            const s = document.getElementById('story');
-            s.style.display = 'flex'; setTimeout(() => s.style.opacity = "1", 50);
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const story = document.getElementById('story');
+                story.style.display = 'flex';
+                setTimeout(() => story.style.opacity = "1", 50);
+            }, 800);
         }
 
         function backToLogs() {
-            document.getElementById('story').style.display = 'none';
-            document.getElementById('logs').style.display = 'flex';
+            const story = document.getElementById('story');
+            story.style.opacity = "0";
+            setTimeout(() => {
+                story.style.display = 'none';
+                const logs = document.getElementById('logs');
+                logs.style.display = 'flex';
+                setTimeout(() => logs.style.opacity = "1", 50);   
+            }, 800);
         }
 
-        // 4. THE UNBEATABLE MINIMAX AI
-        let board = ["","","","","","","","",""], active = true;
-        const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-        function userMove(i) {
-            if(board[i] === "" && active) {
-                board[i] = "X"; render();
-                if(!checkWin(board, "X") && board.includes("")) {
-                    active = false; 
-                    document.getElementById('ttt-status').innerText = "THINKING...";
-                    setTimeout(aiMove, 600);
-                }
-            }
-        }
-
-        function aiMove() {
-            let bestScore = -Infinity, move;
-            for(let i=0; i<9; i++) {
-                if(board[i] === "") {
-                    board[i] = "O";
-                    let score = minimax(board, 0, false);
-                    board[i] = "";
-                    if(score > bestScore) { bestScore = score; move = i; }
-                }
-            }
-            board[move] = "O"; active = true; render();
-            if(!checkWin(board, "O")) document.getElementById('ttt-status').innerText = "YOUR TURN";
-        }
-
-        function minimax(b, d, isMax) {
-            if(checkWin(b, "O", true)) return 10;
-            if(checkWin(b, "X", true)) return -10;
-            if(!b.includes("")) return 0;
-            if(isMax) {
-                let bst = -Infinity;
-                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="O"; bst=Math.max(bst, minimax(b, d+1, false)); b[i]=""; } }
-                return bst;
-            } else {
-                let bst = Infinity;
-                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="X"; bst=Math.min(bst, minimax(b, d+1, true)); b[i]=""; } }
-                return bst;
-            }
-        }
-
-        function checkWin(b, p, silent=false) {
-            for(let c of wins) {
-                if(b[c[0]]===p && b[c[1]]===p && b[c[2]]===p) {
-                    if(!silent) { 
-                        document.getElementById('ttt-status').innerText = p === "O" ? "ROBOT DOMINATION" : "IMPOSSIBLE!"; 
-                        active = false; 
-                    }
-                    return true;
-                }
-            }
-            if(!b.includes("") && !silent) { document.getElementById('ttt-status').innerText = "STALEMATE"; active = false; }
-            return false;
-        }
-
-        function render() {
-            const cells = document.querySelectorAll('.cell');
-            cells.forEach((c, i) => {
-                c.innerText = board[i];
-                c.style.color = board[i] === "X" ? "var(--neon-blue)" : "var(--neon-pink)";
-            });
-        }
-
-        function resetGame() {
-            board = ["","","","","","","","",""]; active = true;
-            document.getElementById('ttt-status').innerText = "THE MACHINE IS READY"; render();
+        function backToHome() {
+            const logs = document.getElementById('logs');
+            logs.style.opacity = "0";
+            setTimeout(() => {
+                logs.style.display = 'none';
+                const hero = document.getElementById('hero');
+                hero.style.display = 'flex';
+                document.getElementById('bg').style.transform = "scale(1.05)";
+                document.getElementById('bg').style.filter = "brightness(1) blur(0px)";
+                setTimeout(() => hero.style.opacity = "1", 50);
+            }, 800);
         }
     </script>
 </body>
