@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | 2028</title>
+    <title>Foggy Fights | 2028 | Solo Grind</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --neon-pink: #ff2d95; 
+            --neon-blue: #00f2ff;
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
             --paper: #fdfaf0;
-            --heaven-glow: 0 0 30px rgba(255, 45, 149, 0.5), 0 0 60px rgba(0, 242, 255, 0.3);
+            --heaven-glow: 0 0 30px rgba(255, 45, 149, 0.6), 0 0 60px rgba(0, 242, 255, 0.3);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
@@ -22,152 +23,174 @@
             color: white; overflow: hidden;
         }
 
-        /* --- BRINGING BACK THE VIBE --- */
-        #live-clock {
-            position: fixed; top: 20px; right: 20px;
-            font-weight: 900; font-family: 'Inter', sans-serif;
-            font-size: 1.2rem; z-index: 5000;
-            text-shadow: 0 0 10px var(--neon-pink);
-            animation: rgbPulse 3s linear infinite;
-        }
-
+        /* --- BACKGROUND & OVERLAYS --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.3), rgba(2,0,8,0.8)), 
+            background: linear-gradient(to bottom, rgba(2,0,8,0.2), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.1);
-            transition: transform 8s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 10s ease-in-out, filter 2s ease;
         }
 
-        /* --- SAKURA PETALS (RESTORED) --- */
+        .glitch-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 2px);
+            pointer-events: none; z-index: 2000; opacity: 0.3;
+        }
+
+        /* --- SAKURA ENGINE --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
-            width: 15px; height: 18px;
+            width: 16px; height: 20px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 80%, 20% 100%, 0% 35%);
-            animation: fallSway linear infinite; opacity: 0.6;
+            animation: fallSway linear infinite;
         }
 
         @keyframes fallSway {
             0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
-            10% { opacity: 0.7; }
-            100% { transform: translateY(110vh) rotate(720deg) translateX(100px); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(1080deg) translateX(150px); opacity: 0; }
         }
 
-        /* --- GLITCH & SHAKE --- */
+        /* --- CORE ANIMATIONS --- */
         @keyframes rgbPulse {
-            0%, 100% { color: #ff0000; text-shadow: 0 0 15px #ff0000; }
-            33% { color: #00f2ff; text-shadow: 0 0 15px #00f2ff; }
-            66% { color: #48ff00; text-shadow: 0 0 15px #48ff00; }
+            0%, 100% { color: #ff0000; text-shadow: 0 0 20px #ff0000; border-color: #ff0000; }
+            33% { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); border-color: var(--neon-blue); }
+            66% { color: #48ff00; text-shadow: 0 0 20px #48ff00; border-color: #48ff00; }
         }
 
         @keyframes cardShake {
-            0% { transform: rotate(-2deg); }
-            100% { transform: rotate(2deg); }
+            0% { transform: rotate(-1.5deg) translate(1px, 1px); }
+            25% { transform: rotate(1deg) translate(-1px, -1px); }
+            50% { transform: rotate(-1deg) translate(-2px, 1px); }
+            75% { transform: rotate(1.5deg) translate(1px, -1px); }
+            100% { transform: rotate(-1.5deg) translate(1px, 1px); }
+        }
+
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+
+        /* --- HUD ELEMENTS --- */
+        #live-clock {
+            position: fixed; top: 25px; right: 25px;
+            font-weight: 900; font-family: 'Inter', sans-serif;
+            font-size: 1.4rem; z-index: 5000;
+            animation: rgbPulse 4s linear infinite;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 15vw, 9rem);
-            animation: floating 4s ease-in-out infinite, rgbPulse 6s linear infinite;
-            z-index: 10; text-align: center;
+            font-size: clamp(4.5rem, 18vw, 12rem);
+            animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
+            margin: 0; z-index: 10; cursor: default;
         }
 
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
-        /* --- MEMORY STACK --- */
+        /* --- MEMORIES SYSTEM --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.92); backdrop-filter: blur(25px);
-            display: none; z-index: 1000; overflow-y: scroll; padding: 80px 20px;
-            flex-direction: column; align-items: center; opacity: 0; transition: 0.6s;
+            background: rgba(2, 0, 8, 0.94); backdrop-filter: blur(40px);
+            display: none; z-index: 3000; overflow-y: scroll; padding: 100px 20px;
+            flex-direction: column; align-items: center; opacity: 0; transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .diary-card {
-            position: relative; background: var(--paper); padding: 12px 12px 55px 12px;
+            position: relative; background: var(--paper); padding: 15px 15px 70px 15px;
             box-shadow: var(--heaven-glow);
-            animation: cardShake 0.1s infinite alternate;
-            margin-bottom: 40px; width: 100%; max-width: 380px;
-            cursor: pointer; transition: 0.3s;
+            animation: cardShake 0.15s infinite ease-in-out;
+            margin-bottom: 60px; width: 100%; max-width: 420px;
+            cursor: pointer; transition: 0.4s;
         }
 
-        .diary-card:hover { animation-play-state: paused; transform: scale(1.05) rotate(0deg); }
+        .diary-card:hover { 
+            animation-play-state: paused; 
+            transform: scale(1.08) rotate(0deg) !important;
+            box-shadow: 0 0 50px white;
+        }
         
-        .diary-card img { width: 100%; height: 250px; object-fit: cover; background: #000; }
-
-        .card-caption {
-            position: absolute; bottom: 15px; left: 0; width: 100%;
-            color: #111; text-align: center; font-weight: 900; font-family: 'Inter';
-        }
+        .diary-card img { width: 100%; height: 280px; object-fit: cover; background: #000; border: 1px solid #ddd; }
 
         .tape {
-            position: absolute; top: -15px; left: 50%; width: 90px; height: 35px;
-            background: rgba(255, 45, 149, 0.6); transform: translateX(-50%) rotate(-4deg);
-            box-shadow: 0 0 10px var(--neon-pink);
+            position: absolute; top: -20px; left: 50%; width: 110px; height: 40px;
+            background: rgba(255, 45, 149, 0.8); transform: translateX(-50%) rotate(-3deg);
+            box-shadow: 0 0 15px var(--neon-pink); z-index: 5;
         }
 
-        /* --- BUTTONS & HUD --- */
+        .card-label {
+            position: absolute; bottom: 20px; left: 0; width: 100%;
+            color: #111; text-align: center; font-weight: 900; font-size: 1.1rem;
+            font-family: 'Inter'; text-transform: uppercase;
+        }
+
+        /* --- BUTTONS --- */
         .btn-fancy {
-            margin: 10px; padding: 15px 35px; border: 3px solid white;
+            margin: 15px; padding: 20px 50px; border: 4px solid white;
             background: transparent; color: white; cursor: pointer;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 3px;
-            transition: 0.3s;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 6px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
         }
 
-        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+        .btn-fancy:hover { background: white; color: black; transform: scale(1.1); }
 
+        /* --- TIC TAC TOE (MINIMAX) --- */
         #ttt-box {
-            margin-top: 20px; padding: 20px; border: 2px solid var(--neon-pink);
-            background: rgba(0,0,0,0.8); box-shadow: var(--heaven-glow);
+            margin-top: 50px; padding: 30px; border: 3px solid white;
+            background: rgba(0,0,0,0.9); box-shadow: var(--heaven-glow);
+            animation: rgbPulse 10s infinite linear;
         }
-        .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 210px; margin: 15px auto; }
+        .ttt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 270px; margin: 25px auto; }
         .cell {
-            aspect-ratio: 1/1; border: 2px solid #fff; display: flex;
-            align-items: center; justify-content: center; font-size: 2rem; cursor: pointer;
+            aspect-ratio: 1/1; background: rgba(255,255,255,0.05); border: 2px solid #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 2.8rem;
+            cursor: pointer; transition: 0.2s; font-weight: 900;
         }
+        .cell:hover { background: rgba(255, 255, 255, 0.1); }
+
     </style>
 </head>
 <body>
 
+    <div class="glitch-overlay"></div>
     <div id="live-clock">00:00:00</div>
     <div class="bg-img" id="bg"></div>
     <div id="leaf-container"></div>
 
-    <div class="hero" id="hero" style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; z-index:10;">
+    <div class="hero" id="hero" style="height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; z-index:100;">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="main-logo" style="font-size: 3rem;">MEMORIES</h2>
+        <h2 class="main-logo" style="font-size: 4rem;">MEMORIES</h2>
         
         <div class="diary-card" onclick="window.open('https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about', '_blank')">
             <div class="tape"></div>
             <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" style="object-fit: contain; background: white;">
-            <div class="card-caption">CLICK TO JOIN COMMUNITY</div>
+            <div class="card-label">CLICK TO JOIN THE CREW</div>
         </div>
 
-        <div class="diary-card" style="animation-delay: 0.05s;">
-            <div class="tape" style="background: rgba(0, 242, 255, 0.6);"></div>
+        <div class="diary-card" style="animation-delay: 0.1s;">
+            <div class="tape" style="background: var(--neon-blue);"></div>
             <img src="Screenshot_22.png">
-            <div class="card-caption">THE GRIND IS REAL</div>
+            <div class="card-label">THE 2028 VISION</div>
         </div>
 
-        <button class="btn-fancy" onclick="openStory()">STORY & GAME</button>
-        <button class="btn-fancy" onclick="location.reload()">BACK</button>
+        <button class="btn-fancy" onclick="openStory()">EXPLORE MORE</button>
+        <button class="btn-fancy" onclick="location.reload()">BACK HOME</button>
     </div>
 
     <div class="heaven-logs" id="story">
-        <h2 class="main-logo" style="font-size: 2.5rem;">THE SOLO PATH</h2>
-        <div style="max-width: 500px; text-align: center; line-height: 1.8; font-family: 'Inter'; font-weight: 700;">
-            Started this at 13. Solo dev. <br>
-            They wanted it in '25, then '26... but I'm building a legacy. <br>
-            Release set for 2028. We don't stop.
+        <h1 class="main-logo" style="font-size: 3rem;">MY JOURNEY</h1>
+        <div style="max-width: 650px; text-align: center; line-height: 2; font-family: 'Inter'; font-weight: 700; font-size: 1.2rem; padding: 20px;">
+            Started this at 13. Solo grind. <br><br>
+            2025 was the goal. Then 2026. Life hits hard, and I'm a one-man army. <br>
+            But the fog doesn't clear. 2028 is the year. I haven't stopped building.
         </div>
 
         <div id="ttt-box">
-            <div id="ttt-status" style="text-align:center; font-weight:900; color:var(--neon-pink); margin-bottom: 10px;">THE ROBOT IS WATCHING</div>
-            <div class="ttt-grid">
+            <div id="ttt-status" style="text-align:center; font-weight:900; font-size: 1.5rem; letter-spacing: 2px;">THE MACHINE IS READY</div>
+            <div class="ttt-grid" id="grid">
                 <div class="cell" onclick="userMove(0)"></div>
                 <div class="cell" onclick="userMove(1)"></div>
                 <div class="cell" onclick="userMove(2)"></div>
@@ -178,40 +201,53 @@
                 <div class="cell" onclick="userMove(7)"></div>
                 <div class="cell" onclick="userMove(8)"></div>
             </div>
-            <button onclick="resetGame()" style="width:100%; padding:10px; font-weight:900;">RESET</button>
+            <button onclick="resetGame()" style="width:100%; padding:15px; font-weight:900; cursor:pointer; background:white; color:black; border:none;">REBOOT SYSTEM</button>
         </div>
-        <button class="btn-fancy" onclick="backToLogs()" style="margin-top:20px;">BACK TO MEMORIES</button>
+
+        <button class="btn-fancy" onclick="backToLogs()" style="margin-top: 40px;">BACK TO MEMORIES</button>
     </div>
 
     <script>
+        // 1. CLOCK ENGINE
         function updateClock() { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }
         setInterval(updateClock, 1000); updateClock();
 
+        // 2. SAKURA ENGINE
         function createLeaf() {
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            leaf.style.animationDuration = (Math.random() * 4 + 3) + 's';
+            leaf.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            leaf.style.width = (Math.random() * 10 + 10) + 'px';
             document.getElementById('leaf-container').appendChild(leaf);
-            setTimeout(() => leaf.remove(), 6000);
+            setTimeout(() => leaf.remove(), 7000);
         }
-        setInterval(createLeaf, 500);
+        setInterval(createLeaf, 350);
 
+        // 3. NAVIGATION ENGINE
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.5) blur(20px)";
+            document.getElementById('bg').style.transform = "scale(2.5) rotate(5deg)";
+            document.getElementById('bg').style.filter = "blur(15px) brightness(0.5)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
                 const l = document.getElementById('logs');
                 l.style.display = 'flex'; setTimeout(() => l.style.opacity = "1", 50);
-            }, 8000); // Slow cinematic transition
-            document.getElementById('bg').style.transition = "transform 8s ease-in-out";
+            }, 1200);
         }
 
-        function openStory() { document.getElementById('logs').style.display='none'; const s=document.getElementById('story'); s.style.display='flex'; setTimeout(()=>s.style.opacity="1",50); }
-        function backToLogs() { document.getElementById('story').style.display='none'; document.getElementById('logs').style.display='flex'; }
+        function openStory() {
+            document.getElementById('logs').style.display = 'none';
+            const s = document.getElementById('story');
+            s.style.display = 'flex'; setTimeout(() => s.style.opacity = "1", 50);
+        }
 
-        // --- UNBEATABLE AI ---
+        function backToLogs() {
+            document.getElementById('story').style.display = 'none';
+            document.getElementById('logs').style.display = 'flex';
+        }
+
+        // 4. THE UNBEATABLE MINIMAX AI
         let board = ["","","","","","","","",""], active = true;
         const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
@@ -219,7 +255,9 @@
             if(board[i] === "" && active) {
                 board[i] = "X"; render();
                 if(!checkWin(board, "X") && board.includes("")) {
-                    active = false; setTimeout(aiMove, 600);
+                    active = false; 
+                    document.getElementById('ttt-status').innerText = "THINKING...";
+                    setTimeout(aiMove, 600);
                 }
             }
         }
@@ -234,7 +272,8 @@
                     if(score > bestScore) { bestScore = score; move = i; }
                 }
             }
-            board[move] = "O"; active = true; render(); checkWin(board, "O");
+            board[move] = "O"; active = true; render();
+            if(!checkWin(board, "O")) document.getElementById('ttt-status').innerText = "YOUR TURN";
         }
 
         function minimax(b, d, isMax) {
@@ -242,35 +281,41 @@
             if(checkWin(b, "X", true)) return -10;
             if(!b.includes("")) return 0;
             if(isMax) {
-                let best = -Infinity;
-                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="O"; best=Math.max(best, minimax(b, d+1, false)); b[i]=""; } }
-                return best;
+                let bst = -Infinity;
+                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="O"; bst=Math.max(bst, minimax(b, d+1, false)); b[i]=""; } }
+                return bst;
             } else {
-                let best = Infinity;
-                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="X"; best=Math.min(best, minimax(b, d+1, true)); b[i]=""; } }
-                return best;
+                let bst = Infinity;
+                for(let i=0; i<9; i++) { if(b[i]===""){ b[i]="X"; bst=Math.min(bst, minimax(b, d+1, true)); b[i]=""; } }
+                return bst;
             }
         }
 
         function checkWin(b, p, silent=false) {
             for(let c of wins) {
                 if(b[c[0]]===p && b[c[1]]===p && b[c[2]]===p) {
-                    if(!silent) { document.getElementById('ttt-status').innerText = "THE MACHINE WINS"; active = false; }
+                    if(!silent) { 
+                        document.getElementById('ttt-status').innerText = p === "O" ? "ROBOT DOMINATION" : "IMPOSSIBLE!"; 
+                        active = false; 
+                    }
                     return true;
                 }
             }
-            if(!b.includes("") && !silent) { document.getElementById('ttt-status').innerText = "IT'S A DRAW"; active = false; }
+            if(!b.includes("") && !silent) { document.getElementById('ttt-status').innerText = "STALEMATE"; active = false; }
             return false;
         }
 
         function render() {
-            const cells = document.getElementsByClassName('cell');
-            for(let i=0; i<9; i++) cells[i].innerText = board[i];
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((c, i) => {
+                c.innerText = board[i];
+                c.style.color = board[i] === "X" ? "var(--neon-blue)" : "var(--neon-pink)";
+            });
         }
 
         function resetGame() {
             board = ["","","","","","","","",""]; active = true;
-            document.getElementById('ttt-status').innerText = "THE ROBOT IS WATCHING"; render();
+            document.getElementById('ttt-status').innerText = "THE MACHINE IS READY"; render();
         }
     </script>
 </body>
