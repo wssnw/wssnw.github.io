@@ -113,7 +113,7 @@
             background: var(--paper); 
             padding: 15px 15px 60px 15px;
             width: 100%;
-            /* HEAVY GLOW ON CARDS */
+            /* heavy glow shii */
             box-shadow: var(--heaven-glow);
             transform: rotate(-1.5deg);
             animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -165,13 +165,13 @@
             box-shadow: 0 0 25px var(--neon-pink);
         }
 
-        /* --- legacy --- */
+        /* --- legacy / history glow --- */
         .legacy-text {
             font-size: clamp(1.2rem, 4vw, 1.8rem);
             font-family: 'Inter', sans-serif;
             line-height: 1.8;
             color: #fff;
-            /* glowing text*/
+            /* glowing text */
             text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
             animation: textBreath 3s ease-in-out infinite;
         }
@@ -179,6 +179,15 @@
         @keyframes textBreath {
             0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
             50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
+        }
+
+        .made-by {
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
         }
 
         .hero {
@@ -204,6 +213,7 @@
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="logs">
@@ -213,10 +223,17 @@
             <div class="diary-card" style="animation-delay: 0.1s;">
                 <div class="tape"></div>
                 <div class="img-box">
-                    <img src="https://tr.rbxcdn.com/180day-033504107936691459976378e9b08535/768/432/Image/Webp" alt="Foggy Fights Game">
+                    <img src="Screenshot_22.png" alt="Foggy Fights Game">
                 </div>
-                <div class="diary-label">The Main Stage</div>
-                <a href="https://www.roblox.com/games/15134238727/Foggy-Fights" target="_blank" class="btn-play">PLAY NOW</a>
+                <div class="diary-label">The Deep Fog</div>
+            </div>
+
+            <div class="diary-card" style="animation-delay: 0.2s; transform: rotate(2deg);">
+                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
+                <div class="img-box">
+                    <img src="RobloxScreenShot20260302_213405110.png" alt="Beachside">
+                </div>
+                <div class="diary-label">Beachside Calm</div>
             </div>
 
             <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
@@ -237,6 +254,7 @@
 
         <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
         <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
+        <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="story">
@@ -249,6 +267,7 @@
             </div>
             
             <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
+            <div class="made-by" style="margin-top:40px">made by wssnw</div>
         </div>
     </div>
 
