@@ -39,11 +39,11 @@
             66% { color: #48ff00; text-shadow: 0 0 10px #48ff00; }
         }
 
-        /* --- Better Background --- */
+        /* --- Reverted Main Background --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.5), rgba(2,0,8,0.9)), 
-                        url('https://images.unsplash.com/photo-1542931415-162aeab4418f?q=80&w=2000&auto=format&fit=crop') no-repeat center center;
+            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
+                        url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.05);
             transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1), filter 3s ease;
         }
@@ -77,9 +77,14 @@
 
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
+        /* --- Better Background in Memory Section --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.92); backdrop-filter: blur(40px);
+            background: linear-gradient(rgba(2, 0, 8, 0.8), rgba(2, 0, 8, 0.95)), 
+                        url('https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(20px);
             display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
             flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
         }
@@ -103,12 +108,10 @@
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         /* --- Better Memory Text --- */
-        .memory-label {
+        .diary-label {
             color: #111; text-align: center; margin-top: 20px; 
-            font-weight: 900; letter-spacing: 2px; font-size: 1.1rem;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--neon-pink);
-            display: inline-block; width: 100%;
+            font-weight: 900; letter-spacing: 2px; font-size: 1.2rem;
+            text-transform: uppercase; font-family: 'Syne', sans-serif;
         }
 
         .btn-fancy {
@@ -146,19 +149,19 @@
         <div class="diary-card">
             <div class="tape"></div>
             <div class="img-box"><img src="Screenshot_22.png"></div>
-            <div class="memory-label">11/08/2025</div>
+            <div class="diary-label">11/08/2025</div>
         </div>
 
         <div class="diary-card" style="transform: rotate(2deg);">
             <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
             <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
-            <div class="memory-label">9/07/2025</div>
+            <div class="diary-label">9/07/2025</div>
         </div>
 
         <div class="diary-card" style="transform: rotate(-1deg);">
             <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
             <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp"></div>
-            <div class="memory-label">THE COMMUNITY</div>
+            <div class="diary-label">THE COMMUNITY</div>
             <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment" target="_blank" style="display:block; background:#000; color:#fff; text-align:center; padding:12px; margin-top:10px; text-decoration:none; font-weight:900;">JOIN GROUP</a>
         </div>
 
