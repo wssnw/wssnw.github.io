@@ -3,508 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | Legacy Edition</title>
+    <title>Foggy Fights | Golden Hour Legacy</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- GLOBAL VARIABLES & THEME --- */
         :root {
-            --gold: #ffb347;
-            --deep-gold: #e69526;
-            --glass-bg: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --glow: rgba(255, 179, 71, 0.4);
-            --transition-slow: 3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-med: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            --gold-primary: #ffb347;
+            --gold-bright: #ffd194;
+            --gold-deep: #8b5a00;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --sunset-orange: rgba(255, 100, 0, 0.2);
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
         body, html {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            font-family: 'Syne', sans-serif;
-            color: #fff;
-            overflow: hidden;
-            user-select: none;
+            width: 100%; height: 100%;
+            background: #080500; font-family: 'Syne', sans-serif;
+            color: #fff; overflow: hidden; user-select: none;
         }
 
-        /* --- BACKGROUND ENGINE --- */
-        #main-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            pointer-events: none;
-            mix-blend-mode: screen;
+        /* --- THE GOLDEN HOUR ENGINE --- */
+        .atmosphere {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3; pointer-events: none;
+            background: radial-gradient(circle at 80% 20%, rgba(255, 180, 50, 0.15) 0%, transparent 60%),
+                        linear-gradient(to bottom, transparent, rgba(139, 90, 0, 0.2));
         }
+
+        .sun-flare {
+            position: fixed; top: -10%; right: -10%; width: 60%; height: 60%;
+            background: radial-gradient(circle, rgba(255, 200, 100, 0.2) 0%, transparent 70%);
+            z-index: 4; filter: blur(60px); animation: flarePulse 10s infinite alternate;
+        }
+
+        @keyframes flarePulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.2); opacity: 0.8; } }
 
         .background-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)), 
-                        url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover;
-            z-index: 1;
-            filter: sepia(0.35) saturate(1.3) brightness(0.9);
-            transform: scale(1.1);
-            transition: transform var(--transition-slow), filter var(--transition-slow);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('IMG_3002.jpeg') center/cover no-repeat;
+            z-index: 1; filter: sepia(0.5) saturate(1.5) brightness(0.8) contrast(1.1);
+            transform: scale(1.05); transition: 4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .golden-tint {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(255, 179, 71, 0.15) 0%, transparent 75%);
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* --- LOGO ANIMATION (METALLIC SWEEP) --- */
-        .logo-container {
-            text-align: center;
-            z-index: 10;
-            margin-bottom: 2rem;
-        }
+        /* --- THE "FULL" METALLIC LOGO --- */
+        .logo-wrapper { perspective: 1000px; margin-bottom: 40px; z-index: 10; }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4rem, 15vw, 10rem);
-            background: linear-gradient(90deg, #fff 0%, var(--gold) 25%, #fff 50%, var(--gold) 75%, #fff 100%);
-            background-size: 300% auto;
+            font-size: clamp(4.5rem, 18vw, 11rem);
+            color: var(--gold-primary);
+            position: relative;
+            background: linear-gradient(to bottom, #fff 20%, var(--gold-primary) 45%, var(--gold-deep) 55%, var(--gold-bright) 85%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: textShine 4s linear infinite, float 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px var(--glow));
-            line-height: 1;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            filter: drop-shadow(0 0 2px rgba(0,0,0,1)) 
+                    drop-shadow(0 10px 15px rgba(0,0,0,0.5))
+                    drop-shadow(0 0 30px var(--sunset-orange));
+            animation: float 5s ease-in-out infinite, metallicSweep 4s linear infinite;
+            background-size: 200% auto;
         }
 
-        @keyframes textShine {
-            0% { background-position: 0% center; }
-            100% { background-position: 300% center; }
+        @keyframes metallicSweep {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-25px) rotate(1deg); }
+        @keyframes float { 
+            0%, 100% { transform: translateY(0) rotateX(10deg); } 
+            50% { transform: translateY(-20px) rotateX(15deg); } 
         }
 
-        /* --- GLASS BUTTON SYSTEM --- */
-        .ui-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            position: relative;
-            z-index: 20;
-            transition: opacity 1.5s ease;
-        }
+        /* --- GLASS BUTTONS --- */
+        .btn-container { z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 25px; }
 
-        .glass-button {
-            position: relative;
-            padding: 24px 80px;
-            font-weight: 900;
+        .glass-btn {
             background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border);
+            padding: 22px 70px;
+            font-size: 15px;
+            font-weight: 900;
             color: #fff;
-            border-radius: 4px; /* Sharp nostalgic edges */
-            cursor: pointer;
-            letter-spacing: 6px;
             text-transform: uppercase;
-            font-size: 14px;
-            transition: all 0.5s var(--transition-med);
+            letter-spacing: 5px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.4s;
+            position: relative;
             overflow: hidden;
         }
 
-        .glass-button::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.6s;
+        .glass-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
         }
 
-        .glass-button:hover {
-            border-color: var(--gold);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 40px rgba(255, 179, 71, 0.3);
-            transform: translateY(-5px);
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 50px rgba(255, 179, 71, 0.4);
+            transform: translateY(-5px) scale(1.02);
         }
 
-        .glass-button:hover::after {
-            left: 100%;
-        }
+        .glass-btn:hover::before { left: 100%; }
 
-        /* --- SOCIALS (CORRECTED ICONS) --- */
-        .social-bar {
-            display: flex;
-            gap: 40px;
-            margin-top: 50px;
-        }
-
-        .social-icon {
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            transition: var(--transition-med);
+        /* --- ROBLOX & SOCIALS --- */
+        .socials { display: flex; gap: 35px; margin-top: 40px; }
+        .icon { 
+            width: 45px; cursor: pointer; transition: 0.3s; 
             filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
         }
+        .icon:hover { transform: scale(1.2) rotate(5deg); filter: drop-shadow(0 0 20px var(--gold-primary)); }
+        .roblox-logo { filter: invert(1) brightness(2); }
 
-        .social-icon:hover {
-            transform: scale(1.3) rotate(8deg);
-            filter: drop-shadow(0 0 20px var(--gold));
+        /* --- LEGACY PAGE --- */
+        .legacy-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(30, 15, 0, 0.9), #000);
+            z-index: 1000; display: none; opacity: 0; transition: 2s;
+            overflow-y: auto; padding: 60px 20px; flex-direction: column; align-items: center;
         }
 
-        .roblox-silver {
-            filter: invert(1) brightness(1.5) drop-shadow(0 0 8px rgba(255,255,255,0.5));
+        .polaroid-frame {
+            background: #fdfdfd; padding: 15px 15px 50px 15px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            width: 320px; cursor: zoom-in; margin: 20px;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.6s;
+            transform: rotate(var(--r));
         }
 
-        /* --- LEGACY PAGE (THE HEART) --- */
-        .legacy-view {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.95)), 
-                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
-            background-size: cover;
-            display: none;
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 80px 20px;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 2s ease;
-        }
-
-        .memory-track {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 60px;
-        }
-
-        .polaroid {
-            background: #fffef5;
-            padding: 15px 15px 55px 15px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            width: 320px;
-            cursor: zoom-in;
-            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-            animation: slowDrift 12s infinite alternate ease-in-out;
-            position: relative;
-        }
-
-        .polaroid img {
-            width: 100%;
-            height: auto;
-            filter: sepia(0.2) contrast(1.1);
-            pointer-events: none;
-        }
-
-        .polaroid p {
-            color: #333;
-            font-family: 'Dancing Script', cursive;
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.5rem;
-            pointer-events: none;
-        }
-
-        .polaroid.active {
-            position: fixed;
-            top: 50%;
-            left: 50%;
+        .polaroid-frame.zoomed {
+            position: fixed; top: 50%; left: 50%; 
             transform: translate(-50%, -50%) scale(1.8) rotate(0deg) !important;
-            z-index: 5000;
-            cursor: zoom-out;
-            animation: none;
+            z-index: 2000; cursor: zoom-out; box-shadow: 0 0 100px rgba(0,0,0,1);
         }
 
-        @keyframes slowDrift {
-            from { transform: rotate(-3deg) translateY(0); }
-            to { transform: rotate(3deg) translateY(-30px); }
+        .polaroid-frame img { width: 100%; filter: contrast(1.1) sepia(0.2); }
+        .polaroid-frame p { 
+            color: #222; font-family: 'Dancing Script'; text-align: center; 
+            font-size: 1.6rem; margin-top: 15px; 
         }
 
-        .legacy-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(40px);
-            border: 1px solid var(--glass-border);
-            padding: 50px;
-            border-radius: 2px;
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        /* --- AI --- */
+        .ai-core {
+            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px;
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border-radius: 50%; border: 1px solid var(--gold-primary);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 3000; transition: 0.4s;
+        }
+        .ai-core:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--gold-primary); }
+        
+        .ai-box {
+            position: fixed; bottom: 100px; left: 30px; width: 300px;
+            background: rgba(15, 10, 0, 0.95); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            padding: 20px; display: none; z-index: 3000; flex-direction: column; gap: 10px;
         }
 
-        /* --- AI ASSISTANT --- */
-        .ai-sphere {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 65px;
-            height: 65px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 2000;
-            font-size: 26px;
-            transition: 0.5s;
-            box-shadow: 0 0 20px var(--glow);
-        }
-
-        .ai-sphere:hover {
-            transform: scale(1.15) rotate(15deg);
-            background: var(--gold);
-            color: #000;
-        }
-
-        .ai-panel {
-            position: fixed;
-            bottom: 110px;
-            right: 30px;
-            width: 320px;
-            background: rgba(10,10,10,0.95);
-            backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 25px;
-            display: none;
-            z-index: 2000;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,1);
-        }
-
-        #ai-output {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #ddd;
-            min-height: 60px;
-        }
-
-        .ai-input {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            padding: 12px;
-            color: #fff;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-
-        .ai-input:focus {
-            border-color: var(--gold);
-            outline: none;
-        }
-
-        /* --- SCREEN BLUR FOR ZOOM --- */
-        .zoom-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 4000;
-            display: none;
-            opacity: 0;
-            transition: 0.5s;
-        }
-
+        input { background: transparent; border: 1px solid var(--gold-primary); color: #fff; padding: 10px; border-radius: 5px; outline: none; }
     </style>
 </head>
 <body>
 
-    <canvas id="main-canvas"></canvas>
-    <div class="golden-tint"></div>
+    <div class="atmosphere"></div>
+    <div class="sun-flare"></div>
     <div class="background-layer" id="bg-main"></div>
-    <div class="zoom-overlay" id="zoom-bg"></div>
 
-    <div class="ai-sphere" onclick="toggleAI()">✨</div>
-    <div class="ai-panel" id="ai-panel">
-        <div style="font-weight: 900; color: var(--gold); letter-spacing: 2px; font-size: 12px;">FOGGY ASSISTANT</div>
-        <div id="ai-output">Hello. I am here to preserve the memories of Foggy Fights. What would you like to know?</div>
-        <input type="text" class="ai-input" id="ai-input" placeholder="Ask about the release date..." onkeypress="handleAI(event)">
-    </div>
-
-    <div class="ui-container" id="hero-section">
-        <div class="logo-container">
+    <div class="ui-container btn-container" id="home" style="height: 100vh; justify-content: center; display: flex;">
+        <div class="logo-wrapper">
             <h1 class="main-logo">Foggy Fights</h1>
         </div>
         
-        <button class="glass-button" onclick="transitionToLegacy()">Enter the Fog</button>
+        <button class="glass-btn" onclick="openLegacy()">Enter the Fog</button>
         
-        <div class="social-bar">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="social-icon" onclick="alert('Discord Coming Soon!')" alt="Discord">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="social-icon roblox-silver" onclick="window.open('https://www.roblox.com/communities/35978868')" alt="Roblox">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="social-icon" onclick="alert('TikTok Coming Soon!')" alt="TikTok">
+        <div class="socials">
+            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="icon" onclick="alert('Discord Soon!')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" class="icon roblox-logo" onclick="window.open('https://www.roblox.com/communities/35978868')">
+            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="icon" onclick="alert('TikTok Soon!')">
         </div>
     </div>
 
-    <div class="legacy-view" id="legacy-section">
-        <div class="memory-track">
-            <div class="polaroid" onclick="zoomIn(this)">
+    <div class="ai-core" onclick="toggleAI()">📜</div>
+    <div class="ai-box" id="ai-box">
+        <p style="color: var(--gold-primary); font-weight: 900; font-size: 12px;">FOGGY CHRONICLES</p>
+        <p id="ai-text" style="font-size: 13px;">What memory shall we recover today?</p>
+        <input type="text" id="ai-input" placeholder="Ask about 2028..." onkeypress="handleAI(event)">
+    </div>
+
+    <div class="legacy-screen" id="legacy">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; width: 100%;">
+            <div class="polaroid-frame" style="--r: -3deg;" onclick="zoom(this)">
                 <img src="Screenshot_22.png">
-                <p>The 2025 Vision</p>
+                <p>The First Spark</p>
             </div>
-            <div class="polaroid" style="animation-delay: -6s;" onclick="zoomIn(this)">
+            <div class="polaroid-frame" style="--r: 4deg;" onclick="zoom(this)">
                 <img src="RobloxScreenShot20260302_213405110.png">
-                <p>Golden Hour Build</p>
+                <p>Golden Era Dev</p>
             </div>
         </div>
 
-        <div class="legacy-card">
-            <h2 style="font-family:'Dancing Script'; font-size: 4rem; color: var(--gold); margin-bottom: 20px;">The Legacy</h2>
-            <p style="font-size: 18px; line-height: 2.2; color: #ccc;">
-                This game was inspired by a game that I played called <b style="color:var(--gold);">Da Hood</b>.<br><br>
-                I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026.<br><br>
-                And now it's probably going to get released in <b style="color:var(--gold);">2028</b> since I'm busy with life.
+        <div style="background: var(--glass-bg); padding: 40px; max-width: 700px; margin-top: 40px; border: 1px solid var(--glass-border); text-align: center;">
+            <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold-primary);">The Solo Journey</h2>
+            <p style="line-height: 2; color: #ddd; margin-top: 20px;">
+                Inspired by the grit of <b>Da Hood</b>. A solo vision born in 2025. 
+                Though life has moved the clocks, the fog will finally settle in <b>2028</b>.
             </p>
-            <button class="glass-button" onclick="location.reload()" style="margin-top: 50px;">Return Home</button>
+            <button class="glass-btn" style="margin-top: 30px;" onclick="location.reload()">Return Home</button>
         </div>
-        <div style="height: 100px;"></div>
     </div>
 
     <script>
-        /* --- PARTICLE & SOUND ENGINE --- */
-        const canvas = document.getElementById('main-canvas');
-        const ctx = canvas.getContext('2d');
         const paperSound = new Audio('https://www.soundjay.com/misc/sounds/paper-turn-1.mp3');
-        let particles = [];
-        let isActive = false;
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = canvas.width / 2;
-                this.y = canvas.height / 2;
-                this.angle = Math.random() * Math.PI * 2;
-                this.velocity = Math.random() * 4 + 2;
-                this.life = 1;
-                this.size = Math.random() * 80 + 20;
-            }
-            update() {
-                this.x += Math.cos(this.angle) * this.velocity;
-                this.y += Math.sin(this.angle) * this.velocity;
-                this.life -= 0.005;
-            }
-            draw() {
-                ctx.beginPath();
-                let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                grad.addColorStop(0, `rgba(255, 179, 71, ${this.life * 0.3})`);
-                grad.addColorStop(1, 'transparent');
-                ctx.fillStyle = grad;
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function animate() {
-            if (!isActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (particles.length < 40) particles.push(new Particle());
-            particles.forEach((p, i) => {
-                p.update();
-                p.draw();
-                if (p.life <= 0) particles.splice(i, 1);
-            });
-            requestAnimationFrame(animate);
-        }
-
-        /* --- UI CONTROLLERS --- */
-        function transitionToLegacy() {
-            isActive = true;
-            animate();
-            
+        function openLegacy() {
             const bg = document.getElementById('bg-main');
-            const hero = document.getElementById('hero-section');
-            const legacy = document.getElementById('legacy-section');
+            const home = document.getElementById('home');
+            const leg = document.getElementById('legacy');
 
-            bg.style.transform = "scale(120) rotate(20deg)";
-            bg.style.filter = "brightness(50) blur(100px) sepia(1)";
-            hero.style.opacity = "0";
+            bg.style.transform = "scale(150) rotate(30deg)";
+            bg.style.filter = "brightness(40) blur(100px) sepia(1)";
+            home.style.opacity = "0";
 
             setTimeout(() => {
-                hero.style.display = 'none';
-                legacy.style.display = 'flex';
-                setTimeout(() => { legacy.style.opacity = "1"; }, 100);
+                home.style.display = 'none';
+                leg.style.display = 'flex';
+                setTimeout(() => leg.style.opacity = "1", 100);
             }, 3000);
         }
 
-        function zoomIn(el) {
-            const overlay = document.getElementById('zoom-bg');
-            if (!el.classList.contains('active')) {
-                paperSound.currentTime = 0;
-                paperSound.play();
-                overlay.style.display = 'block';
-                setTimeout(() => overlay.style.opacity = '1', 10);
-                el.classList.add('active');
-            } else {
-                overlay.style.opacity = '0';
-                setTimeout(() => overlay.style.display = 'none', 500);
-                el.classList.remove('active');
-            }
+        function zoom(el) {
+            paperSound.currentTime = 0;
+            paperSound.play();
+            el.classList.toggle('zoomed');
         }
 
-        /* --- AI LOGIC --- */
         function toggleAI() {
-            const panel = document.getElementById('ai-panel');
-            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+            const box = document.getElementById('ai-box');
+            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
         }
 
         function handleAI(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('ai-input');
-                const output = document.getElementById('ai-output');
-                const query = input.value.toLowerCase();
-
-                output.style.opacity = '0.5';
-                
-                setTimeout(() => {
-                    if (query.includes('release')) {
-                        output.innerText = "The fog is currently scheduled to settle in 2028. High quality takes time.";
-                    } else if (query.includes('hood')) {
-                        output.innerText = "Da Hood was the core inspiration for the atmosphere and grit of Foggy Fights.";
-                    } else if (query.includes('who')) {
-                        output.innerText = "You are witnessing the solo journey of a developer dedicated to the craft since 2025.";
-                    } else {
-                        output.innerText = "The fog doesn't have an answer for that yet. Ask about the release or inspiration.";
-                    }
-                    output.style.opacity = '1';
-                }, 400);
-                
-                input.value = "";
+            if(e.key === 'Enter') {
+                const q = e.target.value.toLowerCase();
+                const out = document.getElementById('ai-text');
+                if(q.includes('release')) out.innerText = "The grand release is written for 2028.";
+                else if(q.includes('hood')) out.innerText = "Da Hood was our foundation and spark.";
+                else out.innerText = "The fog is too thick to see that answer yet.";
+                e.target.value = "";
             }
         }
     </script>
