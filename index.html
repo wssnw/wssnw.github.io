@@ -10,17 +10,11 @@
             --neon-pink: #ff2d95; 
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
-            --white-glow: rgba(255, 255, 255, 0.9);
             --paper: #fdfaf0;
             --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
         }
 
-        /* --- core reset, stop looking at my code skid --- */
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-            touch-action: manipulation; 
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
         body, html {
             margin: 0; padding: 0;
@@ -31,32 +25,37 @@
             overflow: hidden;
         }
 
-        /* --- bg engine ig --- */
+        /* --- Live Clock Section --- */
+        #live-clock {
+            position: fixed; top: 20px; right: 20px;
+            font-family: 'Inter', sans-serif; font-weight: 900;
+            font-size: 1.3rem; z-index: 5000;
+            letter-spacing: 2px;
+            animation: rgbText 5s linear infinite;
+        }
+
+        @keyframes rgbText {
+            0%, 100% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+            33% { color: #00f2ff; text-shadow: 0 0 10px #00f2ff; }
+            66% { color: #48ff00; text-shadow: 0 0 10px #48ff00; }
+        }
+
+        /* --- Background Engine --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
                         url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover;
-            z-index: 1; transform: scale(1.05);
-            transition: transform 7s cubic-bezier(0.22, 1, 0.36, 1), filter 5s ease;
+            background-size: cover; z-index: 1; transform: scale(1.05);
+            transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1), filter 3s ease;
         }
 
-        /* --- sakura --- */
+        /* --- Sakura Physics --- */
         .leaf {
             position: fixed; top: -10%; z-index: 5;
             width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
-            pointer-events: auto;
-            animation: fallSway linear infinite;
-            opacity: 0.8;
-            transition: filter 0.3s, transform 0.3s;
-            cursor: pointer;
-        }
-
-        .leaf.clicked {
-            filter: brightness(2) drop-shadow(0 0 15px white);
-            transform: scale(2.5) rotate(45deg) !important;
+            animation: fallSway linear infinite; opacity: 0.8;
         }
 
         @keyframes fallSway {
@@ -65,148 +64,71 @@
             100% { transform: translateY(110vh) rotate(720deg) translateX(120px); opacity: 0; }
         }
 
-        /* --- titles n rgb glow --- */
-        .main-logo, .glow-header {
-            font-family: 'Dancing Script', cursive;
-            color: white;
-            text-align: center;
-            animation: rgbPulse 5s linear infinite;
-        }
-
+        /* --- Typography --- */
         .main-logo {
+            font-family: 'Dancing Script', cursive;
             font-size: clamp(3.8rem, 16vw, 11rem);
             animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
-            margin: 0;
-            z-index: 10;
+            margin: 0; z-index: 10;
         }
 
         @keyframes rgbPulse {
-            0%, 100% { filter: drop-shadow(0 0 15px #ff0000) drop-shadow(0 0 30px var(--neon-pink)); }
-            33% { filter: drop-shadow(0 0 15px #00f2ff) drop-shadow(0 0 30px #7000ff); }
-            66% { filter: drop-shadow(0 0 15px #48ff00) drop-shadow(0 0 30px #fffb00); }
+            0%, 100% { filter: drop-shadow(0 0 15px #ff0000); }
+            33% { filter: drop-shadow(0 0 15px #00f2ff); }
+            66% { filter: drop-shadow(0 0 15px #48ff00); }
         }
 
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- diary --- */
+        /* --- Layout & Cards --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(2, 0, 8, 0.85);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            display: none; z-index: 1000;
-            overflow-y: scroll; padding: 60px 20px;
-            flex-direction: column; align-items: center;
-            opacity: 0; transition: opacity 1s ease;
-        }
-
-        .diary-stack {
-            width: 100%; max-width: 450px;
-            display: flex; flex-direction: column; gap: 45px;
-            margin-bottom: 50px;
+            background: rgba(2, 0, 8, 0.88); backdrop-filter: blur(30px);
+            display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
+            flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
         }
 
         .diary-card {
-            position: relative; 
-            background: var(--paper); 
-            padding: 15px 15px 60px 15px;
-            width: 100%;
-            /* heavy glow shii */
-            box-shadow: var(--heaven-glow);
-            transform: rotate(-1.5deg);
-            animation: diaryEntry 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative; background: var(--paper); padding: 15px 15px 60px 15px;
+            box-shadow: var(--heaven-glow); transform: rotate(-1.5deg);
+            margin-bottom: 50px; width: 100%; max-width: 450px;
+            transition: 0.3s;
         }
-        .diary-card:nth-child(even) { transform: rotate(2deg); }
 
-        @keyframes diaryEntry {
-            from { opacity: 0; transform: translateY(100px) rotate(10deg); }
-            to { opacity: 1; transform: translateY(0) rotate(-1.5deg); }
-        }
+        .diary-card:hover { transform: rotate(0deg) scale(1.02); }
 
         .tape {
             position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
             background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
-            box-shadow: 0 0 15px var(--neon-pink);
-            z-index: 5;
+            box-shadow: 0 0 15px var(--neon-pink); z-index: 5;
         }
 
-        .img-box { 
-            width: 100%; aspect-ratio: 16/9; background: #111; 
-            overflow: hidden; border: 1px solid rgba(0,0,0,0.1);
-        }
+        .img-box { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .diary-label {
-            color: #222; font-family: 'Syne', sans-serif;
-            font-size: 1.2rem; text-align: center; margin-top: 20px;
-            font-weight: 800; letter-spacing: 1px;
-        }
-
-        /* --- glowing buttons --- */
         .btn-fancy {
             margin: 10px; padding: 18px 40px; border: 2px solid white;
             background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
-            letter-spacing: 5px; font-weight: 900; transition: 0.4s;
-            backdrop-filter: blur(5px); text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            letter-spacing: 5px; font-weight: 900; text-transform: uppercase;
+            backdrop-filter: blur(5px); transition: 0.4s;
         }
-        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 40px white; }
+        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
 
-        .btn-play {
-            display: block; width: 100%; background: #000; color: white;
-            padding: 14px; margin-top: 15px; text-decoration: none;
-            text-align: center; font-weight: 900; letter-spacing: 2px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: 0.3s;
-        }
-        .btn-play:hover { 
-            background: var(--neon-pink); 
-            box-shadow: 0 0 25px var(--neon-pink);
-        }
-
-        /* --- legacy / history glow --- */
         .legacy-text {
-            font-size: clamp(1.2rem, 4vw, 1.8rem);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.8;
-            color: #fff;
-            /* glowing text */
-            text-shadow: 0 0 10px rgba(255,255,255,0.5), 0 0 20px var(--neon-pink);
+            font-size: 1.4rem; font-family: 'Inter', sans-serif; line-height: 1.8;
+            text-shadow: 0 0 15px var(--neon-pink); text-align: center;
             animation: textBreath 3s ease-in-out infinite;
         }
 
-        @keyframes textBreath {
-            0%, 100% { opacity: 0.9; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-            50% { opacity: 1; text-shadow: 0 0 20px var(--neon-pink), 0 0 40px #00f2ff; }
-        }
+        @keyframes textBreath { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 
-        .made-by {
-            font-size: 0.7rem;
-            opacity: 0.4;
-            margin-top: 20px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .hero {
-            position: relative; z-index: 10; height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 1.5s ease;
-        }
-
-        @media (max-width: 600px) {
-            .diary-stack { max-width: 90%; }
-            .btn-fancy { width: 85%; }
-            .main-logo { font-size: 4rem; }
-        }
-
-        #story { display: none; }
+        .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
+        .made-by { font-size: 0.7rem; opacity: 0.4; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
+    <div id="live-clock">00:00:00</div>
     <div class="bg-img" id="bg"></div>
     <div id="leaf-container"></div>
 
@@ -217,109 +139,103 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="glow-header" style="font-size: 3.5rem; letter-spacing: 10px; margin-bottom: 50px;">MEMORIES</h2>
+        <h2 class="main-logo" style="font-size: 3.5rem; margin-bottom: 40px;">MEMORIES</h2>
         
-        <div class="diary-stack">
-            <div class="diary-card" style="animation-delay: 0.1s;">
-                <div class="tape"></div>
-                <div class="img-box">
-                    <img src="Screenshot_22.png" alt="Progress shot">
-                </div>
-                <div class="diary-label">11/08/2025</div>
-            </div>
-
-            <div class="diary-card" style="animation-delay: 0.2s; transform: rotate(2deg);">
-                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
-                <div class="img-box">
-                    <img src="RobloxScreenShot20260302_213405110.png" alt="Progress shot">
-                </div>
-                <div class="diary-label">9/07/2025</div>
-            </div>
-
-            <div class="diary-card" style="animation-delay: 0.3s; transform: rotate(3deg);">
-                <div class="tape" style="background: #00f2ff; box-shadow: 0 0 15px #00f2ff;"></div>
-                <div class="img-box">
-                    <img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp" alt="Group Icon" style="object-fit: contain; background: #fff; padding: 10px;">
-                </div>
-                <div class="diary-label">THE COMMUNITY</div>
-                <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment#!/about" target="_blank" class="btn-play">JOIN GROUP</a>
-            </div>
-
-            <div class="diary-card" style="animation-delay: 0.5s; transform: rotate(-2deg);">
-                <div class="tape" style="background: #fffb00; box-shadow: 0 0 15px #fffb00;"></div>
-                <div class="img-box"><img src="Screenshot_28.png" alt="Development"></div>
-                <div class="diary-label">08/15/25 - Progress</div>
-            </div>
+        <div class="diary-card">
+            <div class="tape"></div>
+            <div class="img-box"><img src="Screenshot_22.png"></div>
+            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900; letter-spacing:1px;">THE BEGINNING</div>
         </div>
 
-        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5; box-shadow:none;" onclick="backToHome()">BACK</button>
-        <div class="made-by">made by wssnw</div>
+        <div class="diary-card" style="transform: rotate(2deg);">
+            <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
+            <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp"></div>
+            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">COMMUNITY HUB</div>
+            <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment" target="_blank" style="display:block; background:#000; color:#fff; text-align:center; padding:12px; margin-top:10px; text-decoration:none; font-weight:900;">JOIN GROUP</a>
+        </div>
+
+        <button class="btn-fancy" onclick="openStory()">THE STORY</button>
+        <button class="btn-fancy" onclick="openWorld()">EXPLORE WORLD</button>
+        <button class="btn-fancy" style="border:none; opacity:0.5;" onclick="backToHome()">BACK</button>
     </div>
 
     <div class="heaven-logs" id="story">
-        <div style="max-width: 800px; text-align: center; padding: 20px;">
-            <h1 class="glow-header" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 30px;">THE LEGACY</h1>
-            <div class="legacy-text">
-                This game was inspired from a game that i played called da hood.<br><br>
-                i started this at 13-14 alone and tried to release the game in 2025 but it took alot of time so i set it to 2026<br><br>
-                and now its probably going to get released in 2028 since im busy with life.
-            </div>
-            
-            <button class="btn-fancy" style="margin-top:60px" onclick="backToLogs()">BACK TO DIARY</button>
-            <div class="made-by" style="margin-top:40px">made by wssnw</div>
+        <h1 class="main-logo" style="font-size: 3.5rem;">THE LEGACY</h1>
+        <div class="legacy-text" style="max-width: 700px; padding: 20px;">
+            Inspired by the gritty streets of Da Hood. <br><br>
+            I started this journey alone at 13. Releasing was the plan for 2025, then 2026... <br><br>
+            Life moves fast. Now, the fog clears in 2028. The grind never stops.
         </div>
+        <button class="btn-fancy" style="margin-top:50px;" onclick="backToLogs()">BACK TO DIARY</button>
+    </div>
+
+    <div class="heaven-logs" id="world">
+        <h1 class="main-logo" style="font-size: 3.5rem;">THE FOG</h1>
+        
+        <div class="diary-card">
+            <div class="tape" style="background:#48ff00; box-shadow:0 0 15px #48ff00;"></div>
+            <div class="img-box"><img src="Screenshot_28.png"></div>
+            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">UPHILL DISTRICT</div>
+        </div>
+
+        <div class="diary-card" style="transform: rotate(-2deg);">
+            <div class="tape" style="background:#fffb00; box-shadow:0 0 15px #fffb00;"></div>
+            <div style="height:200px; background:#111; display:flex; align-items:center; justify-content:center; font-weight:900; color: #555;">[ REDACTED ]</div>
+            <div style="color:#222; text-align:center; margin-top:15px; font-weight:900;">CENTRAL BANK</div>
+        </div>
+
+        <button class="btn-fancy" onclick="backToLogs()">BACK</button>
     </div>
 
     <script>
-        const leafContainer = document.getElementById('leaf-container');
-        
+        // 1. Live Clock Engine
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-GB', { hour12: false });
+            document.getElementById('live-clock').innerText = time;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 2. Sakura Engine
         function createLeaf() {
             if (document.hidden) return;
             const leaf = document.createElement('div');
             leaf.classList.add('leaf');
             leaf.style.left = Math.random() * 100 + 'vw';
-            const size = (Math.random() * 10 + 15) + 'px';
-            leaf.style.width = size;
-            leaf.style.height = (parseFloat(size) * 1.2) + 'px';
             leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            leafContainer.appendChild(leaf);
+            document.getElementById('leaf-container').appendChild(leaf);
             setTimeout(() => leaf.remove(), 10000);
         }
-        setInterval(createLeaf, 500);
+        setInterval(createLeaf, 600);
 
+        // 3. Navigation Engine
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.2) rotate(5deg)";
-            document.getElementById('bg').style.filter = "brightness(4) blur(40px)";
+            document.getElementById('bg').style.transform = "scale(2.5) rotate(5deg)";
+            document.getElementById('bg').style.filter = "brightness(3) blur(30px)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
-                const logs = document.getElementById('logs');
-                logs.style.display = 'flex';
-                setTimeout(() => logs.style.opacity = "1", 50);
-            }, 2000);
+                const l = document.getElementById('logs');
+                l.style.display = 'flex';
+                setTimeout(() => l.style.opacity = "1", 50);
+            }, 1200);
         }
 
-        function openStory() {
-            const logs = document.getElementById('logs');
-            logs.style.opacity = "0";
-            setTimeout(() => {
-                logs.style.display = 'none';
-                const story = document.getElementById('story');
-                story.style.display = 'flex';
-                setTimeout(() => story.style.opacity = "1", 50);
-            }, 800);
+        function openStory() { switchSection('logs', 'story'); }
+        function openWorld() { switchSection('logs', 'world'); }
+        
+        function backToLogs() { 
+            document.getElementById('story').style.display = 'none';
+            document.getElementById('world').style.display = 'none';
+            document.getElementById('logs').style.display = 'flex';
         }
 
-        function backToLogs() {
-            const story = document.getElementById('story');
-            story.style.opacity = "0";
-            setTimeout(() => {
-                story.style.display = 'none';
-                const logs = document.getElementById('logs');
-                logs.style.display = 'flex';
-                setTimeout(() => logs.style.opacity = "1", 50);   
-            }, 800);
+        function switchSection(oldId, newId) {
+            document.getElementById(oldId).style.display = 'none';
+            const n = document.getElementById(newId);
+            n.style.display = 'flex';
+            setTimeout(() => n.style.opacity = "1", 50);
         }
 
         function backToHome() {
