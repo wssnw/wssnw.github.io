@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Foggy Fights | 2028</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { 
             --neon-pink: #ff2d95; 
@@ -39,7 +39,6 @@
             66% { color: #48ff00; text-shadow: 0 0 10px #48ff00; }
         }
 
-        /* --- Reverted Main Background --- */
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
@@ -69,6 +68,20 @@
             margin: 0; z-index: 10;
         }
 
+        /* --- New Section Titles --- */
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #fff 40%, #555);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+        }
+
         @keyframes rgbPulse {
             0%, 100% { filter: drop-shadow(0 0 15px #ff0000); }
             33% { filter: drop-shadow(0 0 15px #00f2ff); }
@@ -77,26 +90,35 @@
 
         @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- Better Background in Memory Section --- */
+        /* --- Memories/Legacy Effects --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(2, 0, 8, 0.8), rgba(2, 0, 8, 0.95)), 
+            background: linear-gradient(rgba(2, 0, 8, 0.7), rgba(2, 0, 8, 0.9)), 
                         url('https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?q=80&w=1974&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            backdrop-filter: blur(20px);
             display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
             flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
+        }
+
+        /* Scanline Effect Overlay */
+        .heaven-logs::before {
+            content: " ";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none; z-index: 10;
         }
 
         .diary-card {
             position: relative; background: var(--paper); padding: 15px 15px 60px 15px;
             box-shadow: var(--heaven-glow); transform: rotate(-1.5deg);
             margin-bottom: 50px; width: 100%; max-width: 450px;
-            transition: 0.3s;
+            transition: 0.3s; z-index: 5;
         }
 
-        .diary-card:hover { transform: rotate(0deg) scale(1.05); }
+        .diary-card:hover { transform: rotate(0deg) scale(1.05); filter: brightness(1.1); }
 
         .tape {
             position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
@@ -107,24 +129,25 @@
         .img-box { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- Better Memory Text --- */
         .diary-label {
             color: #111; text-align: center; margin-top: 20px; 
             font-weight: 900; letter-spacing: 2px; font-size: 1.2rem;
-            text-transform: uppercase; font-family: 'Syne', sans-serif;
+            text-transform: uppercase;
         }
 
         .btn-fancy {
             margin: 10px; padding: 18px 40px; border: 2px solid white;
             background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
             letter-spacing: 5px; font-weight: 900; text-transform: uppercase;
-            backdrop-filter: blur(5px); transition: 0.4s;
+            backdrop-filter: blur(5px); transition: 0.4s; z-index: 20;
         }
         .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
 
         .legacy-text {
             font-size: 1.4rem; font-family: 'Inter', sans-serif; line-height: 1.8;
-            text-shadow: 0 0 15px var(--neon-pink); text-align: center;
+            text-shadow: 0 0 15px rgba(255, 45, 149, 0.4); text-align: center;
+            background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
         }
 
         .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
@@ -144,7 +167,7 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="main-logo" style="font-size: 3.5rem; margin-bottom: 40px;">MEMORIES</h2>
+        <h2 class="section-title">Memories</h2>
         
         <div class="diary-card">
             <div class="tape"></div>
@@ -170,8 +193,8 @@
     </div>
 
     <div class="heaven-logs" id="story">
-        <h1 class="main-logo" style="font-size: 3.5rem;">THE LEGACY</h1>
-        <div class="legacy-text" style="max-width: 700px; padding: 20px;">
+        <h1 class="section-title">The Legacy</h1>
+        <div class="legacy-text" style="max-width: 700px;">
             This game was inspired from a game that I played called da hood.<br><br>
             I started this at alone and tried to release the game in 2025 but it took alot of time so I set it to 2026<br><br>
             and now its probably going to get released in 2028 since im busy with life.
