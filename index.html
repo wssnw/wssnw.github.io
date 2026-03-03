@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | 2028</title>
+    <title>Foggy Fights | Summer '28</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --neon-pink: #ff2d95; 
+            --sun-glow: #ffd7b5;
             --sakura-light: #ffd1dc;
             --sakura-deep: #ffb7c5;
-            --paper: #fdfaf0;
-            --heaven-glow: 0 0 20px rgba(255, 45, 149, 0.6), 0 0 40px rgba(0, 242, 255, 0.4);
+            --polaroid-white: #ffffff;
+            --nostalgia-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
@@ -19,29 +19,32 @@
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            background: #020008;
+            background: #f4e9d8;
             font-family: 'Syne', sans-serif;
-            color: white;
+            color: #4a3f35;
             overflow: hidden;
+        }
+
+        /* Retro Film Grain Effect */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/film-grain.png');
+            opacity: 0.12; pointer-events: none; z-index: 9999;
         }
 
         #live-clock {
             position: fixed; top: 20px; right: 20px;
             font-family: 'Inter', sans-serif; font-weight: 900;
-            font-size: 1.3rem; z-index: 5000;
+            font-size: 1.1rem; z-index: 5000;
             letter-spacing: 2px;
-            animation: rgbText 5s linear infinite;
-        }
-
-        @keyframes rgbText {
-            0%, 100% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
-            33% { color: #00f2ff; text-shadow: 0 0 10px #00f2ff; }
-            66% { color: #48ff00; text-shadow: 0 0 10px #48ff00; }
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
         .bg-img {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(2,0,8,0.4), rgba(2,0,8,0.9)), 
+            background: linear-gradient(to bottom, rgba(255, 215, 181, 0.2), rgba(0,0,0,0.5)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1; transform: scale(1.05);
             transition: transform 3s cubic-bezier(0.22, 1, 0.36, 1), filter 3s ease;
@@ -52,7 +55,7 @@
             width: 18px; height: 22px;
             background: linear-gradient(135deg, var(--sakura-light), var(--sakura-deep));
             clip-path: polygon(50% 15%, 70% 0%, 100% 20%, 90% 60%, 50% 100%, 10% 60%, 0% 20%, 30% 0%);
-            animation: fallSway linear infinite; opacity: 0.8;
+            animation: fallSway linear infinite; opacity: 0.6;
         }
 
         @keyframes fallSway {
@@ -63,95 +66,69 @@
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(3.8rem, 16vw, 11rem);
-            animation: floating 4s ease-in-out infinite, rgbPulse 5s linear infinite;
+            font-size: clamp(4rem, 15vw, 10rem);
+            color: white;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
             margin: 0; z-index: 10;
+            animation: floating 4s ease-in-out infinite;
         }
 
-        /* --- New Section Titles --- */
+        @keyframes floating { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-15px) rotate(1deg); } }
+
+        /* --- Section Titles --- */
         .section-title {
-            font-family: 'Syne', sans-serif;
-            font-weight: 900;
-            font-size: clamp(2.5rem, 10vw, 5rem);
-            letter-spacing: -2px;
-            text-transform: uppercase;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 10vw, 5rem);
+            color: #8d7765;
             margin-bottom: 40px;
-            background: linear-gradient(to bottom, #fff 40%, #555);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+            text-align: center;
         }
 
-        @keyframes rgbPulse {
-            0%, 100% { filter: drop-shadow(0 0 15px #ff0000); }
-            33% { filter: drop-shadow(0 0 15px #00f2ff); }
-            66% { filter: drop-shadow(0 0 15px #48ff00); }
-        }
-
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        /* --- Memories/Legacy Effects --- */
+        /* --- Warm Memories Layout --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(2, 0, 8, 0.7), rgba(2, 0, 8, 0.9)), 
-                        url('https://images.unsplash.com/photo-1601042879364-f3947d3f9c16?q=80&w=1974&auto=format&fit=crop');
+            background: #fdf6ec; /* Warm cream base */
+            background-image: linear-gradient(rgba(253, 246, 236, 0.85), rgba(253, 246, 236, 0.85)), 
+                              url('https://images.unsplash.com/photo-1501436513145-30f24e19fcc8?q=80&w=1888&auto=format&fit=crop');
             background-size: cover;
-            background-position: center;
-            display: none; z-index: 1000; overflow-y: scroll; padding: 60px 20px;
+            display: none; z-index: 1000; overflow-y: scroll; padding: 80px 20px;
             flex-direction: column; align-items: center; opacity: 0; transition: 1s ease;
         }
 
-        /* Scanline Effect Overlay */
-        .heaven-logs::before {
-            content: " ";
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none; z-index: 10;
-        }
-
         .diary-card {
-            position: relative; background: var(--paper); padding: 15px 15px 60px 15px;
-            box-shadow: var(--heaven-glow); transform: rotate(-1.5deg);
-            margin-bottom: 50px; width: 100%; max-width: 450px;
-            transition: 0.3s; z-index: 5;
+            position: relative; background: var(--polaroid-white); padding: 12px 12px 45px 12px;
+            box-shadow: var(--nostalgia-shadow);
+            margin-bottom: 40px; width: 100%; max-width: 350px;
+            transition: 0.4s; z-index: 5;
         }
 
-        .diary-card:hover { transform: rotate(0deg) scale(1.05); filter: brightness(1.1); }
+        .diary-card:hover { transform: rotate(0deg) scale(1.05); }
 
-        .tape {
-            position: absolute; top: -15px; left: 50%; width: 110px; height: 40px;
-            background: rgba(255, 45, 149, 0.9); transform: translateX(-50%) rotate(-4deg);
-            box-shadow: 0 0 15px var(--neon-pink); z-index: 5;
-        }
-
-        .img-box { width: 100%; aspect-ratio: 16/9; background: #111; overflow: hidden; border: 1px solid rgba(0,0,0,0.1); }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #eee; overflow: hidden; filter: sepia(0.2); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .diary-label {
-            color: #111; text-align: center; margin-top: 20px; 
-            font-weight: 900; letter-spacing: 2px; font-size: 1.2rem;
-            text-transform: uppercase;
+            color: #8d7765; text-align: center; margin-top: 15px; 
+            font-family: 'Dancing Script', cursive; font-size: 1.6rem;
         }
 
         .btn-fancy {
-            margin: 10px; padding: 18px 40px; border: 2px solid white;
-            background: rgba(255, 255, 255, 0.1); color: white; cursor: pointer;
-            letter-spacing: 5px; font-weight: 900; text-transform: uppercase;
-            backdrop-filter: blur(5px); transition: 0.4s; z-index: 20;
+            margin: 10px; padding: 15px 40px; border: 1.5px solid #8d7765;
+            background: transparent; color: #8d7765; cursor: pointer;
+            letter-spacing: 2px; font-weight: 900; text-transform: uppercase;
+            transition: 0.4s; z-index: 20;
         }
-        .btn-fancy:hover { background: white; color: black; box-shadow: 0 0 30px white; }
+        .btn-fancy:hover { background: #8d7765; color: white; box-shadow: 0 0 20px rgba(141, 119, 101, 0.2); }
 
         .legacy-text {
-            font-size: 1.4rem; font-family: 'Inter', sans-serif; line-height: 1.8;
-            text-shadow: 0 0 15px rgba(255, 45, 149, 0.4); text-align: center;
-            background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px;
-            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1.2rem; font-family: 'Inter', sans-serif; line-height: 1.8;
+            color: #6b5b4e; text-align: center;
+            background: rgba(255,255,255,0.4); padding: 40px; border-radius: 2px;
+            border: 1px dashed #c4b5a7;
         }
 
         .hero { position: relative; z-index: 10; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s; }
-        .made-by { font-size: 0.7rem; opacity: 0.4; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
+        .made-by { font-size: 0.7rem; opacity: 0.6; color: white; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -162,42 +139,39 @@
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-fancy" onclick="godlyEnter()">ENTER THE FOG</button>
+        <button class="btn-fancy" style="color:white; border-color:white;" onclick="godlyEnter()">Look Back</button>
         <div class="made-by">made by wssnw</div>
     </div>
 
     <div class="heaven-logs" id="logs">
-        <h2 class="section-title">Memories</h2>
+        <h2 class="section-title">Sweet Memories</h2>
         
-        <div class="diary-card">
-            <div class="tape"></div>
+        <div class="diary-card" style="transform: rotate(-2deg);">
             <div class="img-box"><img src="Screenshot_22.png"></div>
-            <div class="diary-label">11/08/2025</div>
+            <div class="diary-label">Initial Build</div>
         </div>
 
-        <div class="diary-card" style="transform: rotate(2deg);">
-            <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
+        <div class="diary-card" style="transform: rotate(3deg);">
             <div class="img-box"><img src="RobloxScreenShot20260302_213405110.png"></div>
-            <div class="diary-label">9/07/2025</div>
+            <div class="diary-label">Summer Heat</div>
         </div>
 
         <div class="diary-card" style="transform: rotate(-1deg);">
-            <div class="tape" style="background:#00f2ff; box-shadow:0 0 15px #00f2ff;"></div>
             <div class="img-box"><img src="https://tr.rbxcdn.com/180day-6799581898748367980/150/150/Image/Webp"></div>
-            <div class="diary-label">THE COMMUNITY</div>
-            <a href="https://www.roblox.com/communities/35978868/Foggy-Fights-Entertainment" target="_blank" style="display:block; background:#000; color:#fff; text-align:center; padding:12px; margin-top:10px; text-decoration:none; font-weight:900;">JOIN GROUP</a>
+            <div class="diary-label">The Hub</div>
+            <a href="https://www.roblox.com/communities/35978868" target="_blank" style="display:block; background:#8d7765; color:#fff; text-align:center; padding:10px; margin-top:10px; text-decoration:none; font-family: 'Inter'; font-weight:900; font-size: 0.8rem;">JOIN GROUP</a>
         </div>
 
-        <button class="btn-fancy" onclick="openStory()">EXPLORE STORY</button>
-        <button class="btn-fancy" style="border:none; opacity:0.5;" onclick="backToHome()">BACK</button>
+        <button class="btn-fancy" onclick="openStory()">OUR STORY</button>
+        <button class="btn-fancy" style="border:none; opacity:0.6;" onclick="backToHome()">RETURN</button>
     </div>
 
     <div class="heaven-logs" id="story">
         <h1 class="section-title">The Legacy</h1>
         <div class="legacy-text" style="max-width: 700px;">
-            This game was inspired from a game that I played called da hood.<br><br>
-            I started this at alone and tried to release the game in 2025 but it took alot of time so I set it to 2026<br><br>
-            and now its probably going to get released in 2028 since im busy with life.
+            This game was inspired from a game that I played called <b>Da Hood</b>.<br><br>
+            I started this alone and tried to release the game in 2025, but it took more time so I set it to 2026.<br><br>
+            And now its probably going to get released in <b>2028</b> since I'm busy with life.
         </div>
         <button class="btn-fancy" style="margin-top:50px;" onclick="backToLogs()">BACK TO DIARY</button>
     </div>
@@ -205,8 +179,7 @@
     <script>
         function updateClock() {
             const now = new Date();
-            const time = now.toLocaleTimeString('en-GB', { hour12: false });
-            document.getElementById('live-clock').innerText = time;
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('en-GB', { hour12: false });
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -223,8 +196,8 @@
         setInterval(createLeaf, 600);
 
         function godlyEnter() {
-            document.getElementById('bg').style.transform = "scale(2.5) rotate(5deg)";
-            document.getElementById('bg').style.filter = "brightness(3) blur(30px)";
+            document.getElementById('bg').style.transform = "scale(2) blur(20px)";
+            document.getElementById('bg').style.filter = "brightness(0.5)";
             document.getElementById('hero').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('hero').style.display = 'none';
