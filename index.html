@@ -2,174 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | The Golden Era</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foggy Fights | Assets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #ffb347;
-            --gold-glow: rgba(255, 179, 71, 0.5);
-            --warm-white: #fffcf2;
+            --gold-hot: #fff5e6;
+            --gold-glow: rgba(255, 179, 71, 0.4);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+        /* Documentation Style: Pure Black Background */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background: #000; font-family: 'Syne', sans-serif;
-            color: var(--warm-white); overflow: hidden;
+            background: #000; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* --- THE SWEEPING SUNRAYS (RIGHT TO LEFT) --- */
-        .sun-sweep {
+        /* --- THE RIGHT-TO-LEFT SWEEP (GLOW ONLY) --- */
+        .sweep-overlay {
             position: fixed; top: 0; left: 0; width: 200%; height: 100%;
             background: linear-gradient(110deg, 
-                transparent 20%, 
-                rgba(255, 215, 100, 0.08) 40%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                rgba(255, 215, 100, 0.08) 60%, 
-                transparent 80%);
-            z-index: 6; pointer-events: none;
-            animation: sweepRightToLeft 8s ease-in-out infinite;
-            filter: blur(40px);
+                transparent 30%, 
+                rgba(255, 215, 100, 0.1) 45%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 215, 100, 0.1) 55%, 
+                transparent 70%);
+            z-index: 5; pointer-events: none;
+            animation: sweepRightToLeft 6s ease-in-out infinite;
+            filter: blur(60px);
         }
 
         @keyframes sweepRightToLeft {
-            0% { transform: translateX(50%); opacity: 0; }
+            0% { transform: translateX(60%); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(-110%); opacity: 0; }
         }
 
-        /* --- BACKGROUND ENGINE --- */
-        .bg-img {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), 
-                        url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover; z-index: 1;
-            filter: sepia(0.6) saturate(1.6) brightness(0.8);
-            transition: 4s cubic-bezier(0.1, 0, 0.1, 1);
-        }
-
-        /* --- HERO UI --- */
-        .hero { 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            height: 100vh; position: relative; z-index: 10; transition: 1s;
+        /* --- THE LOGO --- */
+        .logo-wrap {
+            position: relative; z-index: 10;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4.5rem, 16vw, 10rem);
-            color: var(--gold);
-            text-shadow: 0 0 40px var(--gold-glow), 0 10px 20px rgba(0,0,0,0.5);
-            animation: float 5s ease-in-out infinite;
+            font-size: clamp(5rem, 25vw, 15rem);
+            /* Metallic Gradient Stack */
+            background: linear-gradient(to bottom, 
+                #fff 0%, 
+                var(--gold) 45%, 
+                #8b5a00 55%, 
+                var(--gold-hot) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Heavy 3D Shadows */
+            filter: drop-shadow(0 0 10px rgba(0,0,0,1)) 
+                    drop-shadow(0 30px 50px rgba(0,0,0,0.9))
+                    drop-shadow(0 0 40px var(--gold-glow));
+            animation: float 6s ease-in-out infinite, shimmer 4s linear infinite;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        .btn-enter {
-            padding: 22px 75px; font-weight: 900; background: rgba(0,0,0,0.6);
-            border: 2px solid var(--gold); color: var(--gold);
-            cursor: pointer; letter-spacing: 8px; transition: 0.5s;
-            margin-top: 40px; font-size: 14px; backdrop-filter: blur(15px);
-            box-shadow: 0 0 30px rgba(255, 179, 71, 0.2);
-        }
-        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 60px var(--gold); }
-
-        /* --- ROBLOX SILVER LOGO --- */
-        .socials { display: flex; gap: 35px; margin-top: 60px; z-index: 20; }
-        .s-icon { width: 45px; height: 45px; cursor: pointer; transition: 0.4s; filter: drop-shadow(0 0 10px var(--gold)); }
-        .s-icon:hover { transform: scale(1.25); }
-        .roblox-silver { filter: invert(1) brightness(2) drop-shadow(0 0 8px #fff) !important; }
-
-        /* --- LEGACY PAGE WITH BACKGROUND --- */
-        .heaven-logs {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
-                        url('IMG_3002.jpeg') center/cover no-repeat;
-            display: none; z-index: 10003; overflow-y: auto; padding: 100px 20px;
-            flex-direction: column; align-items: center; opacity: 0;
-            transition: 2s ease-in-out;
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        .photo-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-bottom: 60px; }
-        
-        .photo {
-            background: #fff; padding: 15px 15px 50px 15px;
-            width: 320px; box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-            transform: rotate(var(--r)); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
         }
-        .photo:hover { transform: rotate(0deg) scale(1.1); z-index: 50; }
-        .photo img { width: 100%; filter: sepia(0.3) contrast(1.1); }
-        .photo p { color: #222; font-family: 'Dancing Script'; margin-top: 20px; font-size: 1.6rem; text-align: center; }
 
-        .legacy-card {
-            max-width: 850px; width: 95%; text-align: center;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(40px);
-            padding: 60px 40px; border: 1px solid var(--gold-glow);
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+        /* Optional Branding Subtext */
+        .doc-tag {
+            position: fixed; bottom: 30px; left: 30px;
+            color: rgba(255,255,255,0.2);
+            font-family: monospace; font-size: 12px;
+            letter-spacing: 4px; text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="sun-sweep"></div>
-    <div class="bg-img" id="bg"></div>
+    <div class="sweep-overlay"></div>
 
-    <div class="hero" id="hero">
+    <div class="logo-wrap">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
-        
-        <div class="socials">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="s-icon" onclick="alert('Discord Soon!')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" 
-                 class="s-icon roblox-silver" 
-                 onclick="window.open('https://www.roblox.com/communities/35978868')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="s-icon" onclick="alert('TikTok Soon!')">
-        </div>
     </div>
 
-    <div class="heaven-logs" id="logs">
-        <div class="photo-stack">
-            <div class="photo" style="--r: -4deg;">
-                <img src="Screenshot_22.png">
-                <p>The First Spark</p>
-            </div>
-            <div class="photo" style="--r: 5deg;">
-                <img src="RobloxScreenShot20260302_213405110.png">
-                <p>Golden Dreams</p>
-            </div>
-        </div>
+    <div class="doc-tag">Asset_01 // Core_Logo // Final_Build_2028</div>
 
-        <div class="legacy-card">
-            <h2 style="font-family:'Dancing Script'; font-size: 4.5rem; color: var(--gold); margin-bottom: 25px;">The Legacy</h2>
-            <p style="font-size: 1.4rem; line-height: 2.2; color: #eee;">
-                Inspired by the grit of <b style="color:var(--gold);">Da Hood</b>.<br><br>
-                Started as a solo mission in 2025. Life happens, so we move.<br>
-                The fog is set to clear in <b style="color:var(--gold);">2028</b>.
-            </p>
-            <button class="btn-enter" onclick="location.reload()" style="margin-top: 50px;">BACK HOME</button>
-        </div>
-        <div style="height: 150px;"></div>
-    </div>
-
-    <script>
-        function godlyEnter() {
-            const bg = document.getElementById('bg');
-            const hero = document.getElementById('hero');
-            const logs = document.getElementById('logs');
-
-            bg.style.transform = "scale(120) rotate(15deg)";
-            bg.style.filter = "brightness(40) blur(100px) sepia(1)";
-            hero.style.opacity = "0";
-
-            setTimeout(() => {
-                hero.style.display = 'none';
-                logs.style.display = 'flex';
-                document.body.style.overflowY = 'auto';
-                setTimeout(() => { logs.style.opacity = "1"; }, 100);
-            }, 2500); 
-        }
-    </script>
 </body>
 </html>
