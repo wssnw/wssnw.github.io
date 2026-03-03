@@ -3,143 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | Golden Hour</title>
+    <title>Foggy Fights | Nostalgia</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #ffb347;
-            --nostalgia-yellow: rgba(255, 200, 50, 0.15);
-            --deep-gold: #ffcc33;
+            --warm-white: #fffcf2;
+            --nostalgia-overlay: rgba(255, 180, 50, 0.1);
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: #000; font-family: 'Syne', sans-serif;
-            color: white; overflow-x: hidden;
+            color: var(--warm-white); overflow-x: hidden;
         }
 
-        /* --- Nostalgic Yellow Tint Overlay --- */
-        .golden-hour-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, var(--nostalgia-yellow) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none; z-index: 5;
+        /* --- Fixed Translation UI --- */
+        #google_translate_element {
+            position: fixed; top: 20px; left: 20px; z-index: 10005;
+            opacity: 0.8; transition: 0.5s;
+        }
+        #google_translate_element:hover { opacity: 1; }
+        .goog-te-gadget-icon { display: none !important; }
+        .goog-te-gadget-simple { 
+            background: rgba(255,255,255,0.1) !important; 
+            border: 1px solid var(--gold) !important;
+            padding: 5px 10px !important; border-radius: 50px !important;
         }
 
-        /* --- Minimalist Translate Icon --- */
-        .lang-icon {
-            position: fixed; top: 25px; left: 25px; z-index: 10005;
-            width: 35px; height: 35px; cursor: pointer;
-            filter: drop-shadow(0 0 10px var(--gold));
-            transition: 0.5s ease; opacity: 0.8;
-        }
-        .lang-icon:hover { transform: rotate(180deg) scale(1.1); opacity: 1; }
-
-        /* --- Background --- */
-        .bg-wrapper {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; overflow: hidden;
-        }
-
+        /* --- Background Layers --- */
         .bg-img {
-            width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)), 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)), 
                         url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover; transform: scale(1.1);
-            filter: sepia(0.3) saturate(1.2);
-            transition: transform 6s cubic-bezier(0.1, 0, 0.1, 1), filter 5s ease;
+            background-size: cover; z-index: 1; transform: scale(1.1);
+            filter: sepia(0.4) saturate(1.3);
+            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1), filter 4s ease;
         }
 
-        /* --- Logo --- */
+        .golden-wash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--nostalgia-overlay), transparent);
+            z-index: 2; pointer-events: none;
+        }
+
+        /* --- Logo & Main UI --- */
+        .hero { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            height: 100vh; position: relative; z-index: 10; transition: 2s ease;
+        }
+
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(3.5rem, 15vw, 10rem);
-            background: linear-gradient(180deg, #fff, var(--deep-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 179, 71, 0.5));
-            animation: floating 8s ease-in-out infinite;
-            text-align: center;
+            font-size: clamp(4rem, 15vw, 9rem);
+            color: var(--gold);
+            text-shadow: 0 0 50px rgba(255, 179, 71, 0.6);
+            animation: float 6s ease-in-out infinite;
+            margin: 0;
         }
 
-        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- Corrected Social Icons --- */
-        .socials-box { display: flex; gap: 30px; margin-top: 40px; z-index: 100; }
-        .s-icon {
-            width: 45px; height: 45px; cursor: pointer;
-            transition: 0.6s cubic-bezier(0.2, 1, 0.2, 1);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
-        }
-        .s-icon:hover { transform: scale(1.3); filter: drop-shadow(0 0 20px var(--gold)); }
-
-        /* --- Cinematic Button --- */
         .btn-enter {
-            padding: 22px 80px; font-weight: 900;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,179,71,0.3); color: var(--gold);
-            border-radius: 2px; cursor: pointer; /* Sharp edges for nostalgic feel */
-            letter-spacing: 6px; transition: 1s; font-size: 13px;
+            padding: 20px 60px; font-weight: 900; background: none;
+            border: 2px solid var(--gold); color: var(--gold);
+            cursor: pointer; letter-spacing: 5px; transition: 0.8s;
+            margin-top: 30px; font-size: 14px; box-shadow: 0 0 20px rgba(255, 179, 71, 0.2);
         }
-        .btn-enter:hover { background: var(--gold); color: black; box-shadow: 0 0 50px var(--gold); }
+        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 40px var(--gold); }
 
-        /* --- Memory Interface (Slower & Smoother) --- */
+        /* --- Corrected Icons --- */
+        .socials { display: flex; gap: 25px; margin-top: 40px; }
+        .s-icon { 
+            width: 40px; height: 40px; cursor: pointer; transition: 0.5s;
+            filter: drop-shadow(0 0 5px var(--gold));
+        }
+        .s-icon:hover { transform: scale(1.2); filter: drop-shadow(0 0 15px var(--gold)); }
+
+        /* --- NEW LEGACY PAGE (Heart & Vibe) --- */
         .heaven-logs {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #000; display: none; z-index: 10003; 
-            overflow-y: auto; padding: 100px 20px; flex-direction: column; align-items: center;
-            opacity: 0; transition: 3s cubic-bezier(0.1, 0, 0.1, 1);
+            background: linear-gradient(rgba(255, 179, 71, 0.1), rgba(0, 0, 0, 0.9)), 
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            display: none; z-index: 10003; overflow-y: auto; padding: 60px 20px;
+            flex-direction: column; align-items: center; opacity: 0;
+            transition: 2.5s cubic-bezier(0.1, 0, 0.1, 1);
         }
 
-        /* --- Slower Drifting Screenshots --- */
-        .screenshot-grid {
-            display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin: 60px 0;
+        .legacy-content {
+            max-width: 800px; width: 100%; text-align: center;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
+            padding: 40px; border: 1px solid rgba(255, 179, 71, 0.2);
+            box-shadow: 0 0 100px rgba(0,0,0,0.5);
         }
 
-        .polaroid {
-            background: #fffdf5; padding: 15px 15px 50px 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 320px; animation: drift 12s ease-in-out infinite alternate;
-        }
-        .polaroid img { width: 100%; filter: sepia(0.2) contrast(1.1); }
-        
-        @keyframes drift {
-            from { transform: rotate(-2deg) translateY(0); }
-            to { transform: rotate(2deg) translateY(-20px); }
+        .screenshot-container {
+            display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-bottom: 50px;
         }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(40px);
-            border: 1px solid rgba(255,215,0,0.1); padding: 40px;
-            border-radius: 0px; max-width: 700px; width: 100%; margin-bottom: 40px;
-            box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+        .photo {
+            background: #fffef0; padding: 10px 10px 35px 10px;
+            width: 280px; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            transform: rotate(-2deg); animation: drift 10s ease-in-out infinite alternate;
         }
+        .photo img { width: 100%; filter: sepia(0.2); }
+        .photo p { color: #555; font-family: 'Dancing Script'; margin-top: 10px; font-size: 1.2rem; }
+
+        @keyframes drift { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
 
         #fx-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 10002; pointer-events: none; mix-blend-mode: screen;
         }
-
-        .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; position: relative; z-index: 10; transition: 2s; }
     </style>
 </head>
 <body>
 
-    <div class="golden-hour-overlay"></div>
-    
-    <img src="https://cdn-icons-png.flaticon.com/512/814/814513.png" class="lang-icon" onclick="toggleTranslate()" alt="Translate">
-    <div id="google_translate_element" style="display:none"></div>
-
+    <div id="google_translate_element"></div>
+    <div class="golden-wash"></div>
     <canvas id="fx-canvas"></canvas>
-    <div class="bg-wrapper"><div class="bg-img" id="bg"></div></div>
+    
+    <div class="bg-img" id="bg"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
         
-        <div class="socials-box">
+        <div class="socials">
             <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="s-icon" onclick="alert('Discord Soon!')" alt="Discord">
             <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" class="s-icon" onclick="window.open('https://www.roblox.com/communities/35978868')" alt="Roblox">
             <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="s-icon" onclick="alert('TikTok Soon!')" alt="TikTok">
@@ -147,62 +141,58 @@
     </div>
 
     <div class="heaven-logs" id="logs">
-        <div class="screenshot-grid">
-            <div class="polaroid">
+        
+        <div class="screenshot-container">
+            <div class="photo">
                 <img src="Screenshot_22.png">
-                <p style="color:#444; font-family:'Dancing Script'; text-align:center; margin-top:20px; font-size: 1.4rem;">Where it began...</p>
+                <p>The First Spark</p>
             </div>
-            <div class="polaroid" style="animation-delay: -6s;">
+            <div class="photo" style="animation-delay: -5s; transform: rotate(2deg);">
                 <img src="RobloxScreenShot20260302_213405110.png">
-                <p style="color:#444; font-family:'Dancing Script'; text-align:center; margin-top:20px; font-size: 1.4rem;">Golden Build</p>
+                <p>Golden Dreams</p>
             </div>
         </div>
 
-        <div class="glass-panel" style="border-top: 2px solid var(--gold);">
-            <h3 style="color: var(--gold); margin-top:0; letter-spacing: 4px;">THE LEGACY</h3>
-            <p style="font-size: 16px; line-height: 2.2; color: #ddd;">
+        <div class="legacy-content">
+            <h2 style="font-family:'Dancing Script'; font-size: 3rem; color: var(--gold); margin-top: 0;">Our Journey</h2>
+            <p style="font-size: 1.1rem; line-height: 2; color: #eee; text-align: left;">
                 This game was inspired by a game that I played called <b style="color:var(--gold);">Da Hood</b>.<br><br>
                 I started this alone and tried to release the game in 2025, but it took more time, so I set it to 2026.<br><br>
                 And now it's probably going to get released in <b style="color:var(--gold);">2028</b> since I'm busy with life.
             </p>
+            <button class="btn-enter" onclick="location.reload()" style="margin-top: 40px; border-radius: 0;">BACK HOME</button>
         </div>
-
-        <button class="btn-enter" onclick="location.reload()" style="margin-bottom: 100px;">RETURN</button>
+        
+        <div style="height: 100px;"></div>
     </div>
 
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script>
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-        }
-        function toggleTranslate() {
-            let x = document.getElementById('google_translate_element');
-            x.style.display = (x.style.display === 'none') ? 'block' : 'none';
+            new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
         }
 
         const canvas = document.getElementById('fx-canvas');
         const ctx = canvas.getContext('2d');
-        let rays = [];
         let active = false;
+        let rays = [];
 
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
 
-        class GoldenRay {
+        class Ray {
             constructor() {
-                this.x = canvas.width/2; this.y = canvas.height/2;
                 this.angle = Math.random() * Math.PI * 2;
-                this.speed = Math.random() * 2 + 1;
-                this.w = Math.random() * 100 + 50;
-                this.l = 0; this.a = 1;
+                this.l = 0; this.s = Math.random() * 3 + 2;
+                this.a = 1;
             }
             draw() {
-                this.l += this.speed; this.a *= 0.995;
-                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                this.l += this.s; this.a *= 0.99;
+                ctx.save(); ctx.translate(canvas.width/2, canvas.height/2); ctx.rotate(this.angle);
                 let g = ctx.createLinearGradient(0,0,0,this.l);
-                g.addColorStop(0, `rgba(255, 200, 50, ${this.a * 0.2})`);
+                g.addColorStop(0, `rgba(255, 179, 71, ${this.a * 0.2})`);
                 g.addColorStop(1, 'transparent');
-                ctx.fillStyle = g; ctx.fillRect(-this.w/2, 0, this.w, this.l);
+                ctx.fillStyle = g; ctx.fillRect(-20, 0, 40, this.l);
                 ctx.restore();
             }
         }
@@ -210,7 +200,7 @@
         function anim() {
             if(!active) return;
             ctx.clearRect(0,0,canvas.width, canvas.height);
-            if(rays.length < 30) rays.push(new GoldenRay());
+            if(rays.length < 25) rays.push(new Ray());
             rays.forEach(r => r.draw());
             requestAnimationFrame(anim);
         }
@@ -221,15 +211,15 @@
             const hero = document.getElementById('hero');
             const logs = document.getElementById('logs');
 
-            bg.style.transform = "scale(60) rotate(10deg)";
-            bg.style.filter = "brightness(30) sepia(1) blur(100px)";
+            bg.style.transform = "scale(80) rotate(5deg)";
+            bg.style.filter = "brightness(40) blur(120px) sepia(1)";
             hero.style.opacity = "0";
 
             setTimeout(() => {
                 hero.style.display = 'none';
                 logs.style.display = 'flex';
-                setTimeout(() => { logs.style.opacity = "1"; }, 500);
-            }, 2500); // 2.5 second slow transition
+                setTimeout(() => { logs.style.opacity = "1"; }, 100);
+            }, 3000); // Super slow transition
         }
     </script>
 </body>
