@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Foggy Fights | The Golden Era</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@400;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
@@ -13,7 +13,6 @@
             --warm-white: #fffcf2;
         }
 
-        /* --- 1. PRO SCROLLBAR --- */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
@@ -26,7 +25,7 @@
             color: var(--warm-white); overflow: hidden;
         }
 
-        /* --- 2. FILM GRAIN & VIGNETTE (THE "FULL" LOOK) --- */
+        /* --- ATMOSPHERE --- */
         .grain {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://www.transparenttextures.com/patterns/stardust.png');
@@ -39,15 +38,9 @@
             z-index: 40; pointer-events: none;
         }
 
-        /* --- THE SWEEPING SUNRAYS (RIGHT TO LEFT) --- */
         .sun-sweep {
             position: fixed; top: 0; left: 0; width: 200%; height: 100%;
-            background: linear-gradient(110deg, 
-                transparent 20%, 
-                rgba(255, 215, 100, 0.08) 40%, 
-                rgba(255, 255, 255, 0.1) 50%, 
-                rgba(255, 215, 100, 0.08) 60%, 
-                transparent 80%);
+            background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
             z-index: 6; pointer-events: none;
             animation: sweepRightToLeft 8s ease-in-out infinite;
             filter: blur(40px);
@@ -59,17 +52,16 @@
             100% { transform: translateX(-100%); opacity: 0; }
         }
 
-        /* --- BACKGROUND ENGINE (PARALLAX ENABLED) --- */
         .bg-img {
             position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
             background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), 
                         url('IMG_3002.jpeg') no-repeat center center;
             background-size: cover; z-index: 1;
             filter: sepia(0.6) saturate(1.6) brightness(0.8);
-            transition: transform 0.2s ease-out, filter 4s cubic-bezier(0.1, 0, 0.1, 1);
+            transition: 4s cubic-bezier(0.1, 0, 0.1, 1);
         }
 
-        /* --- HERO UI --- */
+        /* --- HERO --- */
         .hero { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             height: 100vh; position: relative; z-index: 10; transition: 1s;
@@ -79,7 +71,7 @@
             font-family: 'Dancing Script', cursive;
             font-size: clamp(4.5rem, 16vw, 10rem);
             color: var(--gold);
-            text-shadow: 0 0 40px var(--gold-glow), 0 10px 20px rgba(0,0,0,0.5);
+            text-shadow: 0 0 40px var(--gold-glow);
             animation: float 5s ease-in-out infinite;
         }
 
@@ -90,52 +82,42 @@
             border: 2px solid var(--gold); color: var(--gold);
             cursor: pointer; letter-spacing: 8px; transition: 0.5s;
             margin-top: 40px; font-size: 14px; backdrop-filter: blur(15px);
-            box-shadow: 0 0 30px rgba(255, 179, 71, 0.2);
-            text-transform: uppercase;
         }
-        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 60px var(--gold); transform: scale(1.05); }
+        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 60px var(--gold); }
 
-        /* --- ROBLOX SILVER LOGO --- */
-        .socials { display: flex; gap: 35px; margin-top: 60px; z-index: 20; }
-        .s-icon { width: 45px; height: 45px; cursor: pointer; transition: 0.4s; filter: drop-shadow(0 0 10px var(--gold)); }
-        .s-icon:hover { transform: scale(1.25) translateY(-5px); }
-        .roblox-silver { filter: invert(1) brightness(2) drop-shadow(0 0 8px #fff) !important; }
-
-        /* --- LEGACY PAGE --- */
-        .heaven-logs {
+        /* --- THE CONTENT HUB --- */
+        .content-hub {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95)), 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
                         url('IMG_3002.jpeg') center/cover no-repeat;
-            display: none; z-index: 10003; overflow-y: auto; padding: 100px 20px;
+            display: none; z-index: 10003; overflow-y: auto; padding: 80px 5%;
             flex-direction: column; align-items: center; opacity: 0;
             transition: 2s ease-in-out;
         }
 
-        .photo-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-bottom: 60px; }
-        
-        /* --- PHOTO SHINE FEATURE --- */
-        .photo {
-            position: relative; background: #fff; padding: 15px 15px 50px 15px;
-            width: 320px; box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-            transform: rotate(var(--r)); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-        }
-        .photo::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg); transition: 0.6s;
-        }
-        .photo:hover::after { left: 150%; }
-        .photo:hover { transform: rotate(0deg) scale(1.1); z-index: 50; }
-        .photo img { width: 100%; filter: sepia(0.3) contrast(1.1); }
-        .photo p { color: #222; font-family: 'Dancing Script'; margin-top: 20px; font-size: 1.6rem; text-align: center; }
+        section { width: 100%; max-width: 1000px; margin-bottom: 150px; text-align: center; }
 
-        .legacy-card {
-            max-width: 850px; width: 95%; text-align: center;
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(40px);
-            padding: 60px 40px; border: 1px solid rgba(255, 179, 71, 0.2);
-            box-shadow: 0 0 100px rgba(0,0,0,0.8);
+        /* Feature Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 40px; backdrop-filter: blur(10px); transition: 0.4s;
         }
+        .card:hover { border-color: var(--gold); background: rgba(255,179,71,0.05); transform: translateY(-10px); }
+        .card h3 { color: var(--gold); letter-spacing: 4px; margin-bottom: 15px; }
+
+        /* Roadmap */
+        .roadmap { border-left: 2px solid var(--gold); padding: 20px 40px; text-align: left; margin: 50px auto; max-width: 600px; }
+        .step { margin-bottom: 40px; position: relative; }
+        .step::before { content: ''; position: absolute; left: -51px; top: 5px; width: 20px; height: 20px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); }
+
+        .photo-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+        .photo { background: #fff; padding: 15px 15px 50px 15px; width: 300px; transform: rotate(var(--r)); transition: 0.5s; }
+        .photo:hover { transform: rotate(0) scale(1.1); z-index: 100; }
+        .photo img { width: 100%; filter: sepia(0.2); }
+        .photo p { color: #222; font-family: 'Dancing Script'; margin-top: 15px; font-size: 1.4rem; }
+
+        h2.section-title { font-size: 3rem; letter-spacing: 10px; color: var(--gold); text-transform: uppercase; margin-bottom: 50px; }
     </style>
 </head>
 <body>
@@ -148,66 +130,87 @@
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
         <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
-        
-        <div class="socials">
-            <img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="s-icon" onclick="alert('Discord Soon!')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg" 
-                 class="s-icon roblox-silver" 
-                 onclick="window.open('https://www.roblox.com/communities/35978868')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" class="s-icon" onclick="alert('TikTok Soon!')">
-        </div>
     </div>
 
-    <div class="heaven-logs" id="logs">
-        <div class="photo-stack">
-            <div class="photo" style="--r: -4deg;">
-                <img src="Screenshot_22.png">
-                <p>The First Spark</p>
+    <div class="content-hub" id="hub">
+        
+        <section>
+            <h2 class="section-title">The Pillars</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>COMBAT</h3>
+                    <p>High-stakes, grit-focused mechanics inspired by the streets of Da Hood.</p>
+                </div>
+                <div class="card">
+                    <h3>CULTURE</h3>
+                    <p>A community built on the golden era of 2025 edits and street legacy.</p>
+                </div>
+                <div class="card">
+                    <h3>CONQUEST</h3>
+                    <p>Claim your territory. Build your name. Leave a mark that doesn't fade.</p>
+                </div>
             </div>
-            <div class="photo" style="--r: 5deg;">
-                <img src="RobloxScreenShot20260302_213405110.png">
-                <p>Golden Dreams</p>
-            </div>
-        </div>
+        </section>
 
-        <div class="legacy-card">
-            <h2 style="font-family:'Dancing Script'; font-size: 4.5rem; color: var(--gold); margin-bottom: 25px;">The Legacy</h2>
-            <p style="font-size: 1.4rem; line-height: 2.2; color: #eee;">
-                Inspired by the grit of <b style="color:var(--gold);">Da Hood</b>.<br><br>
-                Started as a solo mission in 2025. Life happens, so we move.<br>
-                The fog is set to clear in <b style="color:var(--gold);">2028</b>.
-            </p>
-            <button class="btn-enter" onclick="location.reload()" style="margin-top: 50px;">BACK HOME</button>
-        </div>
-        <div style="height: 150px;"></div>
+        <section>
+            <h2 class="section-title">Memories</h2>
+            <div class="photo-stack">
+                <div class="photo" style="--r: -3deg;"><img src="Screenshot_22.png"><p>The Spark</p></div>
+                <div class="photo" style="--r: 4deg;"><img src="RobloxScreenShot20260302_213405110.png"><p>Golden Era</p></div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">The Timeline</h2>
+            <div class="roadmap">
+                <div class="step">
+                    <h4 style="color:var(--gold)">2025: ORIGINS</h4>
+                    <p>The first foggy encounter. The project is born in silence.</p>
+                </div>
+                <div class="step">
+                    <h4 style="color:var(--gold)">2026: EXPANSION</h4>
+                    <p>Building the infrastructure. Recruitment begins.</p>
+                </div>
+                <div class="step">
+                    <h4 style="color:var(--gold)">2028: THE CLEARING</h4>
+                    <p>Full-scale release. The fog lifts to reveal the empire.</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-bottom: 200px;">
+            <h2 class="section-title">JOIN US</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.7;">The fog waits for no one. Are you in or out?</p>
+            <button class="btn-enter" onclick="window.open('https://www.roblox.com/communities/35978868')">BECOME LEGACY</button>
+            <br><br>
+            <button class="btn-enter" onclick="location.reload()" style="font-size: 10px; padding: 15px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff;">RETURN HOME</button>
+        </section>
+
     </div>
 
     <script>
-        // --- PARALLAX FEATURE ---
         document.addEventListener('mousemove', (e) => {
-            if (document.getElementById('hero').style.display !== 'none') {
-                const bg = document.getElementById('bg');
-                const x = (window.innerWidth - e.pageX * 2) / 90;
-                const y = (window.innerHeight - e.pageY * 2) / 90;
-                bg.style.transform = `translate(${x}px, ${y}px)`;
-            }
+            const bg = document.getElementById('bg');
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            bg.style.transform = `translate(${x}px, ${y}px)`;
         });
 
         function godlyEnter() {
             const bg = document.getElementById('bg');
             const hero = document.getElementById('hero');
-            const logs = document.getElementById('logs');
+            const hub = document.getElementById('hub');
 
-            bg.style.transform = "scale(120) rotate(15deg)";
-            bg.style.filter = "brightness(40) blur(100px) sepia(1)";
+            bg.style.transform = "scale(100) rotate(20deg)";
+            bg.style.filter = "brightness(50) blur(100px)";
             hero.style.opacity = "0";
 
             setTimeout(() => {
                 hero.style.display = 'none';
-                logs.style.display = 'flex';
+                hub.style.display = 'flex';
                 document.body.style.overflowY = 'auto';
-                setTimeout(() => { logs.style.opacity = "1"; }, 100);
-            }, 2500); 
+                setTimeout(() => { hub.style.opacity = "1"; }, 100);
+            }, 2000); 
         }
     </script>
 </body>
