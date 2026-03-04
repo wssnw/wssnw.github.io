@@ -3,214 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Foggy Fights | The Golden Era</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@400;800;900&display=swap" rel="stylesheet">
+    <title>Foggy Fights | Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@800;900&family=Special+Elite&display=swap" rel="stylesheet">
     
     <style>
         :root { 
             --gold: #ffb347;
-            --gold-glow: rgba(255, 179, 71, 0.5);
-            --warm-white: #fffcf2;
+            --gold-glow: rgba(255, 179, 71, 0.4);
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: #000; font-family: 'Syne', sans-serif;
-            color: var(--warm-white); overflow: hidden;
+            color: #fff; overflow: hidden;
         }
 
-        /* --- ATMOSPHERE --- */
-        .grain {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.08; z-index: 50; pointer-events: none;
-        }
-
-        .vignette {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
-            z-index: 40; pointer-events: none;
-        }
-
+        /* --- THE SWEEP --- */
         .sun-sweep {
             position: fixed; top: 0; left: 0; width: 200%; height: 100%;
-            background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.1) 50%, transparent 80%);
-            z-index: 6; pointer-events: none;
-            animation: sweepRightToLeft 8s ease-in-out infinite;
-            filter: blur(40px);
+            background: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.12) 50%, transparent 75%);
+            z-index: 100; pointer-events: none;
+            animation: sweepRightToLeft 7s ease-in-out infinite;
+            filter: blur(50px);
         }
 
         @keyframes sweepRightToLeft {
-            0% { transform: translateX(50%); opacity: 0; }
+            0% { transform: translateX(60%); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(-110%); opacity: 0; }
         }
 
-        .bg-img {
-            position: fixed; top: -5%; left: -5%; width: 110%; height: 110%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7)), 
-                        url('IMG_3002.jpeg') no-repeat center center;
-            background-size: cover; z-index: 1;
-            filter: sepia(0.6) saturate(1.6) brightness(0.8);
-            transition: 4s cubic-bezier(0.1, 0, 0.1, 1);
+        /* --- GLOBAL BG ENGINE --- */
+        .bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            z-index: 1; filter: sepia(0.4) saturate(1.2) brightness(0.7);
         }
 
         /* --- HERO --- */
         .hero { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            height: 100vh; position: relative; z-index: 10; transition: 1s;
+            height: 100vh; position: relative; z-index: 10;
         }
 
         .main-logo {
             font-family: 'Dancing Script', cursive;
-            font-size: clamp(4.5rem, 16vw, 10rem);
+            font-size: clamp(5rem, 18vw, 12rem);
             color: var(--gold);
-            text-shadow: 0 0 40px var(--gold-glow);
-            animation: float 5s ease-in-out infinite;
+            text-shadow: 0 0 50px var(--gold-glow);
+            animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
         .btn-enter {
-            padding: 22px 75px; font-weight: 900; background: rgba(0,0,0,0.6);
-            border: 2px solid var(--gold); color: var(--gold);
-            cursor: pointer; letter-spacing: 8px; transition: 0.5s;
-            margin-top: 40px; font-size: 14px; backdrop-filter: blur(15px);
+            padding: 20px 60px; font-weight: 900; background: rgba(0,0,0,0.8);
+            border: 1px solid var(--gold); color: var(--gold);
+            cursor: pointer; letter-spacing: 10px; transition: 0.4s;
+            margin-top: 30px; backdrop-filter: blur(10px);
         }
-        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 60px var(--gold); }
+        .btn-enter:hover { background: var(--gold); color: #000; box-shadow: 0 0 40px var(--gold); }
 
-        /* --- THE CONTENT HUB --- */
-        .content-hub {
+        /* --- THE HUB (LEGACY RE-DESIGN) --- */
+        .hub {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), 
-                        url('IMG_3002.jpeg') center/cover no-repeat;
-            display: none; z-index: 10003; overflow-y: auto; padding: 80px 5%;
+            background: rgba(0,0,0,0.75); 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: none; z-index: 200; overflow-y: auto; padding: 100px 20px;
             flex-direction: column; align-items: center; opacity: 0;
-            transition: 2s ease-in-out;
+            transition: 1.5s ease-in-out;
         }
 
-        section { width: 100%; max-width: 1000px; margin-bottom: 150px; text-align: center; }
-
-        /* Feature Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 50px; }
-        .card { 
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 40px; backdrop-filter: blur(10px); transition: 0.4s;
+        .section-header {
+            font-family: 'Special Elite', cursive;
+            font-size: 10px; color: var(--gold); letter-spacing: 5px;
+            margin-bottom: 10px; opacity: 0.6;
         }
-        .card:hover { border-color: var(--gold); background: rgba(255,179,71,0.05); transform: translateY(-10px); }
-        .card h3 { color: var(--gold); letter-spacing: 4px; margin-bottom: 15px; }
 
-        /* Roadmap */
-        .roadmap { border-left: 2px solid var(--gold); padding: 20px 40px; text-align: left; margin: 50px auto; max-width: 600px; }
-        .step { margin-bottom: 40px; position: relative; }
-        .step::before { content: ''; position: absolute; left: -51px; top: 5px; width: 20px; height: 20px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 15px var(--gold); }
+        .legacy-box {
+            max-width: 700px; width: 100%; text-align: left;
+            border-left: 2px solid var(--gold); padding: 40px;
+            background: rgba(255,255,255,0.02); margin-top: 40px;
+        }
 
-        .photo-stack { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
-        .photo { background: #fff; padding: 15px 15px 50px 15px; width: 300px; transform: rotate(var(--r)); transition: 0.5s; }
-        .photo:hover { transform: rotate(0) scale(1.1); z-index: 100; }
-        .photo img { width: 100%; filter: sepia(0.2); }
-        .photo p { color: #222; font-family: 'Dancing Script'; margin-top: 15px; font-size: 1.4rem; }
+        .legacy-box h2 {
+            font-size: 3rem; color: var(--gold); text-transform: uppercase;
+            margin: 0 0 20px 0; letter-spacing: -2px;
+        }
 
-        h2.section-title { font-size: 3rem; letter-spacing: 10px; color: var(--gold); text-transform: uppercase; margin-bottom: 50px; }
+        .legacy-box p {
+            font-size: 1.1rem; line-height: 1.8; color: #ccc;
+            font-family: 'Syne', sans-serif; font-weight: 400;
+        }
+
+        .photo-strip {
+            display: flex; gap: 30px; margin-top: 60px; flex-wrap: wrap; justify-content: center;
+        }
+
+        .polaroid {
+            background: #eee; padding: 10px 10px 35px 10px;
+            width: 260px; transform: rotate(var(--r)); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .polaroid:hover { transform: rotate(0) scale(1.05); z-index: 10; }
+        .polaroid img { width: 100%; height: 200px; object-fit: cover; filter: contrast(1.1); }
+
+        .footer-tag {
+            margin-top: 100px; font-family: 'Special Elite'; 
+            font-size: 12px; color: var(--gold); opacity: 0.4;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="grain"></div>
-    <div class="vignette"></div>
     <div class="sun-sweep"></div>
-    <div class="bg-img" id="bg"></div>
+    <div class="bg-layer" id="bg"></div>
 
     <div class="hero" id="hero">
         <h1 class="main-logo">Foggy Fights</h1>
-        <button class="btn-enter" onclick="godlyEnter()">ENTER THE FOG</button>
+        <button class="btn-enter" onclick="showHub()">UNLOCK ACCESS</button>
     </div>
 
-    <div class="content-hub" id="hub">
+    <div class="hub" id="hub">
+        <div class="section-header">PROJECT_RECORDS // 2025-2028</div>
         
-        <section>
-            <h2 class="section-title">The Pillars</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>COMBAT</h3>
-                    <p>High-stakes, grit-focused mechanics inspired by the streets of Da Hood.</p>
-                </div>
-                <div class="card">
-                    <h3>CULTURE</h3>
-                    <p>A community built on the golden era of 2025 edits and street legacy.</p>
-                </div>
-                <div class="card">
-                    <h3>CONQUEST</h3>
-                    <p>Claim your territory. Build your name. Leave a mark that doesn't fade.</p>
-                </div>
-            </div>
-        </section>
+        <div class="legacy-box">
+            <h2>The Vision</h2>
+            <p>
+                Foggy Fights isn't just a game—it's a time capsule. Built from the raw energy of the 2025 street-edit culture, we're taking the grit of the old world and forging it into something new. 
+                <br><br>
+                No fluff. No fillers. Just the fog. 
+                <b style="color:var(--gold);">ETA: 2028.</b>
+            </p>
+        </div>
 
-        <section>
-            <h2 class="section-title">Memories</h2>
-            <div class="photo-stack">
-                <div class="photo" style="--r: -3deg;"><img src="Screenshot_22.png"><p>The Spark</p></div>
-                <div class="photo" style="--r: 4deg;"><img src="RobloxScreenShot20260302_213405110.png"><p>Golden Era</p></div>
-            </div>
-        </section>
+        <div class="photo-strip">
+            <div class="polaroid" style="--r: -3deg;"><img src="Screenshot_22.png"></div>
+            <div class="polaroid" style="--r: 2deg;"><img src="RobloxScreenShot20260302_213405110.png"></div>
+        </div>
 
-        <section>
-            <h2 class="section-title">The Timeline</h2>
-            <div class="roadmap">
-                <div class="step">
-                    <h4 style="color:var(--gold)">2025: ORIGINS</h4>
-                    <p>The first foggy encounter. The project is born in silence.</p>
-                </div>
-                <div class="step">
-                    <h4 style="color:var(--gold)">2026: EXPANSION</h4>
-                    <p>Building the infrastructure. Recruitment begins.</p>
-                </div>
-                <div class="step">
-                    <h4 style="color:var(--gold)">2028: THE CLEARING</h4>
-                    <p>Full-scale release. The fog lifts to reveal the empire.</p>
-                </div>
-            </div>
-        </section>
-
-        <section style="margin-bottom: 200px;">
-            <h2 class="section-title">JOIN US</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.7;">The fog waits for no one. Are you in or out?</p>
-            <button class="btn-enter" onclick="window.open('https://www.roblox.com/communities/35978868')">BECOME LEGACY</button>
-            <br><br>
-            <button class="btn-enter" onclick="location.reload()" style="font-size: 10px; padding: 15px 40px; border: 1px solid rgba(255,255,255,0.2); color: #fff;">RETURN HOME</button>
-        </section>
-
+        <div class="btn-enter" style="font-size: 12px; margin-top: 60px;" onclick="window.open('https://www.roblox.com/communities/35978868')">JOIN THE MOVEMENT</div>
+        
+        <div class="footer-tag">AUTHENTICATED BY FOGGY_DYNAMICS</div>
+        <div style="height: 100px;"></div>
     </div>
 
     <script>
-        document.addEventListener('mousemove', (e) => {
-            const bg = document.getElementById('bg');
-            const x = (window.innerWidth - e.pageX * 2) / 100;
-            const y = (window.innerHeight - e.pageY * 2) / 100;
-            bg.style.transform = `translate(${x}px, ${y}px)`;
-        });
-
-        function godlyEnter() {
-            const bg = document.getElementById('bg');
+        function showHub() {
             const hero = document.getElementById('hero');
             const hub = document.getElementById('hub');
+            const bg = document.getElementById('bg');
 
-            bg.style.transform = "scale(100) rotate(20deg)";
-            bg.style.filter = "brightness(50) blur(100px)";
             hero.style.opacity = "0";
-
+            bg.style.filter = "blur(20px) brightness(0.3)";
+            
             setTimeout(() => {
                 hero.style.display = 'none';
                 hub.style.display = 'flex';
-                document.body.style.overflowY = 'auto';
-                setTimeout(() => { hub.style.opacity = "1"; }, 100);
-            }, 2000); 
+                setTimeout(() => { hub.style.opacity = "1"; }, 50);
+            }, 1000);
         }
     </script>
 </body>
