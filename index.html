@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Foggy Fights | The Golden Era</title>
+<title>Foggy Fights</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Syne:wght@400;800;900&display=swap" rel="stylesheet">
 
@@ -14,6 +14,7 @@
 --warm-white:#fffcf2;
 }
 
+/* general optimization - using will-change tells the browser to use the GPU */
 *{box-sizing:border-box;margin:0;padding:0;will-change:transform}
 
 body,html{
@@ -25,69 +26,49 @@ color:var(--warm-white);
 overflow:hidden;
 }
 
+/* atmosphere effects */
 .grain{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+position:fixed; top:0; left:0; width:100%; height:100%;
 background:url("https://www.transparenttextures.com/patterns/stardust.png");
-opacity:.03;
-z-index:50;
-pointer-events:none;
+opacity:.03; z-index:50; pointer-events:none;
 }
 
 .vignette{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+position:fixed; top:0; left:0; width:100%; height:100%;
 background:radial-gradient(circle,transparent 30%,rgba(0,0,0,.5)100%);
-z-index:40;
-pointer-events:none;
+z-index:40; pointer-events:none;
 }
 
+/* sweeping light from the side */
 .sun-sweep{
-position:fixed;
-top:0;
-left:0;
-width:200%;
-height:100%;
-background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.05)50%,transparent 80%);
-z-index:6;
-pointer-events:none;
-animation:sweep 10s linear infinite;
+position:fixed; top:0; left:-100%; width:200%; height:100%;
+background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.05)50%,transparent 70%);
+z-index:6; pointer-events:none;
+animation:sweep 12s cubic-bezier(0.1, 0, 0.9, 1) infinite;
 opacity:.3;
 }
 
 @keyframes sweep{
-0%{transform:translate3d(50%,0,0)}
-100%{transform:translate3d(-100%,0,0)}
+0%{transform:translate3d(-50%,0,0)}
+100%{transform:translate3d(100%,0,0)}
 }
 
+/* background image with dark overlay for first page */
 .bg-img{
 position:fixed;
-top:-5%;
-left:-5%;
-width:110%;
-height:110%;
+top:-5%; left:-5%; width:110%; height:110%;
 background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.8)),url("IMG_3002.jpeg") center/cover no-repeat;
 z-index:1;
 transition:1.5s ease-in-out;
-transform:translate3d(0,0,0);
+transform:translate3d(0,0,0); /* force GPU */
 backface-visibility:hidden;
 }
 
+/* page 1: hero grit */
 .hero{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-height:100vh;
-position:relative;
-z-index:10;
-transition:.8s;
+display:flex; flex-direction:column; align-items:center;
+justify-content:center; height:100vh; position:relative;
+z-index:10; transition:.8s;
 }
 
 .main-logo{
@@ -104,168 +85,108 @@ animation:float 5s ease-in-out infinite;
 }
 
 .btn-enter{
-padding:20px 60px;
-font-weight:900;
-background:rgba(0,0,0,.6);
-border:2px solid var(--gold);
-color:var(--gold);
-cursor:pointer;
-letter-spacing:6px;
-transition:.4s;
-margin-top:40px;
-font-size:14px;
+padding:20px 60px; font-weight:900; background:rgba(0,0,0,.6);
+border:2px solid var(--gold); color:var(--gold); cursor:pointer;
+letter-spacing:6px; transition:.4s; margin-top:40px; font-size:14px;
 text-transform:uppercase;
 }
 
 .btn-enter:hover{
-background:var(--gold);
-color:#000;
-box-shadow:0 0 40px var(--gold);
+background:var(--gold); color:#000; box-shadow:0 0 40px var(--gold);
 }
 
+/* page 2: the bright glass hub */
 .content-hub{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100vh;
-background:rgba(255,255,255,.05);
-display:none;
-z-index:10003;
-overflow-y:auto;
-padding:80px 5%;
-flex-direction:column;
-align-items:center;
-opacity:0;
-transition:1.2s;
+position:fixed; top:0; left:0; width:100%; height:100vh;
+background:rgba(255,255,255,.05); /* very light glass tint */
+display:none; z-index:10003; overflow-y:auto;
+padding:80px 5%; flex-direction:column; align-items:center;
+opacity:0; transition:1.2s;
 }
 
-section{
-width:100%;
-max-width:1000px;
-margin-bottom:120px;
-text-align:center;
-}
+section{ width:100%; max-width:1000px; margin-bottom:120px; text-align:center; }
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
-margin-top:50px;
+display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px; margin-top:50px;
 }
 
+/* pillar cards */
 .card{
 background:rgba(255,255,255,.1);
 border:1px solid rgba(255,255,255,.15);
-padding:40px;
-transition:.3s;
+padding:40px; transition:.3s;
 }
 
 .card:hover{
 border-color:var(--gold);
 transform:translate3d(0,-8px,0);
-background:rgba(255,255,255,.2);
+background:rgba(255,255,255,0.2);
 }
 
 .card h3{
-color:var(--gold);
-letter-spacing:3px;
-margin-bottom:15px;
+color:var(--gold); letter-spacing:3px; margin-bottom:15px;
 text-transform:uppercase;
 }
 
-.photo-stack{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:40px;
-}
+/* polaroid cards from photo */
+.photo-stack{ display:flex; flex-wrap:wrap; justify-content:center; gap:40px; }
 
 .photo{
 background:rgba(255,255,255,.25);
 border:1px solid rgba(255,255,255,.3);
 padding:15px 15px 50px;
 width:300px;
+/* combined rotation and wind animation with glow */
 transform:rotate(var(--r)) translate3d(0,0,0);
-transition:.4s cubic-bezier(.175,.885,.32,1.275);
+transition:.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+box-shadow: 0 5px 20px rgba(0,0,0,0.2), 0 0 10px rgba(255, 255, 255, 0.1);
+/* unique continuous wind sway */
+animation:windSway 6s ease-in-out infinite alternate;
+animation-delay: calc(var(--r) * 1s); /* randomize timing based on rotation */
 }
 
+/* hover stops the sway and amplifies glow */
 .photo:hover{
 transform:rotate(0) scale(1.05) translate3d(0,0,0);
 z-index:100;
 background:rgba(255,255,255,.4);
+box-shadow: 0 15px 35px rgba(0,0,0,0.25), 0 0 25px rgba(255, 255, 255, 0.2);
+animation-play-state: paused;
 }
 
-.photo img{
-width:100%;
-display:block;
+/* subtle swaying to mimic wind */
+@keyframes windSway {
+0% { transform: rotate(calc(var(--r) - 1deg)) translate3d(0, 0px, 0); }
+100% { transform: rotate(calc(var(--r) + 1deg)) translate3d(0, 5px, 0); }
 }
 
-.photo p{
-color:#fff;
-font-family:'Dancing Script';
-margin-top:15px;
-font-size:1.6rem;
-}
+.photo img{ width:100%; display:block; }
+.photo p{ color:#fff; font-family:'Dancing Script'; margin-top:15px; font-size:1.6rem; }
 
 .section-title{
-font-size:3rem;
-letter-spacing:8px;
-color:var(--gold);
-text-transform:uppercase;
-margin-bottom:50px;
+font-size:3rem; letter-spacing:8px; color:var(--gold);
+text-transform:uppercase; margin-bottom:50px;
 }
 
-.roadmap{
-border-left:2px solid var(--gold);
-padding:20px 40px;
-text-align:left;
-margin:50px auto;
-max-width:600px;
-}
-
-.step{
-margin-bottom:40px;
-position:relative;
-}
-
+/* roadmap timeline */
+.roadmap{ border-left:2px solid var(--gold); padding:20px 40px; text-align:left; margin:50px auto; max-width:600px; }
+.step{ margin-bottom:40px; position:relative; }
 .step::before{
-content:"";
-position:absolute;
-left:-51px;
-top:5px;
-width:18px;
-height:18px;
-background:var(--gold);
-border-radius:50%;
-box-shadow:0 0 10px var(--gold);
+content:""; position:absolute; left:-51px; top:5px; width:18px; height:18px;
+background:var(--gold); border-radius:50%; box-shadow:0 0 10px var(--gold);
 }
 
-.step h4{
-text-transform:uppercase;
-margin-bottom:10px;
-}
+.step h4{ text-transform:uppercase; margin-bottom:10px; }
 
-.footer-area{
-margin-bottom:200px;
-text-align:center;
-}
-
+/* secondary small button for home */
 .btn-secondary{
-font-size:10px;
-padding:15px 40px;
-border:1px solid rgba(255,255,255,.2);
-color:#fff;
-background:transparent;
-cursor:pointer;
-margin-top:20px;
-transition:.3s;
+font-size:10px; padding:15px 40px;
+border:1px solid rgba(255,255,255,.2); color:#fff;
+background:transparent; cursor:pointer; margin-top:20px;
 }
 
-.btn-secondary:hover{
-background:rgba(255,255,255,.1);
-}
-
+/* custom scrollbar to match */
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:rgba(0,0,0,.2)}
 ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:10px}
@@ -291,16 +212,16 @@ background:rgba(255,255,255,.1);
 <h2 class="section-title">The Pillars</h2>
 <div class="grid">
 <div class="card">
-<h3>COMBAT</h3>
-<p>High-stakes, grit-focused mechanics inspired by the streets of Da Hood.</p>
+<h3>STREETS</h3>
+<p>Clean mechanics. No bs. Just skill.</p>
 </div>
 <div class="card">
-<h3>CULTURE</h3>
-<p>A community built on the golden era of 2025 edits and street legacy.</p>
+<h3>COMMUNITY</h3>
+<p>2025 edit culture and legacy.</p>
 </div>
 <div class="card">
-<h3>CONQUEST</h3>
-<p>Claim your territory. Build your name. Leave a mark that doesn't fade.</p>
+<h3>DOMAIN</h3>
+<p>Take what's yours. Leave a mark.</p>
 </div>
 </div>
 </section>
@@ -324,33 +245,32 @@ background:rgba(255,255,255,.1);
 </section>
 
 <section>
-<h2 class="section-title">The Timeline</h2>
+<h2 class="section-title">Timeline</h2>
 <div class="roadmap">
 <div class="step">
 <h4 style="color:var(--gold)">2025: ORIGINS</h4>
-<p>The first foggy encounter. The project is born in silence.</p>
+<p>The project starts in the dark.</p>
 </div>
 <div class="step">
 <h4 style="color:var(--gold)">2026: EXPANSION</h4>
-<p>Building the infrastructure. Recruitment begins.</p>
+<p>Recruiting the circle.</p>
 </div>
 <div class="step">
-<h4 style="color:var(--gold)">2027: STRENGTHENING</h4>
-<p>Consolidating power. Training the inner circle.</p>
+<h4 style="color:var(--gold)">2027: GRIP</h4>
+<p>Locking down the foundations.</p>
 </div>
 <div class="step">
 <h4 style="color:var(--gold)">2028: THE CLEARING</h4>
-<p>Full-scale release. The fog lifts to reveal the empire.</p>
+<p>Everything comes to light.</p>
 </div>
 </div>
 </section>
 
-<section class="footer-area">
-<h2 class="section-title">JOIN US</h2>
-<p style="font-size:1.2rem;margin-bottom:30px;opacity:.8">The fog waits for no one. Are you in or out?</p>
+<section style="margin-bottom:200px">
+<h2 class="section-title">JOIN</h2>
 <button class="btn-enter" onclick="window.open('https://www.roblox.com/communities/35978868')">BECOME LEGACY</button>
 <br>
-<button class="btn-secondary" onclick="location.reload()">RETURN HOME</button>
+<button class="btn-secondary" onclick="location.reload()">HOME</button>
 </section>
 
 </div>
@@ -364,10 +284,11 @@ mx=(window.innerWidth/2-e.clientX)/80
 my=(window.innerHeight/2-e.clientY)/80
 })
 
-// gpu movement loop
+// gpu movement loop for smoothness
 function animate(){
 cx+=(mx-cx)*0.08
 cy+=(my-cy)*0.08
+// force gpu movement to kill the lag
 bg.style.transform=`translate3d(${cx}px,${cy}px,0)`
 requestAnimationFrame(animate)
 }
@@ -377,7 +298,7 @@ function godlyEnter(){
 const hero=document.getElementById("hero")
 const hub=document.getElementById("hub")
 
-// swap to bright look
+// remove dark gradient from p1 and add slight cinematic blur
 bg.style.background='url("IMG_3002.jpeg") center/cover no-repeat'
 bg.style.filter="brightness(1.1) blur(2px)"
 hero.style.opacity="0"
